@@ -16,13 +16,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
 public class VirtualThreadManager {
@@ -41,34 +41,83 @@ public class VirtualThreadManager {
         logger.info("VirtualThreadManager initialized with virtual thread executor");
     }
 
-    public Future<Void> submitTask(Runnable task) {
-        return virtualThreadExecutor.submit(task, null);
+    public CompletableFuture<Void> submitTask(Runnable task) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        virtualThreadExecutor.submit(() -> {
+            try {
+                task.run();
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        return future;
     }
 
-    public <T> Future<T> submitTask(Callable<T> task) {
-        return virtualThreadExecutor.submit(task);
+    public <T> CompletableFuture<T> submitTask(Callable<T> task) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        virtualThreadExecutor.submit(() -> {
+            try {
+                T result = task.call();
+                future.complete(result);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        return future;
     }
 
-    public <T> Future<T> submitTask(Supplier<T> supplier) {
-        return virtualThreadExecutor.submit(supplier::get);
+    public <T> CompletableFuture<T> submitTask(Supplier<T> supplier) {
+        CompletableFuture<T> future = new CompletableFuture<>();
+        virtualThreadExecutor.submit(() -> {
+            try {
+                T result = supplier.get();
+                future.complete(result);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        return future;
     }
 
-    public <T> List<Future<T>> executeAll(Collection<Callable<T>> tasks) {
-        try {
-            return virtualThreadExecutor.invokeAll(tasks);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Task execution was interrupted", e);
-        }
+    public <T> List<CompletableFuture<T>> executeAll(Collection<Callable<T>> tasks) {
+        return tasks.stream()
+                .map(this::submitTask)
+                .toList();
     }
 
-    public <T> T executeAny(Collection<Callable<T>> tasks) throws ExecutionException {
-        try {
-            return virtualThreadExecutor.invokeAny(tasks);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Task execution was interrupted", e);
-        }
+    public <T> CompletableFuture<T> executeAny(Collection<Callable<T>> tasks) {
+        CompletableFuture<T> result = new CompletableFuture<>();
+
+        // Submit all tasks
+        List<CompletableFuture<T>> futures = tasks.stream()
+                .map(this::submitTask)
+                .toList();
+
+        // Complete the result future when any of the futures completes
+        CompletableFuture.anyOf(futures.toArray(new CompletableFuture[0]))
+                .thenRun(() -> {
+                    for (CompletableFuture<T> future : futures) {
+                        if (future.isDone() && !future.isCompletedExceptionally()) {
+                            try {
+                                result.complete(future.get());
+                                // Cancel all other futures
+                                futures.forEach(f -> {
+                                    if (f != future) {
+                                        f.cancel(true);
+                                    }
+                                });
+                                return;
+                            } catch (Exception e) {
+                                // Continue to next future
+                            }
+                        }
+                    }
+                    // If we get here, all futures completed exceptionally
+                    result.completeExceptionally(new ExecutionException("All tasks failed", null));
+                });
+
+        return result;
     }
 
     public Thread newVirtualThread(String name, Runnable task) {
@@ -104,7 +153,10 @@ public class VirtualThreadManager {
     }
 
     public <T> List<T> executeAllAndGet(Collection<Callable<T>> tasks) {
-        List<Future<T>> futures = executeAll(tasks);
+        List<CompletableFuture<T>> futures = tasks.stream()
+                .map(this::submitTask)
+                .toList();
+
         return futures.stream()
                 .map(future -> {
                     try {
@@ -116,29 +168,63 @@ public class VirtualThreadManager {
                         throw new RuntimeException("Task execution failed", e);
                     }
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public <T> List<T> executeAllAndGet(Collection<Callable<T>> tasks, Duration timeout) {
-        try {
-            List<Future<T>> futures = virtualThreadExecutor.invokeAll(tasks, timeout.toMillis(), TimeUnit.MILLISECONDS);
-            return futures.stream()
-                    .filter(Future::isDone)
-                    .map(future -> {
-                        try {
-                            return future.get();
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            throw new RuntimeException("Task execution was interrupted", e);
-                        } catch (ExecutionException e) {
-                            throw new RuntimeException("Task execution failed", e);
+        List<CompletableFuture<T>> futures = tasks.stream()
+                .map(this::submitTask)
+                .toList();
+
+        // Create a timeout for all futures
+        CompletableFuture<Void> timeoutFuture = new CompletableFuture<>();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.schedule(() -> timeoutFuture.complete(null), timeout.toMillis(), TimeUnit.MILLISECONDS);
+
+        // Apply timeout to all futures
+        List<CompletableFuture<T>> timedFutures = futures.stream()
+                .map(future -> {
+                    CompletableFuture<T> timedFuture = new CompletableFuture<>();
+                    future.thenAccept(timedFuture::complete);
+                    timeoutFuture.thenRun(() -> {
+                        if (!future.isDone()) {
+                            future.cancel(true);
                         }
-                    })
-                    .collect(Collectors.toList());
+                    });
+                    return timedFuture;
+                })
+                .toList();
+
+        // Wait for all futures to complete or timeout
+        try {
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                    .exceptionally(e -> null)
+                    .get(timeout.toMillis(), TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Task execution was interrupted", e);
+        } catch (ExecutionException e) {
+            // Some tasks failed, but we'll still return the successful ones
+        } catch (TimeoutException e) {
+            // Timeout occurred, we'll return the completed tasks
+        } finally {
+            scheduler.shutdown();
         }
+
+        return futures.stream()
+                .filter(CompletableFuture::isDone)
+                .filter(future -> !future.isCompletedExceptionally())
+                .map(future -> {
+                    try {
+                        return future.get();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new RuntimeException("Task execution was interrupted", e);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException("Task execution failed", e);
+                    }
+                })
+                .toList();
     }
 
     public ScheduledFuture<?> scheduleTask(Runnable task, Duration delay) {
