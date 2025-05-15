@@ -1,10 +1,11 @@
-package io.j13n.core.service;
+package io.j13n.core.service.search.google;
 
 import dev.langchain4j.web.search.WebSearchOrganicResult;
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import dev.langchain4j.web.search.google.customsearch.GoogleCustomWebSearchEngine;
 import io.j13n.core.model.JobSearchResult;
+import io.j13n.core.service.search.AbstractJobSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -71,6 +71,17 @@
             <artifactId>langchain4j-web-search-engine-tavily</artifactId>
             <version>1.0.0-beta4</version>
         </dependency>
+
+        <!-- AWS S3 Async Client -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.25.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,8 +1,9 @@
-package io.j13n.core.service.search;
+package io.j13n.core.service.search.google;
 
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import dev.langchain4j.web.search.google.customsearch.GoogleCustomWebSearchEngine;
+import io.j13n.core.service.search.AbstractSearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.langchain4j.web.search.WebSearchResults;
-import io.j13n.core.service.search.TavilySearchService;
+import io.j13n.core.service.search.tavily.TavilySearchService;
 
 @RestController
 @RequestMapping("/api/v1/tavily")

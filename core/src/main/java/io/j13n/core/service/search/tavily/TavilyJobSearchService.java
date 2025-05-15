@@ -1,4 +1,4 @@
-package io.j13n.core.service.search;
+package io.j13n.core.service.search.tavily;
 
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
@@ -8,14 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class TavilyJobSearchService extends TavilySearchService {
@@ -128,9 +129,9 @@ public class TavilyJobSearchService extends TavilySearchService {
         results.results().forEach(result -> {
             try {
                 // Extract and validate the job information
-                String title = result.getTitle();
-                String description = result.getSnippet();
-                String url = result.getUrl();
+                String title = result.title();
+                String description = result.snippet();
+                URI url = result.url();
 
                 if (isValidJobPosting(title, description, url)) {
                     JobSearchResult job = createJobResult(title, description, url);
@@ -144,7 +145,7 @@ public class TavilyJobSearchService extends TavilySearchService {
         return jobResults;
     }
 
-    private boolean isValidJobPosting(String title, String description, String url) {
+    private boolean isValidJobPosting(String title, String description, URI url) {
         if (title == null || description == null || url == null) {
             return false;
         }
@@ -156,15 +157,11 @@ public class TavilyJobSearchService extends TavilySearchService {
 
         // Verify it's not a job search page or list
         String lowerTitle = title.toLowerCase();
-        if (lowerTitle.contains("search jobs") || lowerTitle.contains("job list") ||
-            lowerTitle.contains("career opportunities")) {
-            return false;
-        }
-
-        return true;
+        return !lowerTitle.contains("search jobs") && !lowerTitle.contains("job list") &&
+                !lowerTitle.contains("career opportunities");
     }
 
-    private JobSearchResult createJobResult(String title, String description, String url) {
+    private JobSearchResult createJobResult(String title, String description, URI url) {
         JobSearchResult job = new JobSearchResult();
         job.setTitle(cleanTitle(title));
         job.setCompany(extractCompany(title));
@@ -178,9 +175,9 @@ public class TavilyJobSearchService extends TavilySearchService {
 
     private String extractCompany(String title) {
         Matcher matcher = COMPANY_PATTERN.matcher(title);
-        if (matcher.find()) {
+        if (matcher.find())
             return matcher.group(1) != null ? matcher.group(1).trim() : matcher.group(2).trim();
-        }
+
         return "Unknown Company";
     }
 
@@ -201,8 +198,8 @@ public class TavilyJobSearchService extends TavilySearchService {
                combined.contains("fully remote");
     }
 
-    private boolean isDirectJobLink(final String url) {
-        final String lowerUrl = url.toLowerCase();
+    private boolean isDirectJobLink(final URI url) {
+        final String lowerUrl = url.toString().toLowerCase();
         return (lowerUrl.contains("/jobs/") ||
                 lowerUrl.contains("/careers/") ||
                 lowerUrl.contains("/job/") ||

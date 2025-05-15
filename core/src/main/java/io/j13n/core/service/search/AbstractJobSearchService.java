@@ -1,4 +1,4 @@
-package io.j13n.core.service;
+package io.j13n.core.service.search;
 
 import java.util.List;
 

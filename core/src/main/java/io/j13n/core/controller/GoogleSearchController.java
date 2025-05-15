@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.j13n.core.model.JobSearchResult;
-import io.j13n.core.service.GoogleJobSearchService;
+import io.j13n.core.service.search.google.GoogleJobSearchService;
 
 @RestController
 @RequestMapping("/api/v1/google/jobs")
