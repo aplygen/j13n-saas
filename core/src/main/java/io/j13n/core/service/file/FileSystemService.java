@@ -1,4 +1,4 @@
-package io.j13n.core.service;
+package io.j13n.core.service.file;
 
 import io.j13n.core.model.file.FileDetail;
 import lombok.Getter;
@@ -49,7 +49,6 @@ public class FileSystemService implements AutoCloseable {
 
     @Getter
     private final Path tempFolder;
-    // Cache to track file usage
     private final Map<String, Long> fileAccessCache = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(FileSystemService.class);
 
@@ -58,7 +57,6 @@ public class FileSystemService implements AutoCloseable {
         this.bucketName = bucketName;
         try {
             this.tempFolder = Files.createTempDirectory("download-" + this.bucketName);
-            // Start cache cleanup thread
             startCacheCleanupThread();
         } catch (IOException e) {
             throw new RuntimeException("Error creating temp directory", e);
@@ -119,7 +117,6 @@ public class FileSystemService implements AutoCloseable {
 
         List<FileDetail> files = new ArrayList<>();
 
-        // Add directories
         response.commonPrefixes().forEach(prefix -> {
             FileDetail dir = new FileDetail()
                     .setName(getNameFromPath(prefix.prefix()))
@@ -129,7 +126,6 @@ public class FileSystemService implements AutoCloseable {
             files.add(dir);
         });
 
-        // Add files
         response.contents().forEach(content -> {
             if (!content.key().endsWith(FILE_SEPARATOR)) {
                 FileDetail file = new FileDetail()
@@ -170,11 +166,9 @@ public class FileSystemService implements AutoCloseable {
         String hashedPath = hashPath(path);
         Path filePath = createTempFilePath(hashedPath);
 
-        // Check if file exists in cache and is not expired
         if (Files.exists(filePath)) {
             Long lastAccess = fileAccessCache.get(hashedPath);
             if (lastAccess != null && System.currentTimeMillis() - lastAccess < CACHE_EXPIRY_MS) {
-                // Update last access time
                 fileAccessCache.put(hashedPath, System.currentTimeMillis());
                 return filePath.toFile();
             }
@@ -229,7 +223,6 @@ public class FileSystemService implements AutoCloseable {
     public boolean deleteFile(String path) {
         try {
             if (path.endsWith(FILE_SEPARATOR)) {
-                // Delete directory and its contents
                 ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
                         .bucket(bucketName)
                         .prefix(path)
@@ -249,7 +242,6 @@ public class FileSystemService implements AutoCloseable {
                     s3Client.deleteObjects(deleteRequest);
                 }
             } else {
-                // Delete single file
                 DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                         .bucket(bucketName)
                         .key(path)
@@ -310,7 +302,6 @@ public class FileSystemService implements AutoCloseable {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            // Fallback to a simple hash if SHA-256 is not available
             return String.valueOf(path.hashCode());
         }
     }

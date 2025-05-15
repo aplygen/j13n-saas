@@ -4,6 +4,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import io.j13n.core.enums.FileSystemType;
+import io.j13n.core.enums.FileType;
+import io.j13n.core.enums.UserFileType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -22,6 +25,7 @@ public class FileSystemDTO implements Serializable {
     private FileType fileType;    // FILE, DIRECTORY
     private Long size;
     private Long parentId;
+    private UserFileType userFileType;
     private Long createdBy;
     private LocalDateTime createdAt;
     private Long updatedBy;
@@ -32,16 +36,6 @@ public class FileSystemDTO implements Serializable {
     private String url;           // S3 URL
     private String contentType;   // MIME type
     private String bucketName;    // S3 bucket name
-
-    public enum FileSystemType {
-        STATIC,
-        SECURED
-    }
-
-    public enum FileType {
-        FILE,
-        DIRECTORY
-    }
 
     public boolean isDirectory() {
         return FileType.DIRECTORY.equals(this.fileType);

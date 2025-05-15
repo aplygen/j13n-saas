@@ -1,5 +1,0 @@
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-tavily</artifactId>
-    <version>${langchain4j.version}</version>
-</dependency>

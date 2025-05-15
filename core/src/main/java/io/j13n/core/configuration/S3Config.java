@@ -1,4 +1,4 @@
-package io.j13n.core.config;
+package io.j13n.core.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
