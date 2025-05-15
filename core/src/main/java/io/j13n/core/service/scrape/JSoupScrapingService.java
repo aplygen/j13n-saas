@@ -1,5 +1,6 @@
 package io.j13n.core.service.scrape;
 
+import io.j13n.core.model.scrape.FormField;
 import io.j13n.core.model.scrape.JobScrapingResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URI;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
@@ -182,5 +184,10 @@ public class JSoupScrapingService extends AbstractScrapingService {
     @Override
     public boolean supportsUrl(String url) {
         return url != null && URL_PATTERN.matcher(url).matches();
+    }
+
+    @Override
+    public CompletableFuture<List<FormField>> extractFormFields(String url) {
+        return null;
     }
 }
