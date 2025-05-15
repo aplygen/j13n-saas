@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,7 @@ public class GoogleJobSearchService extends AbstractJobSearchService {
     private final GoogleCustomWebSearchEngine searchEngine;
 
     public GoogleJobSearchService(
-            @Value("${google.api.key}") String googleApiKey,
-            @Value("${google.cse.id}") String googleCseId) {
+            @Value("${google.api.key}") String googleApiKey, @Value("${google.cse.id}") String googleCseId) {
         Objects.requireNonNull(googleApiKey, "Google API key must not be null");
         Objects.requireNonNull(googleCseId, "Google CSE ID must not be null");
 
@@ -42,8 +42,8 @@ public class GoogleJobSearchService extends AbstractJobSearchService {
 
     @Override
     public List<JobSearchResult> searchJobs(String query, String location, boolean isRemoteOnly) {
-        logger.info("Performing job search with query: {}, location: {}, remoteOnly: {}",
-                   query, location, isRemoteOnly);
+        logger.info(
+                "Performing job search with query: {}, location: {}, remoteOnly: {}", query, location, isRemoteOnly);
 
         try {
             WebSearchRequest request = createJobSearchRequest(query, location, isRemoteOnly);
@@ -60,9 +60,9 @@ public class GoogleJobSearchService extends AbstractJobSearchService {
         List<JobSearchResult> jobResults = new ArrayList<>();
 
         for (WebSearchOrganicResult result : searchResults.results()) {
-            String title = result.getTitle();
-            String description = result.getSnippet();
-            String url = result.getUrl();
+            String title = result.title();
+            String description = result.snippet();
+            URI url = result.url();
 
             // Extract company name from title using pattern
             String company = extractCompany(title);
@@ -75,8 +75,8 @@ public class GoogleJobSearchService extends AbstractJobSearchService {
             job.setApplicationUrl(url);
             job.setSource(source);
             job.setPostedDate(LocalDateTime.now());
-            job.setRemote(title.toLowerCase().contains("remote") ||
-                         description.toLowerCase().contains("remote"));
+            job.setRemote(title.toLowerCase().contains("remote")
+                    || description.toLowerCase().contains("remote"));
 
             jobResults.add(job);
         }
@@ -87,13 +87,15 @@ public class GoogleJobSearchService extends AbstractJobSearchService {
     private String extractCompany(String title) {
         Matcher matcher = COMPANY_PATTERN.matcher(title);
         if (matcher.find())
-            return matcher.group(1) != null ? matcher.group(1).trim() : matcher.group(2).trim();
+            return matcher.group(1) != null
+                    ? matcher.group(1).trim()
+                    : matcher.group(2).trim();
         return "Unknown Company";
     }
 
     private String cleanTitle(String title) {
-        return title.replaceAll("\\|.*$", "")  // Remove everything after |
-                   .replaceAll("at\\s+[\\w\\s&]+$", "") // Remove "at Company"
-                   .trim();
+        return title.replaceAll("\\|.*$", "") // Remove everything after |
+                .replaceAll("at\\s+[\\w\\s&]+$", "") // Remove "at Company"
+                .trim();
     }
 }
