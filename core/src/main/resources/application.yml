@@ -1,7 +1,21 @@
 spring:
   application:
     name: core
-
+  datasource:
+    url: jdbc:h2:mem:userdb
+    username: sa
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+`
 server:
   port: 8080
 
@@ -14,3 +28,15 @@ google:
 tavily:
   api:
     key: ${TAVILY_API_KEY}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+    model: gpt-4-turbo-preview
+    temperature: 0.3
+    max-tokens: 1000
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:j13nSecretKeyForJWTTokenGenerationAndVerificationPurposes}
+  expiration: 86400000 # 24 hours in milliseconds
