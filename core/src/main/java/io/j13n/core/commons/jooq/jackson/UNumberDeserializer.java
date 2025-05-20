@@ -16,11 +16,11 @@ import java.lang.reflect.Method;
 public class UNumberDeserializer<R extends UNumber> extends StdDeserializer<R> {
 
     @Serial
-    private static final long serialVersionUID = -2888640386444756529L;
+    private static final long serialVersionUID = 9146228421680912993L;
 
     private final Class<R> classs;
 
-    private transient Method method;
+    private final transient Method method;
 
     private transient AbstractMessageService msgResource;
 

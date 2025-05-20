@@ -16,6 +16,5 @@ public class ULongUtil {
             case BigInteger b -> ULong.valueOf(b);
             default -> ULong.valueOf(o.toString());
         };
-
     }
 }
