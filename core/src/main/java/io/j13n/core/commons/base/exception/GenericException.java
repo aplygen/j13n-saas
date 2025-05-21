@@ -38,18 +38,18 @@ public class GenericException extends RuntimeException {
 		this.exceptionId = exceptionId;
 	}
 
+	public static String uniqueId() {
+
+		return (new SimpleDateFormat("yyyy-MM-dd")).format(Calendar.getInstance()
+		        .getTime()) + "-" + Long.toHexString(System.currentTimeMillis() % (1000 * 60 * 60 * 24L));
+	}
+
 	public HttpStatus getStatusCode() {
 		return statusCode;
 	}
 
 	public String getExceptionId() {
 		return this.exceptionId;
-	}
-
-	public static String uniqueId() {
-
-		return (new SimpleDateFormat("yyyy-MM-dd")).format(Calendar.getInstance()
-		        .getTime()) + "-" + Long.toHexString(System.currentTimeMillis() % (1000 * 60 * 60 * 24l));
 	}
 
 	public GenericExceptionData toExceptionData() {

@@ -6,8 +6,7 @@ import java.math.BigInteger;
 
 public class ULongUtil {
 
-    private ULongUtil() {
-    }
+    private ULongUtil() {}
 
     public static ULong valueOf(Object o) {
         return switch (o) {

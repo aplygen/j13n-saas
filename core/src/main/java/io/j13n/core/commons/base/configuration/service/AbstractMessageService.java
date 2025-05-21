@@ -2,7 +2,6 @@ package io.j13n.core.commons.base.configuration.service;
 
 import io.j13n.core.commons.base.exception.GenericException;
 import io.j13n.core.commons.base.util.StringFormatter;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 
 import java.util.Locale;

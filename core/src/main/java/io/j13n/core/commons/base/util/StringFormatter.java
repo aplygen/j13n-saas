@@ -2,6 +2,9 @@ package io.j13n.core.commons.base.util;
 
 public class StringFormatter {
 
+    private StringFormatter() {
+    }
+
     public static String format(String formatString, Object... params) {
 
         if (params == null || params.length == 0)
@@ -27,8 +30,5 @@ public class StringFormatter {
         }
 
         return sb.toString();
-    }
-
-    private StringFormatter() {
     }
 }

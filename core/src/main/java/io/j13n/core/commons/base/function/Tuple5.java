@@ -140,13 +140,10 @@ public class Tuple5<T1, T2, T3, T4, T5> extends Tuple4<T1, T2, T3, T4> {
 	@Override
 	public boolean equals(@Nullable Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Tuple5)) return false;
+		if (!(o instanceof @SuppressWarnings("rawtypes")Tuple5 tuple5)) return false;
 		if (!super.equals(o)) return false;
 
-		@SuppressWarnings("rawtypes")
-        Tuple5 tuple5 = (Tuple5) o;
-
-		return t5.equals(tuple5.t5);
+        return t5.equals(tuple5.t5);
 
 	}
 

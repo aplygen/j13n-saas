@@ -2,6 +2,9 @@ package io.j13n.core.commons.base.util;
 
 public class StringUtil {
 
+    private StringUtil() {
+    }
+
     public static String safeValueOf(Object obj, String... defaultValue) {
 
         if (obj == null) {
@@ -15,9 +18,6 @@ public class StringUtil {
         }
 
         return obj.toString();
-    }
-
-    private StringUtil() {
     }
 
     public static boolean safeIsBlank(Object object) {

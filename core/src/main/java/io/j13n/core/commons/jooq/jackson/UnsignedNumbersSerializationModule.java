@@ -10,7 +10,7 @@ import java.io.Serial;
 
 public class UnsignedNumbersSerializationModule extends SimpleModule {
 
-	@Serial
+    @Serial
     private static final long serialVersionUID = 6367988430700197837L;
 
     public UnsignedNumbersSerializationModule(AbstractMessageService messageResourceService) {

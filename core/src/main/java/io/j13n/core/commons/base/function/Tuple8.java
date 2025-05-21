@@ -186,13 +186,10 @@ public class Tuple8<T1, T2, T3, T4, T5, T6, T7, T8> extends
 	@Override
 	public boolean equals(@Nullable Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Tuple8)) return false;
+		if (!(o instanceof @SuppressWarnings("rawtypes")Tuple8 tuple8)) return false;
 		if (!super.equals(o)) return false;
 
-		@SuppressWarnings("rawtypes")
-        Tuple8 tuple8 = (Tuple8) o;
-
-		return t8.equals(tuple8.t8);
+        return t8.equals(tuple8.t8);
 
 	}
 

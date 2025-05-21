@@ -2,6 +2,9 @@ package io.j13n.core.commons.base.util;
 
 public class CommonsUtil {
 
+	private CommonsUtil() {
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T nonNullValue(T... values) {
 
@@ -21,8 +24,5 @@ public class CommonsUtil {
 			return false;
 
 		return a.equals(b);
-	}
-
-	private CommonsUtil() {
 	}
 }

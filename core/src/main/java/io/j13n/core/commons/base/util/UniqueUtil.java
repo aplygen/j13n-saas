@@ -8,6 +8,9 @@ public class UniqueUtil {
 
 	private static final String BASE = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+	private UniqueUtil() {
+	}
+
 	public static String shortUUID() {
 
 		UUID uuid = UUID.randomUUID();
@@ -26,8 +29,7 @@ public class UniqueUtil {
 			num = num.divide(baseDivisor);
 		}
 
-		return String.format("%22s", sb.reverse()
-		        .toString())
+		return String.format("%22s", sb.reverse())
 		        .replace(' ', '0');
 	}
 
@@ -109,8 +111,5 @@ public class UniqueUtil {
 		}
 
 		return sb.toString();
-	}
-
-	private UniqueUtil() {
 	}
 }
