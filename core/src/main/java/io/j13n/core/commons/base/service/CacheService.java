@@ -74,7 +74,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
             CompletableFuture<Boolean> deleteFuture = CompletableFuture.completedFuture(
                             redisAsyncCommand.hdel(cacheName, key))
                     .thenApply(e -> true);
-            return publishFuture.thenCompose(published -> deleteFuture);
+            return publishFuture.thenCompose(_ -> deleteFuture);
         }
 
         return VirtualThreadWrapper.fromCallable(() -> this.caffineCacheEvict(cacheName, key))
@@ -116,7 +116,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
             if (redisAsyncCommand == null) return VirtualThreadWrapper.just(true);
 
             return CompletableFuture.completedFuture(redisAsyncCommand.hset(cacheName, key, co))
-                    .thenApply(result -> true)
+                    .thenApply(_ -> true)
                     .exceptionally(ex -> true);
         });
 
@@ -203,7 +203,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
                             redisAsyncCommand.del(cacheName))
                     .thenApply(e -> true)
                     .exceptionally(ex -> true);
-            return publishFuture.thenCompose(published -> deleteFuture);
+            return publishFuture.thenCompose(_ -> deleteFuture);
         }
 
         return VirtualThreadWrapper.fromCallable(() -> {
@@ -230,7 +230,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
                                         CompletableFuture<Boolean> deleteFuture = CompletableFuture.completedFuture(
                                                         redisAsyncCommand.del(key))
                                                 .thenApply(e -> true);
-                                        futures.add(publishFuture.thenCompose(published -> deleteFuture));
+                                        futures.add(publishFuture.thenCompose(_ -> deleteFuture));
                                     }
 
                                     return futures;
@@ -244,7 +244,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
                                 }
                                 return VirtualThreadExecutor.all(futures.stream()
                                         .map(f -> (Supplier<Boolean>) f::join)
-                                        .collect(Collectors.toList()));
+                                        .toList());
                             }))
                     .thenApply(results -> results.stream().allMatch(Boolean::booleanValue));
         }
@@ -303,12 +303,12 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
 
         for (int i = 0; i < keySuppliers.length; i++) keys[i] = keySuppliers[i].get();
 
-        return v -> this.evict(cacheName, keys).thenApply(e -> v);
+        return v -> this.evict(cacheName, keys).thenApply(_ -> v);
     }
 
     public <T> Function<T, CompletableFuture<T>> evictFunctionWithKeyFunction(
             String cacheName, Function<T, String> keyMakingFunction) {
-        return v -> this.evict(cacheName, keyMakingFunction.apply(v)).thenApply(e -> v);
+        return v -> this.evict(cacheName, keyMakingFunction.apply(v)).thenApply(_ -> v);
     }
 
 	private Boolean get() {
