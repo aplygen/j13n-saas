@@ -23,16 +23,13 @@ public class FileDetail {
 
         this.name = name;
 
-        if (name == null || name.isBlank())
-            return this;
+        if (name == null || name.isBlank()) return this;
 
         int ind = name.lastIndexOf('.');
-        if (ind <= 0)
-            this.fileName = name;
+        if (ind <= 0) this.fileName = name;
         else {
             this.fileName = name.substring(0, ind);
-            this.type = name.substring(ind + 1)
-                    .toLowerCase();
+            this.type = name.substring(ind + 1).toLowerCase();
         }
         return this;
     }
@@ -40,15 +37,15 @@ public class FileDetail {
     @JsonProperty("isCompressedFile")
     public boolean isCompressedFile() {
 
-        if (this.type == null)
-            return false;
+        if (this.type == null) return false;
 
         return this.type.endsWith(".zip") || this.type.endsWith(".gz");
     }
 
     public static FileDetail clone(FileDetail fileDetail) {
 
-        return new FileDetail().setName(fileDetail.getName())
+        return new FileDetail()
+                .setName(fileDetail.getName())
                 .setDirectory(fileDetail.isDirectory())
                 .setSize(fileDetail.getSize())
                 .setFilePath(fileDetail.getFilePath())

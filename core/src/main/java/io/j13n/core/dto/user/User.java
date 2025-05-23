@@ -3,16 +3,15 @@ package io.j13n.core.dto.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.commons.security.jwt.ContextUser;
+import java.io.Serial;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jooq.types.ULong;
-
-import java.io.Serial;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

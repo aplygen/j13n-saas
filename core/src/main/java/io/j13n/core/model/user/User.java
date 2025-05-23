@@ -1,13 +1,12 @@
 package io.j13n.core.model.user;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -43,7 +42,6 @@ public class User {
     @JoinTable(
             name = "user_authorities",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "authority_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorities = new HashSet<>();
 }

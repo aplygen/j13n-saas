@@ -4,16 +4,15 @@ import io.j13n.core.commons.base.model.condition.AbstractCondition;
 import io.j13n.core.commons.base.model.dto.AbstractDTO;
 import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.jooq.dao.AbstractDAO;
+import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import org.jooq.UpdatableRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractJOOQDataService<
         R extends UpdatableRecord<R>,

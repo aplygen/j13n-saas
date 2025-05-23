@@ -1,19 +1,10 @@
 package io.j13n.core.service.search;
 
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -23,6 +14,14 @@ import dev.langchain4j.web.search.WebSearchOrganicResult;
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import io.j13n.core.model.JobSearchResult;
+import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class AbstractJobSearchServiceTest {
 
@@ -100,8 +99,7 @@ class AbstractJobSearchServiceTest {
                 "Software Engineer Position",
                 URI.create("https://example.com/job"),
                 "Great opportunity for a software engineer",
-                "text/html"
-        );
+                "text/html");
 
         Map<String, Object> metadata = new HashMap<>();
         WebSearchInformationResult info = new WebSearchInformationResult(500L, 1, metadata);
@@ -145,15 +143,13 @@ class AbstractJobSearchServiceTest {
     @Test
     void searchJobs_NullQuery_ThrowsException() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class,
-                () -> searchService.searchJobs(null, "location", false));
+        assertThrows(IllegalArgumentException.class, () -> searchService.searchJobs(null, "location", false));
     }
 
     @Test
     void searchJobs_EmptyQuery_ThrowsException() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class,
-                () -> searchService.searchJobs("", "location", false));
+        assertThrows(IllegalArgumentException.class, () -> searchService.searchJobs("", "location", false));
     }
 
     @Test
@@ -164,11 +160,7 @@ class AbstractJobSearchServiceTest {
         boolean isRemoteOnly = false;
 
         WebSearchOrganicResult mockResult = new WebSearchOrganicResult(
-                "Software Engineer",
-                URI.create("https://example.com/job"),
-                "Job description",
-                "text/html"
-        );
+                "Software Engineer", URI.create("https://example.com/job"), "Job description", "text/html");
 
         Map<String, Object> metadata = new HashMap<>();
         WebSearchInformationResult info = new WebSearchInformationResult(500L, 1, metadata);

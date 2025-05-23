@@ -2,10 +2,10 @@ package io.j13n.core.service.search;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.Test;
 
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
+import org.junit.jupiter.api.Test;
 
 class AbstractSearchServiceTest {
 

@@ -1,12 +1,11 @@
 package io.j13n.core.commons.base.model.condition;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 @Setter
 @Getter

@@ -6,16 +6,14 @@ import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.Response;
 import io.j13n.core.model.llm.LLMExtractionResult;
-import io.j13n.core.model.llm.LLMRequest;
 import io.j13n.core.model.scrape.FormField;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -25,9 +23,7 @@ public class LLMService {
     private final ObjectMapper objectMapper;
 
     public CompletableFuture<Map<String, LLMExtractionResult>> analyzeContent(
-            String content,
-            List<FormField> formFields
-    ) {
+            String content, List<FormField> formFields) {
         try {
             var prompt = buildExtractionPrompt(content, formFields);
             Response<AiMessage> response = chatModel.chat(UserMessage.from(prompt));
@@ -64,11 +60,17 @@ public class LLMService {
         promptBuilder.append("Form fields to extract:\n");
 
         for (FormField field : formFields) {
-            promptBuilder.append("- ").append(field.getName())
-                    .append(" (").append(field.getType()).append(")")
+            promptBuilder
+                    .append("- ")
+                    .append(field.getName())
+                    .append(" (")
+                    .append(field.getType())
+                    .append(")")
                     .append(field.isRequired() ? " [Required]" : "")
-                    .append("\n  Label: ").append(field.getLabel())
-                    .append("\n  Description: ").append(field.getMetadata().getOrDefault("description", "Not provided"))
+                    .append("\n  Label: ")
+                    .append(field.getLabel())
+                    .append("\n  Description: ")
+                    .append(field.getMetadata().getOrDefault("description", "Not provided"))
                     .append("\n\n");
         }
 
@@ -76,7 +78,8 @@ public class LLMService {
         promptBuilder.append("1. The extracted value in the 'value' field\n");
         promptBuilder.append("2. A confidence score (0.0 to 1.0) in the 'confidence' field\n");
         promptBuilder.append("3. Your reasoning in the 'reasoning' field\n");
-        promptBuilder.append("\nPlease format your response as a JSON object where each key is the field name and the value is an object containing 'value', 'confidence', and 'reasoning' fields.");
+        promptBuilder.append(
+                "\nPlease format your response as a JSON object where each key is the field name and the value is an object containing 'value', 'confidence', and 'reasoning' fields.");
         promptBuilder.append("\n\nExample format:\n");
         promptBuilder.append("{\n");
         promptBuilder.append("  \"fieldName\": {\n");

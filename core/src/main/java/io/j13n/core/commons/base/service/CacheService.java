@@ -7,14 +7,6 @@ import io.lettuce.core.pubsub.RedisPubSubAdapter;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.cache.CacheType;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +16,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.cache.CacheType;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CacheService extends RedisPubSubAdapter<String, String> {
@@ -35,12 +34,10 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
     private RedisAsyncCommands<String, Object> redisAsyncCommand;
 
     @Autowired(required = false)
-    @Qualifier("subRedisAsyncCommand")
-    private RedisPubSubAsyncCommands<String, String> subAsyncCommand;
+    @Qualifier("subRedisAsyncCommand") private RedisPubSubAsyncCommands<String, String> subAsyncCommand;
 
     @Autowired(required = false)
-    @Qualifier("pubRedisAsyncCommand")
-    private RedisPubSubAsyncCommands<String, String> pubAsyncCommand;
+    @Qualifier("pubRedisAsyncCommand") private RedisPubSubAsyncCommands<String, String> pubAsyncCommand;
 
     @Autowired(required = false)
     private StatefulRedisPubSubConnection<String, String> subConnect;
@@ -74,7 +71,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
             CompletableFuture<Boolean> deleteFuture = CompletableFuture.completedFuture(
                             redisAsyncCommand.hdel(cacheName, key))
                     .thenApply(e -> true);
-            return publishFuture.thenCompose(_ -> deleteFuture);
+            return publishFuture.thenCompose(evicted -> deleteFuture);
         }
 
         return VirtualThreadWrapper.fromCallable(() -> this.caffineCacheEvict(cacheName, key))
@@ -116,7 +113,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
             if (redisAsyncCommand == null) return VirtualThreadWrapper.just(true);
 
             return CompletableFuture.completedFuture(redisAsyncCommand.hset(cacheName, key, co))
-                    .thenApply(_ -> true)
+                    .thenApply(cObject -> true)
                     .exceptionally(ex -> true);
         });
 
@@ -179,7 +176,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
                     return supplier.get()
                             .thenCompose(value -> {
                                 CacheObject cacheObj = new CacheObject(value);
-                                return this.put(cName, cacheObj, key).thenApply(v -> cacheObj);
+                                return this.put(cName, cacheObj, key).thenApply(cObject -> cacheObj);
                             })
                             .exceptionally(ex -> {
                                 CacheObject nullObj = new CacheObject(null);
@@ -203,14 +200,14 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
                             redisAsyncCommand.del(cacheName))
                     .thenApply(e -> true)
                     .exceptionally(ex -> true);
-            return publishFuture.thenCompose(_ -> deleteFuture);
+            return publishFuture.thenCompose(evicted -> deleteFuture);
         }
 
         return VirtualThreadWrapper.fromCallable(() -> {
                     this.cacheManager.getCache(cacheName).clear();
                     return true;
                 })
-                .exceptionally(_ -> false);
+                .exceptionally(evicted -> false);
     }
 
     public CompletableFuture<Boolean> evictAllCaches() {
@@ -230,7 +227,7 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
                                         CompletableFuture<Boolean> deleteFuture = CompletableFuture.completedFuture(
                                                         redisAsyncCommand.del(key))
                                                 .thenApply(e -> true);
-                                        futures.add(publishFuture.thenCompose(_ -> deleteFuture));
+                                        futures.add(publishFuture.thenCompose(evicted -> deleteFuture));
                                     }
 
                                     return futures;
@@ -303,27 +300,27 @@ public class CacheService extends RedisPubSubAdapter<String, String> {
 
         for (int i = 0; i < keySuppliers.length; i++) keys[i] = keySuppliers[i].get();
 
-        return v -> this.evict(cacheName, keys).thenApply(_ -> v);
+        return v -> this.evict(cacheName, keys).thenApply(evicted -> v);
     }
 
     public <T> Function<T, CompletableFuture<T>> evictFunctionWithKeyFunction(
             String cacheName, Function<T, String> keyMakingFunction) {
-        return v -> this.evict(cacheName, keyMakingFunction.apply(v)).thenApply(_ -> v);
+        return v -> this.evict(cacheName, keyMakingFunction.apply(v)).thenApply(evicted -> v);
     }
 
-	private Boolean get() {
-		Collection<String> cacheNames = this.cacheManager.getCacheNames();
-		boolean result = true;
+    private Boolean get() {
+        Collection<String> cacheNames = this.cacheManager.getCacheNames();
+        boolean result = true;
 
-		for (String name : cacheNames) {
-			Cache cache = this.cacheManager.getCache(name);
-			if (cache != null) {
-				cache.clear();
-			} else {
-				result = false;
-			}
-		}
+        for (String name : cacheNames) {
+            Cache cache = this.cacheManager.getCache(name);
+            if (cache != null) {
+                cache.clear();
+            } else {
+                result = false;
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

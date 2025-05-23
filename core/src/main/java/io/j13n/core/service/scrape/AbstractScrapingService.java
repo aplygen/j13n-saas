@@ -1,12 +1,11 @@
 package io.j13n.core.service.scrape;
 
+import io.j13n.core.model.scrape.FormField;
+import io.j13n.core.model.scrape.JobScrapingResult;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
-import io.j13n.core.model.scrape.FormField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.j13n.core.model.scrape.JobScrapingResult;
 
 public abstract class AbstractScrapingService {
 

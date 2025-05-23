@@ -1,13 +1,9 @@
 package io.j13n.core.service.search;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import io.j13n.core.model.JobSearchResult;
+import java.util.List;
 
 public abstract class AbstractJobSearchService {
 

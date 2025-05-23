@@ -49,21 +49,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> 
-                auth.requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/h2-console/**").permitAll()
-                    .anyRequest().authenticated()
-            );
-        
+        http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**")
+                        .permitAll()
+                        .requestMatchers("/h2-console/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
+
         // For H2 Console
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
-        
+
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
 }

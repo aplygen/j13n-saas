@@ -5,12 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.j13n.core.commons.base.exception.GenericException;
 import io.lettuce.core.codec.RedisCodec;
-import org.springframework.http.HttpStatus;
-
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 public class RedisJSONCodec implements RedisCodec<String, Object> {
 

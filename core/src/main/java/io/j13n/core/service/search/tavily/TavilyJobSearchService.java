@@ -3,11 +3,6 @@ package io.j13n.core.service.search.tavily;
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import io.j13n.core.model.JobSearchResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +12,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TavilyJobSearchService extends TavilySearchService {
@@ -35,23 +34,21 @@ public class TavilyJobSearchService extends TavilySearchService {
             "jobs.",
             "workday.com",
             "lever.co",
-            "greenhouse.io"
-    ));
+            "greenhouse.io"));
 
-    private static final Set<String> EXCLUDED_DOMAINS = new HashSet<>(Arrays.asList(
-            "facebook.com",
-            "instagram.com",
-            "twitter.com",
-            "youtube.com"
-    ));
+    private static final Set<String> EXCLUDED_DOMAINS =
+            new HashSet<>(Arrays.asList("facebook.com", "instagram.com", "twitter.com", "youtube.com"));
 
     public TavilyJobSearchService(@Value("${tavily.api.key}") String tavilyApiKey) {
         super(tavilyApiKey);
     }
 
     public List<JobSearchResult> searchJobs(String query, String location, boolean isRemoteOnly) {
-        logger.info("Performing Tavily job search with query: {}, location: {}, remoteOnly: {}",
-                   query, location, isRemoteOnly);
+        logger.info(
+                "Performing Tavily job search with query: {}, location: {}, remoteOnly: {}",
+                query,
+                location,
+                isRemoteOnly);
 
         String enhancedQuery = buildOptimizedQuery(query, location, isRemoteOnly);
         logger.debug("Enhanced query (length: {}): {}", enhancedQuery.length(), enhancedQuery);
@@ -157,8 +154,9 @@ public class TavilyJobSearchService extends TavilySearchService {
 
         // Verify it's not a job search page or list
         String lowerTitle = title.toLowerCase();
-        return !lowerTitle.contains("search jobs") && !lowerTitle.contains("job list") &&
-                !lowerTitle.contains("career opportunities");
+        return !lowerTitle.contains("search jobs")
+                && !lowerTitle.contains("job list")
+                && !lowerTitle.contains("career opportunities");
     }
 
     private JobSearchResult createJobResult(String title, String description, URI url) {
@@ -176,35 +174,37 @@ public class TavilyJobSearchService extends TavilySearchService {
     private String extractCompany(String title) {
         Matcher matcher = COMPANY_PATTERN.matcher(title);
         if (matcher.find())
-            return matcher.group(1) != null ? matcher.group(1).trim() : matcher.group(2).trim();
+            return matcher.group(1) != null
+                    ? matcher.group(1).trim()
+                    : matcher.group(2).trim();
 
         return "Unknown Company";
     }
 
     private String cleanTitle(String title) {
-        return title.replaceAll("\\|.*$", "")  // Remove everything after |
-                   .replaceAll("at\\s+[\\w\\s&]+$", "") // Remove "at Company"
-                   .replaceAll("\\([^)]*\\)", "") // Remove parentheses and their contents
-                   .trim();
+        return title.replaceAll("\\|.*$", "") // Remove everything after |
+                .replaceAll("at\\s+[\\w\\s&]+$", "") // Remove "at Company"
+                .replaceAll("\\([^)]*\\)", "") // Remove parentheses and their contents
+                .trim();
     }
 
     private boolean isRemoteJob(String title, String description) {
         String combined = (title + " " + description).toLowerCase();
-        return combined.contains("remote") ||
-               combined.contains("work from home") ||
-               combined.contains("wfh") ||
-               combined.contains("virtual position") ||
-               combined.contains("remote-first") ||
-               combined.contains("fully remote");
+        return combined.contains("remote")
+                || combined.contains("work from home")
+                || combined.contains("wfh")
+                || combined.contains("virtual position")
+                || combined.contains("remote-first")
+                || combined.contains("fully remote");
     }
 
     private boolean isDirectJobLink(final URI url) {
         final String lowerUrl = url.toString().toLowerCase();
-        return (lowerUrl.contains("/jobs/") ||
-                lowerUrl.contains("/careers/") ||
-                lowerUrl.contains("/job/") ||
-                lowerUrl.contains("apply") ||
-                lowerUrl.contains("position")) &&
-               JOB_DOMAINS.stream().anyMatch(domain -> lowerUrl.contains(domain.toLowerCase()));
+        return (lowerUrl.contains("/jobs/")
+                        || lowerUrl.contains("/careers/")
+                        || lowerUrl.contains("/job/")
+                        || lowerUrl.contains("apply")
+                        || lowerUrl.contains("position"))
+                && JOB_DOMAINS.stream().anyMatch(domain -> lowerUrl.contains(domain.toLowerCase()));
     }
 }

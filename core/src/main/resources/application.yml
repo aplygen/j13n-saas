@@ -1,3 +1,4 @@
+---
 spring:
   application:
     name: core
@@ -5,28 +6,22 @@ spring:
     url: jdbc:postgresql://localhost:5432/your_database
     username: your_username
     password: your_password
-
 server:
   port: 8080
-
 google:
   api:
-    key: ${GOOGLE_API_KEY}
+    key: "${GOOGLE_API_KEY}"
   cse:
-    id: ${GOOGLE_CSE_ID}
-
+    id: "${GOOGLE_CSE_ID}"
 tavily:
   api:
-    key: ${TAVILY_API_KEY}
-
+    key: "${TAVILY_API_KEY}"
 openai:
   api:
-    key: ${OPENAI_API_KEY}
+    key: "${OPENAI_API_KEY}"
     model: gpt-4-turbo-preview
     temperature: 0.3
     max-tokens: 1000
-
-# JWT Configuration
 jwt:
-  secret: ${JWT_SECRET:j13nSecretKeyForJWTTokenGenerationAndVerificationPurposes}
-  expiration: 86400000 # 24 hours in milliseconds
+  secret: "${JWT_SECRET:j13nSecretKeyForJWTTokenGenerationAndVerificationPurposes}"
+  expiration: 86400000

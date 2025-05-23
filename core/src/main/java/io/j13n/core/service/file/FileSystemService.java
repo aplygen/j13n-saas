@@ -1,6 +1,19 @@
 package io.j13n.core.service.file;
 
 import io.j13n.core.model.file.FileDetail;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +38,6 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
 @Service
 public class FileSystemService implements AutoCloseable {
 
@@ -49,6 +48,7 @@ public class FileSystemService implements AutoCloseable {
 
     @Getter
     private final Path tempFolder;
+
     private final Map<String, Long> fileAccessCache = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(FileSystemService.class);
 

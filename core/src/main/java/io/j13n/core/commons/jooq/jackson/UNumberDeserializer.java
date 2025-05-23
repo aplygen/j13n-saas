@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
 import io.j13n.core.commons.base.exception.GenericException;
-import org.jooq.types.UNumber;
-import org.springframework.http.HttpStatus;
-
 import java.io.IOException;
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import org.jooq.types.UNumber;
+import org.springframework.http.HttpStatus;
 
 public class UNumberDeserializer<R extends UNumber> extends StdDeserializer<R> {
 

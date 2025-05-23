@@ -1,14 +1,13 @@
 package io.j13n.core.model.scrape;
 
 import io.j13n.core.model.JobSearchResult;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 @Accessors(chain = true)

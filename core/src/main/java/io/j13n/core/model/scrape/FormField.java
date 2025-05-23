@@ -2,7 +2,6 @@ package io.j13n.core.model.scrape;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -16,9 +15,9 @@ public class FormField {
     private boolean required;
     private String placeholder;
     private String defaultValue;
-    private String[] options;  // for select/radio/checkbox fields
-    private String selector;   // CSS selector to locate this field
-    private Map<String, String> metadata;  // Additional metadata for special field types
+    private String[] options; // for select/radio/checkbox fields
+    private String selector; // CSS selector to locate this field
+    private Map<String, String> metadata; // Additional metadata for special field types
 
     public FormField() {
         this.metadata = new HashMap<>();

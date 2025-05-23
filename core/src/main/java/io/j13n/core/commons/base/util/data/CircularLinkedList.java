@@ -1,10 +1,9 @@
 package io.j13n.core.commons.base.util.data;
 
-import lombok.Getter;
-
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
+import lombok.Getter;
 
 @Getter
 public class CircularLinkedList<T> {

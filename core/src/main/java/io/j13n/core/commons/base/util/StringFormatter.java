@@ -2,13 +2,11 @@ package io.j13n.core.commons.base.util;
 
 public class StringFormatter {
 
-    private StringFormatter() {
-    }
+    private StringFormatter() {}
 
     public static String format(String formatString, Object... params) {
 
-        if (params == null || params.length == 0)
-            return formatString;
+        if (params == null || params.length == 0) return formatString;
 
         StringBuilder sb = new StringBuilder();
         int ind = 0;
@@ -19,12 +17,9 @@ public class StringFormatter {
         for (int i = 0; i < length; i++) {
             chr = formatString.charAt(i);
 
-            if (chr == '$' && prevchar == '\\')
-                sb.setCharAt(i - 1, chr);
-            else if (chr == '$' && ind < params.length)
-                sb.append(params[ind++]);
-            else
-                sb.append(chr);
+            if (chr == '$' && prevchar == '\\') sb.setCharAt(i - 1, chr);
+            else if (chr == '$' && ind < params.length) sb.append(params[ind++]);
+            else sb.append(chr);
 
             prevchar = chr;
         }

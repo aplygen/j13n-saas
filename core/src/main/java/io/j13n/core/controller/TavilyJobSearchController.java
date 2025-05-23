@@ -1,15 +1,13 @@
 package io.j13n.core.controller;
 
+import io.j13n.core.model.JobSearchResult;
+import io.j13n.core.service.search.tavily.TavilyJobSearchService;
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.j13n.core.model.JobSearchResult;
-import io.j13n.core.service.search.tavily.TavilyJobSearchService;
 
 @RestController
 @RequestMapping("/api/v1/tavily/jobs")
@@ -33,8 +31,7 @@ public class TavilyJobSearchController {
 
     @GetMapping("/search/remote")
     public ResponseEntity<List<JobSearchResult>> searchRemoteJobs(
-            @RequestParam String query,
-            @RequestParam(required = false) String location) {
+            @RequestParam String query, @RequestParam(required = false) String location) {
 
         List<JobSearchResult> results = tavilyJobSearchService.searchJobs(query, location, true);
         return ResponseEntity.ok(results);

@@ -1,6 +1,10 @@
 package io.j13n.core.commons.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serial;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +12,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.io.Serial;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,16 +30,14 @@ public class ContextAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        if (user == null)
-            return null;
+        if (user == null) return null;
         return user.getFirstName();
     }
 
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (user == null)
-            return List.of();
+        if (user == null) return List.of();
         return user.getAuthorities();
     }
 

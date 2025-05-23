@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableScheduling
 @EnableRabbit
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class CoreApplication {
 
     public static void main(String[] args) {

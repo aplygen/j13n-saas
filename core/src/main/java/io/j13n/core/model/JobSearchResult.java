@@ -1,12 +1,11 @@
 package io.j13n.core.model;
 
+import java.net.URI;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
-
-import java.net.URI;
-import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
@@ -18,7 +17,7 @@ public class JobSearchResult {
     private String location;
     private String description;
     private URI applicationUrl;
-    private String source; // e.g., "LinkedIn", "Indeed", etc.
+    private String source;
     private LocalDateTime postedDate;
     private boolean isRemote;
 

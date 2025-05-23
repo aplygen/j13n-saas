@@ -2,11 +2,10 @@ package io.j13n.core.commons.jooq.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
+import java.io.Serial;
 import org.jooq.types.UInteger;
 import org.jooq.types.ULong;
 import org.jooq.types.UShort;
-
-import java.io.Serial;
 
 public class UnsignedNumbersSerializationModule extends SimpleModule {
 

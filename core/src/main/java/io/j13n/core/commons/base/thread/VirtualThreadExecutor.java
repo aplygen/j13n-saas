@@ -1,7 +1,5 @@
 package io.j13n.core.commons.base.thread;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -9,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Utility class for managing virtual threads with similar functionality to reactive programming.
@@ -55,9 +54,7 @@ public class VirtualThreadExecutor {
                 .toList();
 
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenApply(v -> futures.stream()
-                        .map(CompletableFuture::join)
-                        .toList());
+                .thenApply(v -> futures.stream().map(CompletableFuture::join).toList());
     }
 
     /**
@@ -69,11 +66,10 @@ public class VirtualThreadExecutor {
      * @return A CompletableFuture containing the result or an exception
      */
     public static <T> CompletableFuture<T> error(Supplier<T> supplier) {
-        return CompletableFuture.supplyAsync(supplier, virtualThreadExecutor)
-                .exceptionally(throwable -> {
-                    log.error("Error executing task in virtual thread", throwable);
-                    throw new CompletionException(throwable);
-                });
+        return CompletableFuture.supplyAsync(supplier, virtualThreadExecutor).exceptionally(throwable -> {
+            log.error("Error executing task in virtual thread", throwable);
+            throw new CompletionException(throwable);
+        });
     }
 
     /**
@@ -84,14 +80,16 @@ public class VirtualThreadExecutor {
      * @return A CompletableFuture that completes after the delay
      */
     public static CompletableFuture<Void> delay(long delay) {
-        return CompletableFuture.runAsync(() -> {
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new CompletionException(e);
-            }
-        }, virtualThreadExecutor);
+        return CompletableFuture.runAsync(
+                () -> {
+                    try {
+                        Thread.sleep(delay);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new CompletionException(e);
+                    }
+                },
+                virtualThreadExecutor);
     }
 
     /**

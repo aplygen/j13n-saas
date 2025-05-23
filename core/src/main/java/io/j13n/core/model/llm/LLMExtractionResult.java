@@ -2,7 +2,6 @@ package io.j13n.core.model.llm;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 

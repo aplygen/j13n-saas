@@ -1,29 +1,28 @@
 package io.j13n.core.service.search.tavily;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.anyString;
-import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import dev.langchain4j.web.search.WebSearchInformationResult;
 import dev.langchain4j.web.search.WebSearchOrganicResult;
 import dev.langchain4j.web.search.WebSearchResults;
 import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
+import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class TavilyJobSearchServiceTest {
@@ -49,10 +48,9 @@ class TavilyJobSearchServiceTest {
         WebSearchOrganicResult mockResult = new WebSearchOrganicResult(
                 "Senior Software Engineer at Google | Remote",
                 URI.create("https://careers.google.com/jobs/123"),
-                "Exciting opportunity for a Senior Software Engineer. Remote work available. " +
-                "Join our team to work on cutting-edge technology.",
-                "text/html"
-        );
+                "Exciting opportunity for a Senior Software Engineer. Remote work available. "
+                        + "Join our team to work on cutting-edge technology.",
+                "text/html");
 
         Map<String, Object> metadata = new HashMap<>();
         WebSearchInformationResult info = new WebSearchInformationResult(500L, 1, metadata);
@@ -70,7 +68,8 @@ class TavilyJobSearchServiceTest {
         assertEquals("Senior Software Engineer", job.getTitle());
         assertEquals("Google", job.getCompany());
         assertTrue(job.isRemote());
-        assertEquals("https://careers.google.com/jobs/123", job.getApplicationUrl().toString());
+        assertEquals(
+                "https://careers.google.com/jobs/123", job.getApplicationUrl().toString());
     }
 
     @Test
@@ -105,8 +104,7 @@ class TavilyJobSearchServiceTest {
                 "Search Jobs - Career Opportunities",
                 URI.create("https://example.com/search-jobs"),
                 "Find your next career opportunity. Browse thousands of jobs.",
-                "text/html"
-        );
+                "text/html");
 
         Map<String, Object> metadata = new HashMap<>();
         WebSearchInformationResult info = new WebSearchInformationResult(500L, 1, metadata);
@@ -129,12 +127,11 @@ class TavilyJobSearchServiceTest {
         String location = "London";
         boolean isRemoteOnly = false;
 
-        when(mockSearchEngine.search(anyString()))
-                .thenThrow(new RuntimeException("API Error"));
+        when(mockSearchEngine.search(anyString())).thenThrow(new RuntimeException("API Error"));
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> searchService.searchJobs(query, location, isRemoteOnly));
+        RuntimeException exception =
+                assertThrows(RuntimeException.class, () -> searchService.searchJobs(query, location, isRemoteOnly));
 
         assertEquals("Failed to perform Tavily job search", exception.getMessage());
     }

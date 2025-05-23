@@ -16,6 +16,11 @@ import io.lettuce.core.api.async.RedisAsyncCommands;
 import io.lettuce.core.codec.RedisCodec;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +35,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public abstract class AbstractBaseConfiguration implements WebMvcConfigurer {
 

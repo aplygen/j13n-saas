@@ -6,16 +6,15 @@ import io.j13n.core.commons.base.exception.GenericException;
 import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.jooq.dao.AbstractUpdatableDAO;
-import org.jooq.UpdatableRecord;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import org.jooq.UpdatableRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 public abstract class AbstractJOOQUpdatableDataService<
                 R extends UpdatableRecord<R>,

@@ -4,10 +4,10 @@ import java.io.Serial;
 
 public class EventCreationException extends RuntimeException {
 
-	@Serial
-	private static final long serialVersionUID = 6415843079341795248L;
+    @Serial
+    private static final long serialVersionUID = 6415843079341795248L;
 
-	public EventCreationException(String errorField) {
-		super(errorField + " cannot be null or blank");
-	}
+    public EventCreationException(String errorField) {
+        super(errorField + " cannot be null or blank");
+    }
 }

@@ -11,6 +11,14 @@ import io.j13n.core.commons.base.model.condition.FilterCondition;
 import io.j13n.core.commons.base.model.condition.FilterConditionOperator;
 import io.j13n.core.commons.base.model.dto.AbstractDTO;
 import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -33,15 +41,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
-import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public abstract class AbstractDAO<R extends UpdatableRecord<R>, I extends Serializable, D extends AbstractDTO<I, I>> {

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
     <groupId>io.j13n</groupId>
     <artifactId>core</artifactId>
@@ -27,128 +30,75 @@
         <url/>
     </scm>
     <properties>
+        <aws.s3.version>2.25.16</aws.s3.version>
+        <base.package>io.j13n.core</base.package>
+        <base.package.dir>io/j13n/core</base.package.dir>
+        <database.schema.name>entity_processor</database.schema.name>
+        <env.ENVIRONMENT>dev</env.ENVIRONMENT>
         <java.version>24</java.version>
+        <jaxb.api.version>2.3.1</jaxb.api.version>
+        <jaxb.runtime.version>4.0.0</jaxb.runtime.version>
+        <jib.maven.plugin.version>3.3.0</jib.maven.plugin.version>
+        <jooq.dir>${main.java.dir}/${base.package.dir}/${server.package.dir}/jooq</jooq.dir>
+        <jooq.package>${base.package}.${server.package}.jooq</jooq.package>
+        <jooq.version>3.20.4</jooq.version>
+        <jsoup.version>1.17.2</jsoup.version>
+        <jwt.version>0.11.5</jwt.version>
+        <langchain4j.beta.version>1.0.0-beta4</langchain4j.beta.version>
+        <!-- Dependency versions -->
+        <langchain4j.version>1.0.0-rc1</langchain4j.version>
+        <main.java.dir>src/main/java</main.java.dir>
+        <mysql.connector.version>8.0.29</mysql.connector.version>
+        <mysql.jdbc.password>Vishwas123#</mysql.jdbc.password>
+        <mysql.jdbc.url>jdbc:mysql://localhost:3306/${database.schema.name}</mysql.jdbc.url>
+        <mysql.jdbc.user>root</mysql.jdbc.user>
+        <palantir-java.format.version>2.67.0</palantir-java.format.version>
+        <playwright.version>1.42.0</playwright.version>
+        <resources.dir>src/main/resources</resources.dir>
+        <server.package>core</server.package>
+        <server.package.dir>core</server.package.dir>
+        <spotless.version>2.44.4</spotless.version>
+        <test.java.dir>src/test/java</test.java.dir>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-core</artifactId>
-            <version>1.0.0-rc1</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j</artifactId>
-            <version>1.0.0-rc1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-web-search-engine-google-custom</artifactId>
-            <version>1.0.0-beta4</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-web-search-engine-tavily</artifactId>
-            <version>1.0.0-beta4</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.langchain4j</groupId>
-            <artifactId>langchain4j-open-ai</artifactId>
-            <version>1.0.0-rc1</version>
-        </dependency>
-
-        <!-- AWS S3 Async Client -->
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>s3</artifactId>
-            <version>2.25.16</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.17.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
         </dependency>
         <dependency>
             <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>
-            <version>1.42.0</version>
+            <version>${playwright.version}</version>
         </dependency>
-        <!-- Spring Security -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-core</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-open-ai</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-web-search-engine-google-custom</artifactId>
+            <version>${langchain4j.beta.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-web-search-engine-tavily</artifactId>
+            <version>${langchain4j.beta.version}</version>
         </dependency>
         <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.11.5</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.11.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- Validation -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
         <dependency>
             <groupId>io.lettuce</groupId>
             <artifactId>lettuce-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-        <!-- PostgreSQL -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
         </dependency>
         <!-- jOOQ -->
         <dependency>
@@ -157,57 +107,300 @@
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>
+            <artifactId>jooq-codegen</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>
+            <artifactId>jooq-meta</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+        </dependency>
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- Validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
+        <!-- AWS S3 Async Client -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${aws.s3.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.amqp</groupId>
-            <artifactId>spring-rabbit</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>spring-libs-milestone</id>
+            <url>https://repo.spring.io/libs-milestone</url>
+        </repository>
+        <repository>
+            <id>spring-libs-snapshot</id>
+            <url>https://repo.spring.io/libs-snapshot</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.maven.plugin.version}</version>
                 <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-configuration-processor</artifactId>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
+                    <from>
+                        <image>openjdk:alpine</image>
+                    </from>
+                    <to>
+                        <image>ghcr.io/j13n-saas/core</image>
+                        <tags>
+                            <tag>${env.ENVIRONMENT}</tag>
+                            <tag>${project.version}</tag>
+                        </tags>
+                    </to>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>jooq</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jooq</groupId>
+                        <artifactId>jooq-codegen-maven</artifactId>
+                        <configuration>
+                            <jdbc>
+                                <driver>com.mysql.cj.jdbc.Driver</driver>
+                                <url>${mysql.jdbc.url}</url>
+                                <user>${mysql.jdbc.user}</user>
+                                <password>${mysql.jdbc.password}</password>
+                            </jdbc>
+                            <generator>
+                                <database>
+                                    <includes>${database.schema.name}_.*</includes>
+                                    <inputSchema>${database.schema.name}</inputSchema>
+                                    <forcedTypes/>
+                                </database>
+                                <generate>
+                                    <deprecated>false</deprecated>
+                                    <relations>true</relations>
+                                    <records>true</records>
+                                    <immutablePojos>false</immutablePojos>
+                                    <fluentSetters>true</fluentSetters>
+                                </generate>
+                                <target>
+                                    <packageName>${jooq.package}</packageName>
+                                    <directory>${main.java.dir}</directory>
+                                </target>
+                            </generator>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                                <version>${jaxb.api.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>${mysql.connector.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.glassfish.jaxb</groupId>
+                                <artifactId>jaxb-runtime</artifactId>
+                                <version>${jaxb.runtime.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>spotless</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <version>${spotless.version}</version>
+                        <configuration>
+                            <java>
+                                <includes>
+                                    <include>${main.java.dir}/**/*.java</include>
+                                    <include>${test.java.dir}/**/*.java</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>${jooq.dir}/**/*.java</exclude>
+                                </excludes>
+                                <palantirJavaFormat>
+                                    <version>${palantir-java.format.version}</version>
+                                    <style>PALANTIR</style>
+                                </palantirJavaFormat>
+                                <importOrder/>
+                                <removeUnusedImports/>
+                                <formatAnnotations/>
+                                <trimTrailingWhitespace/>
+                                <endWithNewline/>
+                                <toggleOffOn/>
+                            </java>
+                            <pom>
+                                <includes>
+                                    <include>pom.xml</include>
+                                </includes>
+                                <sortPom>
+                                    <encoding>UTF-8</encoding>
+                                    <endWithNewline>true</endWithNewline>
+                                    <expandEmptyElements>false</expandEmptyElements>
+                                    <indentAttribute>all</indentAttribute>
+                                    <keepBlankLines>false</keepBlankLines>
+                                    <nrOfIndentSpace>4</nrOfIndentSpace>
+                                    <sortDependencies>scope,groupId,artifactId</sortDependencies>
+                                    <sortDependencyExclusions>groupId,artifactId</sortDependencyExclusions>
+                                    <sortDependencyManagement>groupId,artifactId</sortDependencyManagement>
+                                    <sortExecutions>false</sortExecutions>
+                                    <sortModules>true</sortModules>
+                                    <sortPlugins>groupId,artifactId</sortPlugins>
+                                    <sortProperties>true</sortProperties>
+                                </sortPom>
+                            </pom>
+                            <yaml>
+                                <includes>
+                                    <include>${resources.dir}/*.yml</include>
+                                    <include>${resources.dir}/*.yaml</include>
+                                </includes>
+                                <jackson>
+                                    <features>
+                                        <INDENT_OUTPUT>true</INDENT_OUTPUT>
+                                        <ORDER_MAP_ENTRIES_BY_KEYS>true</ORDER_MAP_ENTRIES_BY_KEYS>
+                                    </features>
+                                    <yamlFeatures>
+                                        <WRITE_DOC_START_MARKER>true</WRITE_DOC_START_MARKER>
+                                        <MINIMIZE_QUOTES>true</MINIMIZE_QUOTES>
+                                        <SPLIT_LINES>true</SPLIT_LINES>
+                                    </yamlFeatures>
+                                </jackson>
+                                <trimTrailingWhitespace/>
+                                <endWithNewline/>
+                            </yaml>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.diffplug.spotless</groupId>
+                                <artifactId>spotless-maven-plugin</artifactId>
+                                <version>${spotless.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.palantir.javaformat</groupId>
+                                <artifactId>palantir-java-format</artifactId>
+                                <version>${palantir-java.format.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                    <goal>apply</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

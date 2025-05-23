@@ -1,12 +1,11 @@
 package io.j13n.core.commons.base.model.condition;
 
 import io.j13n.core.commons.base.util.StringUtil;
+import java.io.Serial;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.io.Serial;
-import java.util.List;
 
 @Data
 @Accessors(chain = true)

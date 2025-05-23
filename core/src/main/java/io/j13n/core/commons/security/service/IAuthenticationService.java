@@ -1,9 +1,8 @@
 package io.j13n.core.commons.security.service;
 
+import java.util.concurrent.CompletableFuture;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
-
-import java.util.concurrent.CompletableFuture;
 
 public interface IAuthenticationService {
 

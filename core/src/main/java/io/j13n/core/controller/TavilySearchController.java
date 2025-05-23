@@ -1,13 +1,12 @@
 package io.j13n.core.controller;
 
+import dev.langchain4j.web.search.WebSearchResults;
+import io.j13n.core.service.search.tavily.TavilySearchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import dev.langchain4j.web.search.WebSearchResults;
-import io.j13n.core.service.search.tavily.TavilySearchService;
 
 @RestController
 @RequestMapping("/api/v1/tavily")

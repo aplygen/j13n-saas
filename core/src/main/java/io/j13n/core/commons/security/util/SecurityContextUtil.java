@@ -2,13 +2,12 @@ package io.j13n.core.commons.security.util;
 
 import io.j13n.core.commons.security.jwt.ContextAuthentication;
 import io.j13n.core.commons.security.jwt.ContextUser;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import java.util.Collection;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityContextUtil {
 

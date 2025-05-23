@@ -2,15 +2,14 @@ package io.j13n.core.commons.jooq.dao;
 
 import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
-import org.jooq.Field;
-import org.jooq.Table;
-import org.jooq.UpdatableRecord;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import org.jooq.Field;
+import org.jooq.Table;
+import org.jooq.UpdatableRecord;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public abstract class AbstractUpdatableDAO<

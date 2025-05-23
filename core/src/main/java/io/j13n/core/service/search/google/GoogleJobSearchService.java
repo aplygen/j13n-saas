@@ -6,11 +6,6 @@ import dev.langchain4j.web.search.WebSearchResults;
 import dev.langchain4j.web.search.google.customsearch.GoogleCustomWebSearchEngine;
 import io.j13n.core.model.JobSearchResult;
 import io.j13n.core.service.search.AbstractJobSearchService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +13,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GoogleJobSearchService extends AbstractJobSearchService {

@@ -1,23 +1,5 @@
 package io.j13n.core.service.search.tavily;
 
-import dev.langchain4j.web.search.WebSearchInformationResult;
-import dev.langchain4j.web.search.WebSearchOrganicResult;
-import dev.langchain4j.web.search.WebSearchRequest;
-import dev.langchain4j.web.search.WebSearchResults;
-import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,6 +7,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import dev.langchain4j.web.search.WebSearchInformationResult;
+import dev.langchain4j.web.search.WebSearchOrganicResult;
+import dev.langchain4j.web.search.WebSearchRequest;
+import dev.langchain4j.web.search.WebSearchResults;
+import dev.langchain4j.web.search.tavily.TavilyWebSearchEngine;
+import java.net.URI;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class TavilySearchServiceTest {
@@ -47,11 +46,7 @@ class TavilySearchServiceTest {
         // Arrange
         String query = "test query";
         WebSearchOrganicResult mockResult = new WebSearchOrganicResult(
-                "Test Result",
-                URI.create("https://example.com"),
-                "This is a test result",
-                "text/html"
-        );
+                "Test Result", URI.create("https://example.com"), "This is a test result", "text/html");
 
         Map<String, Object> metadata = new HashMap<>();
         WebSearchInformationResult info = new WebSearchInformationResult(500L, 1, metadata);
@@ -76,12 +71,10 @@ class TavilySearchServiceTest {
     void search_ApiError_ThrowsRuntimeException() {
         // Arrange
         String query = "test query";
-        when(mockSearchEngine.search(any(WebSearchRequest.class)))
-                .thenThrow(new RuntimeException("API Error"));
+        when(mockSearchEngine.search(any(WebSearchRequest.class))).thenThrow(new RuntimeException("API Error"));
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> searchService.search(query));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> searchService.search(query));
 
         assertEquals("Failed to perform Tavily search", exception.getMessage());
         verify(mockSearchEngine).search(any(WebSearchRequest.class));
