@@ -44,4 +44,12 @@ public enum UserStatusCode implements EnumType {
     public String getLiteral() {
         return literal;
     }
+
+    public Boolean isActive() {
+        return this == ACTIVE;
+    }
+
+    public Boolean isInActive() {
+        return this == INACTIVE || this == DELETED || this == LOCKED || this == PASSWORD_EXPIRED;
+    }
 }

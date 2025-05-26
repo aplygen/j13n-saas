@@ -98,4 +98,9 @@ public class StringUtil {
         }
         return new String(chars);
     }
+
+    public static String toUpperCaseWithUnderscores(String str) {
+        if (str == null || str.isBlank()) return str;
+        return str.trim().replaceAll("\\s+", "_").toUpperCase();
+    }
 }

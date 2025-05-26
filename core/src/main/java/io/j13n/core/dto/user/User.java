@@ -3,21 +3,22 @@ package io.j13n.core.dto.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.commons.security.jwt.ContextUser;
-import java.io.Serial;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Set;
+import io.j13n.core.enums.UserStatusCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.jooq.types.ULong;
+
+import java.io.Serial;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class User extends AbstractUpdatableDTO<ULong, ULong> {
+public class User extends AbstractUpdatableDTO<Long, Long> {
 
     public static final String PLACEHOLDER = "NONE";
 
@@ -32,14 +33,10 @@ public class User extends AbstractUpdatableDTO<ULong, ULong> {
     private String middleName;
     private String localeCode;
     private String password;
-    private boolean passwordHashed;
+    private boolean passwordHashed = Boolean.TRUE;
+    private UserStatusCode statusCode;
     private Short noFailedAttempt;
     private Set<String> authorities;
-
-    public static BigInteger safeFrom(ULong v) {
-        if (v == null) return null;
-        return v.toBigInteger();
-    }
 
     public String getUserName() {
         return PLACEHOLDER.equals(this.userName) ? null : this.userName;
@@ -69,12 +66,17 @@ public class User extends AbstractUpdatableDTO<ULong, ULong> {
         return this.passwordHashed;
     }
 
+    public User setAuthorities(Collection<String> authorities) {
+        this.authorities = authorities != null ? Set.copyOf(authorities) : null;
+        return this;
+    }
+
     @JsonIgnore
     public ContextUser toContextUser() {
         return new ContextUser()
-                .setId(safeFrom(getId()))
-                .setCreatedBy(safeFrom(getCreatedBy()))
-                .setUpdatedBy(safeFrom(getUpdatedBy()))
+                .setId(getId())
+                .setCreatedBy(getCreatedBy())
+                .setUpdatedBy(getUpdatedBy())
                 .setCreatedAt(getCreatedAt())
                 .setUpdatedAt(getUpdatedAt())
                 .setUserName(getUserName())

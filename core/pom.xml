@@ -31,9 +31,9 @@
     </scm>
     <properties>
         <aws.s3.version>2.25.16</aws.s3.version>
-        <base.package>io.j13n.core</base.package>
-        <base.package.dir>io/j13n/core</base.package.dir>
-        <database.schema.name>entity_processor</database.schema.name>
+        <base.package>io.j13n</base.package>
+        <base.package.dir>io/j13n</base.package.dir>
+        <database.schema.name>core</database.schema.name>
         <env.ENVIRONMENT>dev</env.ENVIRONMENT>
         <java.version>24</java.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
@@ -48,10 +48,10 @@
         <!-- Dependency versions -->
         <langchain4j.version>1.0.0-rc1</langchain4j.version>
         <main.java.dir>src/main/java</main.java.dir>
-        <mysql.connector.version>8.0.29</mysql.connector.version>
-        <mysql.jdbc.password>Vishwas123#</mysql.jdbc.password>
-        <mysql.jdbc.url>jdbc:mysql://localhost:3306/${database.schema.name}</mysql.jdbc.url>
-        <mysql.jdbc.user>root</mysql.jdbc.user>
+        <postgresql.version>42.7.2</postgresql.version>
+        <postgresql.jdbc.password>Vishwas123#</postgresql.jdbc.password>
+        <postgresql.jdbc.url>jdbc:postgresql://localhost:5432/${database.schema.name}</postgresql.jdbc.url>
+        <postgresql.jdbc.user>postgres</postgresql.jdbc.user>
         <palantir-java.format.version>2.67.0</palantir-java.format.version>
         <playwright.version>1.42.0</playwright.version>
         <resources.dir>src/main/resources</resources.dir>
@@ -200,6 +200,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -243,6 +251,53 @@
                 <artifactId>flyway-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-postgres</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <jdbc>
+                                <driver>org.postgresql.Driver</driver>
+                                <url>${postgresql.jdbc.url}</url>
+                                <user>${postgresql.jdbc.user}</user>
+                                <password>${postgresql.jdbc.password}</password>
+                            </jdbc>
+                            <generator>
+                                <database>
+                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                    <includes>CORE_.*</includes>
+                                    <inputSchema>${database.schema.name}</inputSchema>
+                                    <unsignedTypes>true</unsignedTypes>
+                                </database>
+                                <generate>
+                                    <deprecated>false</deprecated>
+                                    <relations>true</relations>
+                                    <records>true</records>
+                                    <immutablePojos>false</immutablePojos>
+                                    <fluentSetters>true</fluentSetters>
+                                </generate>
+                                <target>
+                                    <packageName>${jooq.package}</packageName>
+                                    <directory>${main.java.dir}</directory>
+                                </target>
+                            </generator>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -258,14 +313,15 @@
                         <artifactId>jooq-codegen-maven</artifactId>
                         <configuration>
                             <jdbc>
-                                <driver>com.mysql.cj.jdbc.Driver</driver>
-                                <url>${mysql.jdbc.url}</url>
-                                <user>${mysql.jdbc.user}</user>
-                                <password>${mysql.jdbc.password}</password>
+                                <driver>org.postgresql.Driver</driver>
+                                <url>${postgresql.jdbc.url}</url>
+                                <user>${postgresql.jdbc.user}</user>
+                                <password>${postgresql.jdbc.password}</password>
                             </jdbc>
                             <generator>
                                 <database>
-                                    <includes>${database.schema.name}_.*</includes>
+                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                    <includes>CORE_.*</includes>
                                     <inputSchema>${database.schema.name}</inputSchema>
                                     <forcedTypes/>
                                 </database>
@@ -289,9 +345,9 @@
                                 <version>${jaxb.api.version}</version>
                             </dependency>
                             <dependency>
-                                <groupId>mysql</groupId>
-                                <artifactId>mysql-connector-java</artifactId>
-                                <version>${mysql.connector.version}</version>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${postgresql.version}</version>
                             </dependency>
                             <dependency>
                                 <groupId>org.glassfish.jaxb</groupId>

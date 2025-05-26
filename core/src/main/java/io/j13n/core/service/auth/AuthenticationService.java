@@ -9,7 +9,6 @@ import io.j13n.core.commons.security.jwt.JWTUtil;
 import io.j13n.core.commons.security.service.IAuthenticationService;
 import io.j13n.core.model.auth.AuthenticationRequest;
 import io.j13n.core.model.auth.AuthenticationResponse;
-import io.j13n.core.model.user.User;
 import io.j13n.core.service.user.UserService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -124,17 +123,14 @@ public class AuthenticationService implements IAuthenticationService {
             }
 
             return VirtualThreadWrapper.flatMap(
-                    userService.findByUsername(claims.getUserId().toString()), userOpt -> {
-                        if (userOpt.isEmpty()) {
+                    userService.findByUsername(claims.getUserId().toString()), user -> {
+                        if (user == null)
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
-                        }
 
-                        User user = userOpt.get();
-                        if (!user.isEnabled()) {
+                        if (!user.getStatusCode().isInActive())
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
-                        }
 
-                        return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {
+                        return VirtualThreadWrapper.flatMap(user.toContextUser()), contextUser -> {
                             ContextAuthentication auth = new ContextAuthentication(
                                     contextUser,
                                     true,
