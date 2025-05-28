@@ -7,6 +7,8 @@ import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.base.util.ConditionUtil;
 import io.j13n.core.commons.jooq.dao.AbstractDAO;
 import io.j13n.core.commons.jooq.service.AbstractJOOQDataService;
+import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
 import org.jooq.UpdatableRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.io.Serializable;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class AbstractJOOQDataController<

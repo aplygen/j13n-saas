@@ -1,5 +1,6 @@
 package io.j13n.core.config;
 
+import javax.sql.DataSource;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -7,8 +8,6 @@ import org.jooq.impl.DefaultConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-
-import javax.sql.DataSource;
 
 /**
  * Configuration class for jOOQ.
@@ -28,14 +27,12 @@ public class JooqConfig {
     public DSLContext dslContext(DataSource dataSource) {
         // Wrap the DataSource in a TransactionAwareDataSourceProxy to ensure
         // that jOOQ uses the same transaction as Spring
-        TransactionAwareDataSourceProxy transactionAwareDataSource = 
-                new TransactionAwareDataSourceProxy(dataSource);
-        
+        TransactionAwareDataSourceProxy transactionAwareDataSource = new TransactionAwareDataSourceProxy(dataSource);
+
         // Create a jOOQ configuration with the PostgreSQL dialect
-        org.jooq.Configuration jooqConfig = new DefaultConfiguration()
-                .set(transactionAwareDataSource)
-                .set(SQLDialect.POSTGRES);
-        
+        org.jooq.Configuration jooqConfig =
+                new DefaultConfiguration().set(transactionAwareDataSource).set(SQLDialect.POSTGRES);
+
         // Create and return the DSLContext
         return DSL.using(jooqConfig);
     }

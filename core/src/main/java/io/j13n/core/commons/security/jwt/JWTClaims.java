@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
@@ -21,7 +20,7 @@ public class JWTClaims implements Serializable {
     @Serial
     private static final long serialVersionUID = 4106423186808388123L;
 
-    private BigInteger userId;
+    private Long userId;
     private String hostName;
     private String port;
     private boolean oneTime = false;
@@ -31,7 +30,7 @@ public class JWTClaims implements Serializable {
         Claims claims = parsed.getBody();
 
         return new JWTClaims()
-                .setUserId(BigInteger.valueOf(claims.get("userId", Long.class)))
+                .setUserId(claims.get("userId", Long.class))
                 .setHostName(claims.get("hostName", String.class))
                 .setPort(claims.get("port", String.class))
                 .setOneTime(claims.containsKey(ONE_TIME) ? claims.get(ONE_TIME, Boolean.class) : Boolean.FALSE);

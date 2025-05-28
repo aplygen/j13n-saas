@@ -1,11 +1,6 @@
 package io.j13n.core.commons.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,6 +8,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.Data;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Data
 @Accessors(chain = true)

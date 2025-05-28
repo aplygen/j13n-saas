@@ -4,6 +4,9 @@ import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.jooq.dao.AbstractUpdatableDAO;
 import io.j13n.core.commons.jooq.service.AbstractJOOQUpdatableDataService;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import org.jooq.UpdatableRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -11,10 +14,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.io.Serializable;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class AbstractJOOQUpdatableDataController<

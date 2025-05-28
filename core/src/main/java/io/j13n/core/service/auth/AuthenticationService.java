@@ -44,21 +44,15 @@ public class AuthenticationService implements IAuthenticationService {
 
     public CompletableFuture<AuthenticationResponse> authenticate(
             AuthenticationRequest authRequest, ServerHttpRequest request) {
-        return VirtualThreadWrapper.flatMap(userService.findByUsername(authRequest.getUserName()), userOpt -> {
-            if (userOpt.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-            }
+        return VirtualThreadWrapper.flatMap(userService.findByUsername(authRequest.getUserName()), user -> {
+            if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
-            User user = userOpt.get();
-            if (!user.isEnabled()) {
+            if (!user.getStatusCode().isInActive())
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled");
-            }
 
             return VirtualThreadWrapper.flatMap(
                     userService.validatePassword(user, authRequest.getPassword()), isValid -> {
-                        if (!isValid) {
-                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-                        }
+                        if (!isValid) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
                         return VirtualThreadWrapper.flatMap(
                                 userService.toContextUser(user),
@@ -91,22 +85,17 @@ public class AuthenticationService implements IAuthenticationService {
     @Override
     public CompletableFuture<Authentication> getAuthentication(
             boolean isBasic, String bearerToken, ServerHttpRequest request) {
-        if (bearerToken == null || bearerToken.isBlank()) {
+        if (bearerToken == null || bearerToken.isBlank())
             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
-        }
 
         bearerToken = bearerToken.trim();
 
-        if (bearerToken.startsWith("Bearer ")) {
-            bearerToken = bearerToken.substring(7);
-        }
+        if (bearerToken.startsWith("Bearer ")) bearerToken = bearerToken.substring(7);
 
         final String token = bearerToken;
 
         return VirtualThreadWrapper.flatMap(cacheService.get(CACHE_NAME_TOKEN, token), cachedAuth -> {
-                    if (cachedAuth != null) {
-                        return VirtualThreadWrapper.just((Authentication) cachedAuth);
-                    }
+                    if (cachedAuth != null) return VirtualThreadWrapper.just((Authentication) cachedAuth);
 
                     return extractAndValidateToken(token, request);
                 })
@@ -118,9 +107,8 @@ public class AuthenticationService implements IAuthenticationService {
             JWTClaims claims = JWTUtil.getClaimsFromToken(tokenKey, token);
 
             String host = request.getURI().getHost();
-            if (!host.equals(claims.getHostName())) {
+            if (!host.equals(claims.getHostName()))
                 return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
-            }
 
             return VirtualThreadWrapper.flatMap(
                     userService.findByUsername(claims.getUserId().toString()), user -> {
@@ -130,7 +118,7 @@ public class AuthenticationService implements IAuthenticationService {
                         if (!user.getStatusCode().isInActive())
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-                        return VirtualThreadWrapper.flatMap(user.toContextUser()), contextUser -> {
+                        return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {
                             ContextAuthentication auth = new ContextAuthentication(
                                     contextUser,
                                     true,

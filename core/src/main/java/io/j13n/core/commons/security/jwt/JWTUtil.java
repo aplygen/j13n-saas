@@ -6,7 +6,6 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -55,7 +54,7 @@ public class JWTUtil {
     @Builder
     public static class JWTGenerateTokenParameters {
 
-        BigInteger userId;
+        Long userId;
         String secretKey;
         Integer expiryInMin;
         String host;
