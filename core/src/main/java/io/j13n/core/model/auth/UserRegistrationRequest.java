@@ -1,5 +1,6 @@
 package io.j13n.core.model.auth;
 
+import io.j13n.core.dto.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,15 +14,23 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class UserRegistrationRequest {
-    // Required fields
-    private String userName;
     private String password;
-
-    // Optional fields
     private String emailId;
     private String phoneNumber;
     private String firstName;
     private String lastName;
     private String middleName;
     private String localeCode;
+
+    public User toUser() {
+        return new User()
+                .setUserName(emailId)
+                .setPassword(password)
+                .setEmailId(emailId)
+                .setPhoneNumber(phoneNumber)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setMiddleName(middleName)
+                .setLocaleCode(localeCode);
+    }
 }

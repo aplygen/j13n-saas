@@ -2,7 +2,6 @@ package io.j13n.core.commons.base.configuration.service;
 
 import io.j13n.core.commons.base.exception.GenericException;
 import io.j13n.core.commons.base.util.StringFormatter;
-
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;

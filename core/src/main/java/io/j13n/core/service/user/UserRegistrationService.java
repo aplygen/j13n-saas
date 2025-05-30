@@ -7,17 +7,14 @@ import io.j13n.core.model.auth.AuthenticationRequest;
 import io.j13n.core.model.auth.AuthenticationResponse;
 import io.j13n.core.model.auth.UserRegistrationRequest;
 import io.j13n.core.service.auth.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-/**
- * Service responsible for handling user registration.
- */
 @Service
 public class UserRegistrationService {
 
@@ -33,25 +30,10 @@ public class UserRegistrationService {
     }
 
     public CompletableFuture<AuthenticationResponse> registerUser(
-            UserRegistrationRequest registrationRequest, ServerHttpRequest request) {
-        User user = new User()
-                .setUserName(registrationRequest.getUserName())
-                .setPassword(registrationRequest.getPassword())
-                .setEmailId(registrationRequest.getEmailId())
-                .setPhoneNumber(registrationRequest.getPhoneNumber())
-                .setFirstName(registrationRequest.getFirstName())
-                .setLastName(registrationRequest.getLastName())
-                .setMiddleName(registrationRequest.getMiddleName())
-                .setLocaleCode(registrationRequest.getLocaleCode());
-
-        return this.createUser(user).thenCompose(registeredUser -> {
-            AuthenticationRequest authRequest = new AuthenticationRequest()
-                    .setUserName(registeredUser.getUserName())
-                    .setPassword(registrationRequest.getPassword())
-                    .setRememberMe(false);
-
-            return authenticationService.authenticate(authRequest, request);
-        });
+            UserRegistrationRequest registrationRequest, HttpServletRequest request) {
+        return this.createUser(registrationRequest.toUser())
+                .thenCompose(registeredUser ->
+                        authenticationService.authenticate(AuthenticationRequest.of(registeredUser), request));
     }
 
     private CompletableFuture<User> createUser(User user) {

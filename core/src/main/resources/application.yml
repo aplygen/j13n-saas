@@ -23,14 +23,12 @@ spring:
   threads:
     virtual:
       enabled: true
-
 aws:
   accessKeyId: aosdhj0813ued0813
   secretKey: oqwijd0813ue8091
   region: ap-south-2
   bucket:
     name: j13n
-
 server:
   port: 8080
 google:

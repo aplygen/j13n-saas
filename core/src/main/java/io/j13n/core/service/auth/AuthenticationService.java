@@ -10,12 +10,12 @@ import io.j13n.core.commons.security.service.IAuthenticationService;
 import io.j13n.core.model.auth.AuthenticationRequest;
 import io.j13n.core.model.auth.AuthenticationResponse;
 import io.j13n.core.service.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -43,7 +43,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     public CompletableFuture<AuthenticationResponse> authenticate(
-            AuthenticationRequest authRequest, ServerHttpRequest request) {
+            AuthenticationRequest authRequest, HttpServletRequest request) {
         return VirtualThreadWrapper.flatMap(userService.findByUsername(authRequest.getUserName()), user -> {
             if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
@@ -52,7 +52,8 @@ public class AuthenticationService implements IAuthenticationService {
 
             return VirtualThreadWrapper.flatMap(
                     userService.validatePassword(user, authRequest.getPassword()), isValid -> {
-                        if (!isValid) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+                        if (Boolean.FALSE.equals(isValid))
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
                         return VirtualThreadWrapper.flatMap(
                                 userService.toContextUser(user),
@@ -62,11 +63,11 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     private CompletableFuture<AuthenticationResponse> generateToken(
-            ContextUser user, boolean rememberMe, ServerHttpRequest request) {
+            ContextUser user, boolean rememberMe, HttpServletRequest request) {
         int timeInMinutes = rememberMe ? rememberMeExpiryInMinutes : defaultExpiryInMinutes;
 
-        String host = request.getURI().getHost();
-        String port = "" + request.getURI().getPort();
+        String host = request.getRemoteHost();
+        String port = "" + request.getLocalPort();
 
         Tuple2<String, LocalDateTime> token = JWTUtil.generateToken(JWTUtil.JWTGenerateTokenParameters.builder()
                 .userId(user.getId())
@@ -83,8 +84,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public CompletableFuture<Authentication> getAuthentication(
-            boolean isBasic, String bearerToken, ServerHttpRequest request) {
+    public CompletableFuture<Authentication> getAuthentication(String bearerToken, HttpServletRequest request) {
         if (bearerToken == null || bearerToken.isBlank())
             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
@@ -102,11 +102,11 @@ public class AuthenticationService implements IAuthenticationService {
                 .exceptionally(e -> new ContextAuthentication(null, false, null, null));
     }
 
-    private CompletableFuture<Authentication> extractAndValidateToken(String token, ServerHttpRequest request) {
+    private CompletableFuture<Authentication> extractAndValidateToken(String token, HttpServletRequest request) {
         try {
             JWTClaims claims = JWTUtil.getClaimsFromToken(tokenKey, token);
 
-            String host = request.getURI().getHost();
+            String host = request.getRemoteHost();
             if (!host.equals(claims.getHostName()))
                 return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
@@ -115,7 +115,7 @@ public class AuthenticationService implements IAuthenticationService {
                         if (user == null)
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-                        if (!user.getStatusCode().isInActive())
+                        if (Boolean.FALSE.equals(user.getStatusCode().isInActive()))
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
                         return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {
