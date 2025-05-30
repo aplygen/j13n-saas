@@ -1,13 +1,9 @@
 package io.j13n.core.service.llm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.output.Response;
 import io.j13n.core.model.llm.LLMExtractionResult;
 import io.j13n.core.model.scrape.FormField;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -25,28 +21,28 @@ public class LLMService {
     public CompletableFuture<Map<String, LLMExtractionResult>> analyzeContent(
             String content, List<FormField> formFields) {
         try {
-            var prompt = buildExtractionPrompt(content, formFields);
-            Response<AiMessage> response = chatModel.chat(UserMessage.from(prompt));
-            String jsonResponse = response.content().text();
+            //            AiMessage prompt = buildExtractionPrompt(content, formFields);
+            //            ChatResponse response = chatModel.chat(prompt);
+            //            String jsonResponse = response.
+            //
+            //            // Parse the JSON response into a map of field names to extraction results
+            //            @SuppressWarnings("unchecked")
+            //            Map<String, Map<String, Object>> rawResults = objectMapper.readValue(jsonResponse, Map.class);
+            //            Map<String, LLMExtractionResult> results = new HashMap<>();
+            //
+            //            for (var entry : rawResults.entrySet()) {
+            //                var fieldName = entry.getKey();
+            //                var fieldData = entry.getValue();
+            //
+            //                var result = new LLMExtractionResult()
+            //                        .setExtractedValue((String) fieldData.get("value"))
+            //                        .setConfidenceScore(((Number) fieldData.get("confidence")).doubleValue())
+            //                        .setReasoning((String) fieldData.get("reasoning"));
+            //
+            //                results.put(fieldName, result);
+            //            }
 
-            // Parse the JSON response into a map of field names to extraction results
-            @SuppressWarnings("unchecked")
-            Map<String, Map<String, Object>> rawResults = objectMapper.readValue(jsonResponse, Map.class);
-            Map<String, LLMExtractionResult> results = new HashMap<>();
-
-            for (var entry : rawResults.entrySet()) {
-                var fieldName = entry.getKey();
-                var fieldData = entry.getValue();
-
-                var result = new LLMExtractionResult()
-                        .setExtractedValue((String) fieldData.get("value"))
-                        .setConfidenceScore(((Number) fieldData.get("confidence")).doubleValue())
-                        .setReasoning((String) fieldData.get("reasoning"));
-
-                results.put(fieldName, result);
-            }
-
-            return CompletableFuture.completedFuture(results);
+            return CompletableFuture.completedFuture(null);
         } catch (Exception e) {
             log.error("Failed to analyze content with LLM", e);
             return CompletableFuture.failedFuture(e);

@@ -1,4 +1,4 @@
-package io.j13n.core.config;
+package io.j13n.core.configuration;
 
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAIConfig {
 
-    @Value("${openai.api.key}")
+    @Value("${openai.api.key:1231231241243}")
     private String apiKey;
 
     @Value("${openai.api.model}")

@@ -48,12 +48,12 @@
         <!-- Dependency versions -->
         <langchain4j.version>1.0.0-rc1</langchain4j.version>
         <main.java.dir>src/main/java</main.java.dir>
-        <postgresql.version>42.7.2</postgresql.version>
+        <palantir-java.format.version>2.67.0</palantir-java.format.version>
+        <playwright.version>1.42.0</playwright.version>
         <postgresql.jdbc.password>Vishwas123#</postgresql.jdbc.password>
         <postgresql.jdbc.url>jdbc:postgresql://localhost:5432/${database.schema.name}</postgresql.jdbc.url>
         <postgresql.jdbc.user>postgres</postgresql.jdbc.user>
-        <palantir-java.format.version>2.67.0</palantir-java.format.version>
-        <playwright.version>1.42.0</playwright.version>
+        <postgresql.version>42.7.2</postgresql.version>
         <resources.dir>src/main/resources</resources.dir>
         <server.package>core</server.package>
         <server.package.dir>core</server.package.dir>
@@ -100,6 +100,10 @@
             <groupId>io.lettuce</groupId>
             <artifactId>lettuce-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
         <!-- jOOQ -->
         <dependency>
             <groupId>org.jooq</groupId>
@@ -124,6 +128,10 @@
             <artifactId>postgresql</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -140,6 +148,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -200,14 +212,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -253,13 +257,20 @@
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>generate-postgres</id>
-                        <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <phase>generate-sources</phase>
                         <configuration>
                             <jdbc>
                                 <driver>org.postgresql.Driver</driver>
@@ -289,13 +300,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgresql.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -345,14 +349,14 @@
                                 <version>${jaxb.api.version}</version>
                             </dependency>
                             <dependency>
-                                <groupId>org.postgresql</groupId>
-                                <artifactId>postgresql</artifactId>
-                                <version>${postgresql.version}</version>
-                            </dependency>
-                            <dependency>
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
                                 <version>${jaxb.runtime.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${postgresql.version}</version>
                             </dependency>
                         </dependencies>
                         <executions>

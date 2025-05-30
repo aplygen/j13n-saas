@@ -7,15 +7,13 @@ import io.j13n.core.model.auth.AuthenticationRequest;
 import io.j13n.core.model.auth.AuthenticationResponse;
 import io.j13n.core.model.auth.UserRegistrationRequest;
 import io.j13n.core.service.auth.AuthenticationService;
-import org.springframework.http.ResponseEntity;
+import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.HashSet;
 
 /**
  * Service responsible for handling user registration.
@@ -27,14 +25,15 @@ public class UserRegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authenticationService;
 
-
-    public UserRegistrationService(UserService userService, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
+    public UserRegistrationService(
+            UserService userService, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationService = authenticationService;
     }
 
-    public CompletableFuture<AuthenticationResponse> registerUser(UserRegistrationRequest registrationRequest, ServerHttpRequest request) {
+    public CompletableFuture<AuthenticationResponse> registerUser(
+            UserRegistrationRequest registrationRequest, ServerHttpRequest request) {
         User user = new User()
                 .setUserName(registrationRequest.getUserName())
                 .setPassword(registrationRequest.getPassword())
@@ -45,48 +44,42 @@ public class UserRegistrationService {
                 .setMiddleName(registrationRequest.getMiddleName())
                 .setLocaleCode(registrationRequest.getLocaleCode());
 
-        return this.createUser(user)
-                .thenCompose(registeredUser -> {
-                    AuthenticationRequest authRequest = new AuthenticationRequest()
-                            .setUserName(registeredUser.getUserName())
-                            .setPassword(registrationRequest.getPassword())
-                            .setRememberMe(false);
+        return this.createUser(user).thenCompose(registeredUser -> {
+            AuthenticationRequest authRequest = new AuthenticationRequest()
+                    .setUserName(registeredUser.getUserName())
+                    .setPassword(registrationRequest.getPassword())
+                    .setRememberMe(false);
 
-                    return authenticationService.authenticate(authRequest, request);
-                });
+            return authenticationService.authenticate(authRequest, request);
+        });
     }
 
     private CompletableFuture<User> createUser(User user) {
-        return VirtualThreadWrapper.flatMap(
-                validateNewUser(user),
-                validUser -> {
-                    validUser.setPassword(passwordEncoder.encode(validUser.getPassword()));
-                    validUser.setPasswordHashed(true);
-                    
-                    validUser.setStatusCode(UserStatusCode.ACTIVE);
-                    
-                    if (validUser.getAuthorities() == null)
-                        validUser.setAuthorities(new HashSet<>());
-                    
-                    validUser.setNoFailedAttempt((short) 0);
-                    
-                    return userService.create(validUser);
-                }
-        );
+        return VirtualThreadWrapper.flatMap(validateNewUser(user), validUser -> {
+            validUser.setPassword(passwordEncoder.encode(validUser.getPassword()));
+            validUser.setPasswordHashed(true);
+
+            validUser.setStatusCode(UserStatusCode.ACTIVE);
+
+            if (validUser.getAuthorities() == null) validUser.setAuthorities(new HashSet<>());
+
+            validUser.setNoFailedAttempt((short) 0);
+
+            return userService.create(validUser);
+        });
     }
 
     private CompletableFuture<User> validateNewUser(User user) {
         return VirtualThreadWrapper.fromCallable(() -> {
             if (user.getUserName() == null || user.getUserName().isBlank())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is required");
-            
+
             if (user.getPassword() == null || user.getPassword().isBlank())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
-            
+
             User existingUser = userService.findByUsername(user.getUserName()).join();
-            if (existingUser != null)
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
-            
+            if (existingUser != null) throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+
             return user;
         });
     }

@@ -16,7 +16,7 @@ public class UserRegistrationRequest {
     // Required fields
     private String userName;
     private String password;
-    
+
     // Optional fields
     private String emailId;
     private String phoneNumber;

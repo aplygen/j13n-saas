@@ -3,9 +3,8 @@ package io.j13n.core.commons.base.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
 import io.j13n.core.commons.base.exception.GenericException;
+import io.j13n.core.service.CoreMessageResourceService;
 import jakarta.annotation.Priority;
-import java.net.URI;
-import java.time.Instant;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
+import java.time.Instant;
+
 @Slf4j
 @RestControllerAdvice
 @Priority(0)
@@ -25,7 +27,7 @@ public class ControllerAdvice {
     private static final Logger logger = LoggerFactory.getLogger(ControllerAdvice.class);
 
     @Autowired
-    private AbstractMessageService resourceService;
+    private CoreMessageResourceService resourceService;
 
     @Autowired
     private ObjectMapper objectMapper;

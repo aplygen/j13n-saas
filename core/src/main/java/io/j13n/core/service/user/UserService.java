@@ -6,10 +6,9 @@ import io.j13n.core.commons.security.jwt.ContextUser;
 import io.j13n.core.dao.UserDAO;
 import io.j13n.core.dto.user.User;
 import io.j13n.core.jooq.tables.records.CoreUsersRecord;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class UserService extends AbstractJOOQUpdatableDataService<CoreUsersRecord, Long, User, UserDAO> {

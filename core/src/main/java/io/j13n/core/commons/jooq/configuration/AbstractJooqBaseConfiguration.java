@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.j13n.core.commons.base.configuration.AbstractBaseConfiguration;
 import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
 import io.j13n.core.commons.jooq.jackson.UnsignedNumbersSerializationModule;
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -30,7 +29,6 @@ public abstract class AbstractJooqBaseConfiguration extends AbstractBaseConfigur
         super(objectMapper);
     }
 
-    @PostConstruct
     public void initialize(AbstractMessageService messageResourceService) {
         super.initialize();
         this.objectMapper.registerModule(new UnsignedNumbersSerializationModule(messageResourceService));

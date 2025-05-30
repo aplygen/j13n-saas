@@ -20,19 +20,30 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
     schemas: core
+  threads:
+    virtual:
+      enabled: true
+
+aws:
+  accessKeyId: aosdhj0813ued0813
+  secretKey: oqwijd0813ue8091
+  region: ap-south-2
+  bucket:
+    name: j13n
+
 server:
   port: 8080
 google:
   api:
-    key: "${GOOGLE_API_KEY}"
+    key: "${GOOGLE_API_KEY:123124214}"
   cse:
-    id: "${GOOGLE_CSE_ID}"
+    id: "${GOOGLE_CSE_ID:12341242143}"
 tavily:
   api:
-    key: "${TAVILY_API_KEY}"
+    key: "${TAVILY_API_KEY:2132141251234}"
 openai:
   api:
-    key: "${OPENAI_API_KEY}"
+    key: "${OPENAI_API_KEY:1203i12094129034}"
     model: gpt-4-turbo-preview
     temperature: 0.3
     max-tokens: 1000
