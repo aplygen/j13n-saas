@@ -37,7 +37,10 @@ public interface ISecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
                         .permitAll()
-                        .requestMatchers("**/internal/**")
+                        .requestMatchers("/.*internal.*")
+                        .permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**", "/swagger-resources/**", "/webjars/**", "/v3/api-docs/**", "/error")
                         .permitAll()
                         .requestMatchers("/actuator/**")
                         .permitAll()
