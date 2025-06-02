@@ -14,19 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Install Java 24 manually
+        run: |
+         sudo apt-get update
+         sudo apt-get install -y openjdk-24-jdk
+         java -version
 
       - name: Build config module with correct Maven profile
         run: |
           cd config
           if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "🔧 Building with production profile"
+            echo "Building with production profile"
             mvn clean install -Pproduction -DskipTests
           else
-            echo "🔧 Building with develop profile"
+            echo "Building with develop profile"
             mvn clean install -Pdevelop -DskipTests
           fi
