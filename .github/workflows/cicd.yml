@@ -45,5 +45,5 @@ jobs:
       - name: Build and Push Docker image
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/config:${{ github.ref_name }}
-          docker build -t $IMAGE_NAME -f config/Dockerfile .
+          docker build -t $IMAGE_NAME -f config/Dockerfile config/
           docker push $IMAGE_NAME
