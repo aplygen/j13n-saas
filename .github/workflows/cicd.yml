@@ -1,22 +1,32 @@
-name: Build & Package J13n SaaS
+name: Build with Maven
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-    - name: Build with Maven
-      run: mvn clean install -DskipTests
+      - name: Build config module with correct Maven profile
+        run: |
+          cd config
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "🔧 Building with production profile"
+            mvn clean install -Pproduction -DskipTests
+          else
+            echo "🔧 Building with develop profile"
+            mvn clean install -Pdevelop -DskipTests
+          fi

@@ -51,4 +51,23 @@
         </plugins>
     </build>
 
+    <profiles>
+    <profile>
+        <id>develop</id>
+        <properties>
+            <spring.profiles.active>develop</spring.profiles.active>
+        </properties>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+    </profile>
+
+    <profile>
+        <id>production</id>
+        <properties>
+            <spring.profiles.active>production</spring.profiles.active>
+        </properties>
+    </profile>
+</profiles>
+
 </project>
