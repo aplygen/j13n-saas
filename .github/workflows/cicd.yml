@@ -16,7 +16,7 @@ jobs:
 
       - name: Install Java 24 manually
         run: |
-          url -L -o https://download.java.net/java/early_access/jdk24/6/GPL/openjdk-24_linux-x64_bin.tar.gz
+          curl -L -o https://download.java.net/java/early_access/jdk24/6/GPL/openjdk-24_linux-x64_bin.tar.gz
           mkdir -p /usr/lib/jvm
           tar -xczf openjdk-24.tar.gz -C /usr/lib/jvm
           export JAVA_HOME=/usr/lib/jvm/jdk-24
