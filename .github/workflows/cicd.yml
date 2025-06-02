@@ -16,9 +16,14 @@ jobs:
 
       - name: Install Java 24 manually
         run: |
-         sudo apt-get update
-         sudo apt-get install -y openjdk-24-jdk
-         java -version
+          url -L -o openjdk-24.tar.gz https://download.java.net/java/early_access/jdk24/6/GPL/openjdk-24_linux-x64_bin.tar.gz
+          mkdir -p /usr/lib/jvm
+          tar -xczf openjdk-24.tar.gz -C /usr/lib/jvm
+          export JAVA_HOME=/usr/lib/jvm/jdk-24
+          echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+          echo "$JAVA_HOME/bin" >> $GITHUB_PATH
+          java -version
+
 
       - name: Build config module with correct Maven profile
         run: |
