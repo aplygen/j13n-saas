@@ -18,7 +18,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl
-          curl -L https://download.java.net/java/early_access/jdk24/6/GPL/openjdk-24_linux-x64_bin.tar.gz -o openjdk-24.tar.gz
+          curl -L -o openjdk-24.tar.gz https://download.java.net/java/early_access/jdk24/6/GPL/openjdk-24_linux-x64_bin.tar.gz
+          file openjdk-24.tar.gz
           mkdir -p /usr/lib/jvm
           tar -xzf openjdk-24.tar.gz -C /usr/lib/jvm
           export JAVA_HOME=$(find /usr/lib/jvm -maxdepth 1 -type d -name "jdk-24*" | head -n 1)
