@@ -1,4 +1,4 @@
-name: Build with Maven
+name: Build and Push Docker Image
 
 on:
   push:
@@ -7,8 +7,12 @@ on:
       - develop
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
 
     steps:
       - name: Checkout code
@@ -24,9 +28,22 @@ jobs:
         run: |
           cd config
           if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "Building with production profile"
-            mvn clean install -Pproduction -DskipTests
+            PROFILE=production
           else
-            echo "Building with develop profile"
-            mvn clean install -Pdevelop -DskipTests
+            PROFILE=develop
           fi
+          echo "Using Maven profile: $PROFILE"
+          mvn clean package -P$PROFILE -DskipTests
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/config:${{ github.ref_name }}
+          docker build -t $IMAGE_NAME -f config/Dockerfile .
+          docker push $IMAGE_NAME
