@@ -36,7 +36,7 @@
         <database.schema.name>core</database.schema.name>
         <database.db.name>postgres</database.db.name>
         <env.ENVIRONMENT>dev</env.ENVIRONMENT>
-        <java.version>24</java.version>
+        <java.version>21</java.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
         <jaxb.runtime.version>4.0.0</jaxb.runtime.version>
         <jib.maven.plugin.version>3.3.0</jib.maven.plugin.version>
