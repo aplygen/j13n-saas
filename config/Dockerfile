@@ -1,10 +1,14 @@
-FROM maven:3.9.5-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -Pproduction -DskipTests
+FROM openjdk:21-ea-jdk-oracle
 
-FROM eclipse-temurin:21-jdk
-WORKDIR /app
-COPY --from=build /app/target/config-*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT sh -c "java -Dserver.port=\$PORT -jar app.jar"
+COPY target/config-1.1.0.jar config-1.1.0.jar
+
+EXPOSE 8888
+
+ARG profileName
+ENV SPRING_PROFILE=$profileName
+
+ENV INSTANCE_ID=default
+
+VOLUME [ "/logs" ]
+
+ENTRYPOINT ["java", "-Dspring.cloud.config.server.git.uri=${GIT_URL}", "-Dspring.cloud.config.server.git.username=${GIT_USERNAME}", "-Dspring.cloud.config.server.git.password=${GIT_PASSWORD}", "-Dlogging.file.name=/logs/config-${INSTANCE_ID}.log", "-jar", "config-1.1.0.jar"]
