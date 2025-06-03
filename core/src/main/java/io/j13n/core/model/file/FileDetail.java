@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 @Data
 @Accessors(chain = true)
-public class FileDetail {
+public class FileDetail implements Serializable {
 
-    private Integer id;
+    private Long id;
     private String name;
     private boolean isDirectory;
     private long size;

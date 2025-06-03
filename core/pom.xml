@@ -34,6 +34,7 @@
         <base.package>io.j13n</base.package>
         <base.package.dir>io/j13n</base.package.dir>
         <database.schema.name>core</database.schema.name>
+        <database.db.name>postgres</database.db.name>
         <env.ENVIRONMENT>dev</env.ENVIRONMENT>
         <java.version>24</java.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
@@ -41,7 +42,7 @@
         <jib.maven.plugin.version>3.3.0</jib.maven.plugin.version>
         <jooq.dir>${main.java.dir}/${base.package.dir}/${server.package.dir}/jooq</jooq.dir>
         <jooq.package>${base.package}.${server.package}.jooq</jooq.package>
-        <jooq.version>3.20.4</jooq.version>
+        <jooq.version>3.20.3</jooq.version>
         <jsoup.version>1.17.2</jsoup.version>
         <jwt.version>0.11.5</jwt.version>
         <langchain4j.beta.version>1.0.0-beta4</langchain4j.beta.version>
@@ -51,7 +52,7 @@
         <palantir-java.format.version>2.67.0</palantir-java.format.version>
         <playwright.version>1.42.0</playwright.version>
         <postgresql.jdbc.password>Vishwas123#</postgresql.jdbc.password>
-        <postgresql.jdbc.url>jdbc:postgresql://localhost:5432/${database.schema.name}</postgresql.jdbc.url>
+        <postgresql.jdbc.url>jdbc:postgresql://localhost:5432/${database.db.name}</postgresql.jdbc.url>
         <postgresql.jdbc.user>postgres</postgresql.jdbc.user>
         <postgresql.version>42.7.2</postgresql.version>
         <resources.dir>src/main/resources</resources.dir>
@@ -328,7 +329,22 @@
                                     <name>org.jooq.meta.postgres.PostgresDatabase</name>
                                     <includes>CORE_.*</includes>
                                     <inputSchema>${database.schema.name}</inputSchema>
-                                    <forcedTypes/>
+                                    <forcedTypes>
+                                        <forcedType>
+                                            <name>FILE_SYSTEM_TYPE</name>
+                                            <userType>io.j13n.core.enums.FileSystemType</userType>
+                                            <includeExpression>.*\.FILE_SYSTEM_TYPE</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                            <enumConverter>true</enumConverter>
+                                        </forcedType>
+                                        <forcedType>
+                                            <name>FILE_RESOURCE_TYPE</name>
+                                            <userType>io.j13n.core.enums.FileResourceType</userType>
+                                            <includeExpression>.*\.FILE_RESOURCE_TYPE</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                            <enumConverter>true</enumConverter>
+                                        </forcedType>
+                                    </forcedTypes>
                                 </database>
                                 <generate>
                                     <deprecated>false</deprecated>

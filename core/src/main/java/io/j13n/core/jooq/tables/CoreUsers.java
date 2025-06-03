@@ -7,6 +7,7 @@ package io.j13n.core.jooq.tables;
 import io.j13n.core.jooq.Core;
 import io.j13n.core.jooq.Keys;
 import io.j13n.core.jooq.tables.CoreAuthorities.CoreAuthoritiesPath;
+import io.j13n.core.jooq.tables.CoreFileSystem.CoreFileSystemPath;
 import io.j13n.core.jooq.tables.CoreUserAuthorities.CoreUserAuthoritiesPath;
 import io.j13n.core.jooq.tables.records.CoreUsersRecord;
 
@@ -67,7 +68,7 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
     /**
      * The column <code>core.core_users.username</code>.
      */
-    public final TableField<CoreUsersRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.CHAR(32).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::bpchar"), SQLDataType.CHAR)), this, "");
+    public final TableField<CoreUsersRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.CHAR(320).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::bpchar"), SQLDataType.CHAR)), this, "");
 
     /**
      * The column <code>core.core_users.email</code>.
@@ -225,6 +226,19 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
     @Override
     public List<UniqueKey<CoreUsersRecord>> getUniqueKeys() {
         return Arrays.asList(Keys.CORE_USERS_EMAIL_KEY, Keys.CORE_USERS_USERNAME_KEY);
+    }
+
+    private transient CoreFileSystemPath _coreFileSystem;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>core.core_file_system</code> table
+     */
+    public CoreFileSystemPath coreFileSystem() {
+        if (_coreFileSystem == null)
+            _coreFileSystem = new CoreFileSystemPath(this, null, Keys.CORE_FILE_SYSTEM__CORE_FILE_SYSTEM_USER_ID_FKEY.getInverseKey());
+
+        return _coreFileSystem;
     }
 
     private transient CoreUserAuthoritiesPath _coreUserAuthorities;
