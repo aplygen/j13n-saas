@@ -53,18 +53,18 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
     }
 
     /**
-     * Setter for <code>core.core_file_system.code</code>.
+     * Setter for <code>core.core_file_system.user_id</code>.
      */
-    public CoreFileSystemRecord setCode(String value) {
+    public CoreFileSystemRecord setUserId(Long value) {
         set(2, value);
         return this;
     }
 
     /**
-     * Getter for <code>core.core_file_system.code</code>.
+     * Getter for <code>core.core_file_system.user_id</code>.
      */
-    public String getCode() {
-        return (String) get(2);
+    public Long getUserId() {
+        return (Long) get(2);
     }
 
     /**
@@ -128,25 +128,10 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
     }
 
     /**
-     * Setter for <code>core.core_file_system.user_id</code>.
-     */
-    public CoreFileSystemRecord setUserId(Long value) {
-        set(7, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>core.core_file_system.user_id</code>.
-     */
-    public Long getUserId() {
-        return (Long) get(7);
-    }
-
-    /**
      * Setter for <code>core.core_file_system.created_by</code>.
      */
     public CoreFileSystemRecord setCreatedBy(Long value) {
-        set(8, value);
+        set(7, value);
         return this;
     }
 
@@ -154,14 +139,14 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
      * Getter for <code>core.core_file_system.created_by</code>.
      */
     public Long getCreatedBy() {
-        return (Long) get(8);
+        return (Long) get(7);
     }
 
     /**
      * Setter for <code>core.core_file_system.created_at</code>.
      */
     public CoreFileSystemRecord setCreatedAt(LocalDateTime value) {
-        set(9, value);
+        set(8, value);
         return this;
     }
 
@@ -169,14 +154,14 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
      * Getter for <code>core.core_file_system.created_at</code>.
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(9);
+        return (LocalDateTime) get(8);
     }
 
     /**
      * Setter for <code>core.core_file_system.updated_by</code>.
      */
     public CoreFileSystemRecord setUpdatedBy(Long value) {
-        set(10, value);
+        set(9, value);
         return this;
     }
 
@@ -184,14 +169,14 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
      * Getter for <code>core.core_file_system.updated_by</code>.
      */
     public Long getUpdatedBy() {
-        return (Long) get(10);
+        return (Long) get(9);
     }
 
     /**
      * Setter for <code>core.core_file_system.updated_at</code>.
      */
     public CoreFileSystemRecord setUpdatedAt(LocalDateTime value) {
-        set(11, value);
+        set(10, value);
         return this;
     }
 
@@ -199,7 +184,7 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
      * Getter for <code>core.core_file_system.updated_at</code>.
      */
     public LocalDateTime getUpdatedAt() {
-        return (LocalDateTime) get(11);
+        return (LocalDateTime) get(10);
     }
 
     // -------------------------------------------------------------------------
@@ -225,17 +210,16 @@ public class CoreFileSystemRecord extends UpdatableRecordImpl<CoreFileSystemReco
     /**
      * Create a detached, initialised CoreFileSystemRecord
      */
-    public CoreFileSystemRecord(Long id, FileResourceType fileResourceType, String code, String name, FileSystemType fileSystemType, Long size, Long parentId, Long userId, Long createdBy, LocalDateTime createdAt, Long updatedBy, LocalDateTime updatedAt) {
+    public CoreFileSystemRecord(Long id, FileResourceType fileResourceType, Long userId, String name, FileSystemType fileSystemType, Long size, Long parentId, Long createdBy, LocalDateTime createdAt, Long updatedBy, LocalDateTime updatedAt) {
         super(CoreFileSystem.CORE_FILE_SYSTEM);
 
         setId(id);
         setFileResourceType(fileResourceType);
-        setCode(code);
+        setUserId(userId);
         setName(name);
         setFileSystemType(fileSystemType);
         setSize(size);
         setParentId(parentId);
-        setUserId(userId);
         setCreatedBy(createdBy);
         setCreatedAt(createdAt);
         setUpdatedBy(updatedBy);

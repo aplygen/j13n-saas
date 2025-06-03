@@ -30,7 +30,7 @@ aws:
   bucket:
     name: j13n
 server:
-  port: 8005
+  port: 8080
 google:
   api:
     key: "${GOOGLE_API_KEY:123124214}"

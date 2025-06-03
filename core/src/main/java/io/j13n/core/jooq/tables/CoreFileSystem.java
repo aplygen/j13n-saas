@@ -75,9 +75,9 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
     public final TableField<CoreFileSystemRecord, FileResourceType> FILE_RESOURCE_TYPE = createField(DSL.name("file_resource_type"), DefaultDataType.getDefaultDataType("\"public\".\"file_resource_type\"").nullable(false).defaultValue(DSL.field(DSL.raw("'STATIC'::file_resource_type"), org.jooq.impl.SQLDataType.OTHER)), this, "", new EnumConverter<Object, FileResourceType>(Object.class, FileResourceType.class));
 
     /**
-     * The column <code>core.core_file_system.code</code>.
+     * The column <code>core.core_file_system.user_id</code>.
      */
-    public final TableField<CoreFileSystemRecord, String> CODE = createField(DSL.name("code"), SQLDataType.CHAR(8).nullable(false), this, "");
+    public final TableField<CoreFileSystemRecord, Long> USER_ID = createField(DSL.name("user_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>core.core_file_system.name</code>.
@@ -98,11 +98,6 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
      * The column <code>core.core_file_system.parent_id</code>.
      */
     public final TableField<CoreFileSystemRecord, Long> PARENT_ID = createField(DSL.name("parent_id"), SQLDataType.BIGINT, this, "");
-
-    /**
-     * The column <code>core.core_file_system.user_id</code>.
-     */
-    public final TableField<CoreFileSystemRecord, Long> USER_ID = createField(DSL.name("user_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>core.core_file_system.created_by</code>.
@@ -193,7 +188,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_FILE_SYSTEM_CODE_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE, Indexes.IDX_FILE_SYSTEM_CODE_NAME, Indexes.IDX_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID, Indexes.IDX_FILE_SYSTEM_USER_ID);
+        return Arrays.asList(Indexes.IDX_FILE_SYSTEM_CODE_NAME, Indexes.IDX_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID, Indexes.IDX_FILE_SYSTEM_USER_ID, Indexes.IDX_FILE_SYSTEM_USER_ID_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE);
     }
 
     @Override

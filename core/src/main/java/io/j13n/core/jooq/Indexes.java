@@ -22,8 +22,8 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index IDX_FILE_SYSTEM_CODE_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE = Internal.createIndex(DSL.name("idx_file_system_code_file_resource_type_file_system_type"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.CODE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE }, false);
-    public static final Index IDX_FILE_SYSTEM_CODE_NAME = Internal.createIndex(DSL.name("idx_file_system_code_name"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.CODE, CoreFileSystem.CORE_FILE_SYSTEM.NAME }, false);
+    public static final Index IDX_FILE_SYSTEM_CODE_NAME = Internal.createIndex(DSL.name("idx_file_system_code_name"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID, CoreFileSystem.CORE_FILE_SYSTEM.NAME }, false);
     public static final Index IDX_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID = Internal.createIndex(DSL.name("idx_file_system_file_resource_type_file_system_type_parent_id"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.PARENT_ID }, false);
     public static final Index IDX_FILE_SYSTEM_USER_ID = Internal.createIndex(DSL.name("idx_file_system_user_id"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID }, false);
+    public static final Index IDX_FILE_SYSTEM_USER_ID_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE = Internal.createIndex(DSL.name("idx_file_system_user_id_file_resource_type_file_system_type"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID, CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE }, false);
 }

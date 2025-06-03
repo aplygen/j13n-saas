@@ -58,8 +58,8 @@ public class FileSystemDao {
         this.context = context;
     }
 
-    public CompletableFuture<Boolean> exists(FileResourceType fileResourceType, String clientCode, String path) {
-        return getId(fileResourceType, clientCode, path)
+    public CompletableFuture<Boolean> exists(FileResourceType fileResourceType, Long userId, String path) {
+        return getId(fileResourceType, userId, path)
                 .thenApply(Optional::isPresent)
                 .exceptionally(ex -> {
                     log.error("Error checking if path exists", ex);
@@ -85,8 +85,8 @@ public class FileSystemDao {
         return null;
     }
 
-    public CompletableFuture<Optional<Long>> getId(FileResourceType fileResourceType, String clientCode, String path) {
-        return getFileRecord(fileResourceType, clientCode, path, CoreFileSystemRecord::getId)
+    public CompletableFuture<Optional<Long>> getId(FileResourceType fileResourceType, Long userId, String path) {
+        return getFileRecord(fileResourceType, userId, path, CoreFileSystemRecord::getId)
                 .thenApply(Optional::ofNullable)
                 .exceptionally(ex -> {
                     log.error("Error getting ID", ex);
@@ -97,6 +97,8 @@ public class FileSystemDao {
     public CompletableFuture<Optional<Long>> getFolderId(
             FileResourceType fileResourceType, String clientCode, String path) {
         if (StringUtil.safeIsBlank(path)) return VirtualThreadWrapper.just(Optional.empty());
+
+        Long userId = Long.parseLong(clientCode);
 
         String[] pathParts = path.split(R2_FILE_SEPARATOR_STRING);
         List<String> parts = new ArrayList<>();
@@ -110,7 +112,7 @@ public class FileSystemDao {
         // Process parts sequentially
         List<CompletableFuture<Map.Entry<String, Optional<Long>>>> futures = new ArrayList<>();
         for (String p : parts) {
-            futures.add(getId(fileResourceType, clientCode, p).thenApply(result -> Map.entry(p, result)));
+            futures.add(getId(fileResourceType, userId, p).thenApply(result -> Map.entry(p, result)));
         }
 
         // Create a CompletableFuture that will contain all the results
@@ -132,7 +134,7 @@ public class FileSystemDao {
             for (; i < entries.size(); i++) {
                 final String currentPath = entries.get(i).getKey();
                 folderId = folderId.thenCompose(parentId ->
-                        createFolder(fileResourceType, clientCode, currentPath).thenApply(Optional::of));
+                        createFolder(fileResourceType, userId, currentPath).thenApply(Optional::of));
             }
 
             return folderId;
@@ -140,13 +142,13 @@ public class FileSystemDao {
     }
 
     public CompletableFuture<FileDetail> getFileDetail(
-            FileResourceType fileResourceType, String clientCode, String path) {
+            FileResourceType fileResourceType, Long userId, String path) {
         String[] pathParts =
                 (path.startsWith(R2_FILE_SEPARATOR_STRING) ? path.substring(1) : path).split(R2_FILE_SEPARATOR_STRING);
 
         if (pathParts.length == 0) return VirtualThreadWrapper.just(null);
 
-        return getFileRecord(fileResourceType, clientCode, pathParts, r -> new FileDetail()
+        return getFileRecord(fileResourceType, userId, pathParts, r -> new FileDetail()
                 .setId(r.getId())
                 .setName(r.getName())
                 .setDirectory(r.getFileSystemType() == FileSystemType.DIRECTORY)
@@ -157,7 +159,7 @@ public class FileSystemDao {
 
     private <T> CompletableFuture<T> getFileRecord(
             FileResourceType fileResourceType,
-            String clientCode,
+            Long userId,
             String path,
             Function<CoreFileSystemRecord, T> mapper) {
         if (StringUtil.safeIsBlank(path)) return VirtualThreadWrapper.just(null);
@@ -165,19 +167,19 @@ public class FileSystemDao {
         String[] pathParts =
                 (path.startsWith(R2_FILE_SEPARATOR_STRING) ? path.substring(1) : path).split(R2_FILE_SEPARATOR_STRING);
 
-        return getFileRecord(fileResourceType, clientCode, pathParts, mapper);
+        return getFileRecord(fileResourceType, userId, pathParts, mapper);
     }
 
     private <T> CompletableFuture<T> getFileRecord(
             FileResourceType fileResourceType,
-            String clientCode,
+            Long userId,
             String[] pathParts,
             Function<CoreFileSystemRecord, T> mapper) {
         return VirtualThreadWrapper.fromCallable(() -> {
             Result<CoreFileSystemRecord> result = this.context
                     .selectFrom(CORE_FILE_SYSTEM)
                     .where(DSL.and(
-                            CORE_FILE_SYSTEM.CODE.eq(clientCode),
+                            CORE_FILE_SYSTEM.USER_ID.eq(userId),
                             CORE_FILE_SYSTEM.NAME.in(pathParts),
                             CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE.eq(fileResourceType)))
                     .fetch();
@@ -210,17 +212,18 @@ public class FileSystemDao {
             Pageable page) {
         log.debug("FileSystemDao.list (with path)");
 
-        return getId(fileResourceType, clientCode, path).thenCompose(folderId -> {
+        Long userId = Long.parseLong(clientCode);
+        return getId(fileResourceType, userId, path).thenCompose(folderId -> {
             if (folderId.isEmpty() && !StringUtil.safeIsBlank(path))
                 return VirtualThreadWrapper.just(new FilesPage(new ArrayList<>(), page.getPageNumber(), 0L));
 
-            return listInternal(fileResourceType, clientCode, folderId.orElse(null), fileType, filter, page);
+            return listInternal(fileResourceType, userId, folderId.orElse(null), fileType, filter, page);
         });
     }
 
     private CompletableFuture<FilesPage> listInternal(
             FileResourceType fileResourceType,
-            String clientCode,
+            Long userId,
             Long folderId,
             FileType[] fileType,
             String filter,
@@ -229,7 +232,7 @@ public class FileSystemDao {
 
         List<Condition> conditions = new ArrayList<>();
 
-        conditions.add(CORE_FILE_SYSTEM.CODE.eq(clientCode));
+        conditions.add(CORE_FILE_SYSTEM.USER_ID.eq(userId));
         if (folderId == null) conditions.add(CORE_FILE_SYSTEM.PARENT_ID.isNull());
         else conditions.add(CORE_FILE_SYSTEM.PARENT_ID.eq(folderId));
 
@@ -259,7 +262,6 @@ public class FileSystemDao {
                                 .setCreatedDate(r.getCreatedAt().toEpochSecond(ZoneOffset.UTC))
                                 .setLastModifiedTime(r.getUpdatedAt().toEpochSecond(ZoneOffset.UTC)));
                     }
-
                     return files;
                 })
                 .thenCompose(files -> VirtualThreadWrapper.fromCallable(() -> this.context
@@ -296,10 +298,9 @@ public class FileSystemDao {
             switch (ft) {
                 case DIRECTORIES -> conditions.add(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE.eq(FileSystemType.DIRECTORY));
                 case FILES -> conditions.add(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE.eq(FileSystemType.FILE));
-                default ->
-                    conditions.add(DSL.or(ft.getAvailableFileExtensions().stream()
-                            .map(e -> CORE_FILE_SYSTEM.NAME.like("%." + e))
-                            .toList()));
+                default -> conditions.add(DSL.or(ft.getAvailableFileExtensions().stream()
+                        .map(e -> CORE_FILE_SYSTEM.NAME.like("%." + e))
+                        .toList()));
             }
         }
 
@@ -309,7 +310,8 @@ public class FileSystemDao {
     public CompletableFuture<Boolean> deleteFile(FileResourceType fileResourceType, String clientCode, String path) {
         log.debug("FileSystemDao.deleteFile");
 
-        return getId(fileResourceType, clientCode, path).thenCompose(optionalId -> {
+        Long userId = Long.parseLong(clientCode);
+        return getId(fileResourceType, userId, path).thenCompose(optionalId -> {
             if (optionalId.isEmpty()) return VirtualThreadWrapper.just(false);
 
             Long id = optionalId.get();
@@ -363,7 +365,7 @@ public class FileSystemDao {
                     return VirtualThreadWrapper.fromCallable(() -> {
                         int inserted = this.context
                                 .insertInto(CORE_FILE_SYSTEM)
-                                .set(CORE_FILE_SYSTEM.CODE, clientCode)
+                                .set(CORE_FILE_SYSTEM.USER_ID, Long.parseLong(clientCode))
                                 .set(CORE_FILE_SYSTEM.PARENT_ID, parentId.orElse(null))
                                 .set(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, FileSystemType.FILE)
                                 .set(CORE_FILE_SYSTEM.NAME, finalName)
@@ -374,8 +376,10 @@ public class FileSystemDao {
                     });
                 })
                 .thenCompose(updatedCreated -> {
-                    if (Boolean.TRUE.equals(updatedCreated))
-                        return getFileDetail(fileResourceType, clientCode, finalPath);
+                    if (Boolean.TRUE.equals(updatedCreated)) {
+                        Long userId = Long.parseLong(clientCode);
+                        return getFileDetail(fileResourceType, userId, finalPath);
+                    }
 
                     return VirtualThreadWrapper.just(null);
                 });
@@ -404,8 +408,9 @@ public class FileSystemDao {
         String finalPath = path;
         String finalName = name;
 
+        Long userId = Long.parseLong(clientCode);
         return VirtualThreadWrapper.just(Optional.ofNullable(folderId))
-                .thenCompose(parentId -> getId(fileResourceType, clientCode, finalPath)
+                .thenCompose(parentId -> getId(fileResourceType, userId, finalPath)
                         .thenCompose(existingId -> {
                             if (existingId.isPresent()) {
                                 return VirtualThreadWrapper.fromCallable(() -> {
@@ -425,7 +430,7 @@ public class FileSystemDao {
                             return VirtualThreadWrapper.fromCallable(() -> {
                                 int inserted = this.context
                                         .insertInto(CORE_FILE_SYSTEM)
-                                        .set(CORE_FILE_SYSTEM.CODE, clientCode)
+                                        .set(CORE_FILE_SYSTEM.USER_ID, Long.parseLong(clientCode))
                                         .set(CORE_FILE_SYSTEM.PARENT_ID, parentId.orElse(null))
                                         .set(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, FileSystemType.FILE)
                                         .set(CORE_FILE_SYSTEM.NAME, finalName)
@@ -437,7 +442,7 @@ public class FileSystemDao {
                         }));
     }
 
-    public CompletableFuture<Long> createFolder(FileResourceType fileResourceType, String clientCode, String path) {
+    public CompletableFuture<Long> createFolder(FileResourceType fileResourceType, Long userId, String path) {
         log.debug("FileSystemDao.createFolder");
 
         String resourcePath = path.startsWith(R2_FILE_SEPARATOR_STRING) ? path.substring(1) : path;
@@ -449,14 +454,14 @@ public class FileSystemDao {
         return VirtualThreadWrapper.fromCallable(() -> {
                     if (parentPath == null) return Optional.<Long>empty();
 
-                    return getId(fileResourceType, clientCode, parentPath).join();
+                    return getId(fileResourceType, userId, parentPath).join();
                 })
                 .thenCompose(parentId -> VirtualThreadWrapper.fromCallable(() -> {
                             // Using transaction
                             return this.context.transactionResult(configuration -> {
                                 DSLContext dsl = DSL.using(configuration);
                                 Record1<Long> result = dsl.insertInto(CORE_FILE_SYSTEM)
-                                        .set(CORE_FILE_SYSTEM.CODE, clientCode)
+                                        .set(CORE_FILE_SYSTEM.USER_ID, userId)
                                         .set(CORE_FILE_SYSTEM.PARENT_ID, parentId.orElse(null))
                                         .set(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, FileSystemType.DIRECTORY)
                                         .set(CORE_FILE_SYSTEM.NAME, name)
@@ -468,13 +473,13 @@ public class FileSystemDao {
                             });
                         })
                         .thenCompose(id ->
-                                // Simulate the delay that was in the original code
                                 VirtualThreadWrapper.delay(1000).thenApply(v -> id)));
     }
 
     public CompletableFuture<Map<String, Long>> createFolders(
             FileResourceType fileResourceType, String clientCode, List<String> paths) {
         Map<String, Node> nodeMap = new HashMap<>();
+        Long userId = Long.parseLong(clientCode);
 
         for (String path : paths) {
             String[] pathParts = path.split(R2_FILE_SEPARATOR_STRING);
@@ -501,7 +506,7 @@ public class FileSystemDao {
 
         // Process nodes in a depth-first manner
         List<CompletableFuture<Node>> nodeFutures = new ArrayList<>();
-        for (Node node : nodes) nodeFutures.add(processNode(fileResourceType, clientCode, node, nodeMap));
+        for (Node node : nodes) nodeFutures.add(processNode(fileResourceType, userId, node, nodeMap));
 
         // Create a CompletableFuture that will contain all the processed nodes
         CompletableFuture<List<Node>> allNodesFuture = CompletableFuture.allOf(
@@ -520,13 +525,13 @@ public class FileSystemDao {
     }
 
     private CompletableFuture<Node> processNode(
-            FileResourceType fileResourceType, String clientCode, Node node, Map<String, Node> nodeMap) {
+            FileResourceType fileResourceType, Long userId, Node node, Map<String, Node> nodeMap) {
         return VirtualThreadWrapper.fromCallable(() -> {
             if (node.getId() != null) return node;
 
-            Long id = selectFolderId(fileResourceType, clientCode, node).join();
+            Long id = selectFolderId(fileResourceType, userId, node).join();
             if (id == null)
-                id = insertFolder(fileResourceType, clientCode, node).join();
+                id = insertFolder(fileResourceType, userId, node).join();
 
             node.setId(id);
 
@@ -534,25 +539,25 @@ public class FileSystemDao {
                     nodeMap.values().stream().filter(n -> n.getParent() == node).toList();
 
             for (Node child : children)
-                processNode(fileResourceType, clientCode, child, nodeMap).join();
+                processNode(fileResourceType, userId, child, nodeMap).join();
 
             return node;
         });
     }
 
-    private CompletableFuture<Long> selectFolderId(FileResourceType fileResourceType, String clientCode, Node node) {
+    private CompletableFuture<Long> selectFolderId(FileResourceType fileResourceType, Long userId, Node node) {
         return VirtualThreadWrapper.fromCallable(() -> {
             Record1<Long> rec = this.context
                     .select(CORE_FILE_SYSTEM.ID)
                     .from(CORE_FILE_SYSTEM)
                     .where(DSL.and(
-                            CORE_FILE_SYSTEM.CODE.eq(clientCode),
+                            CORE_FILE_SYSTEM.USER_ID.eq(userId),
                             CORE_FILE_SYSTEM.NAME.eq(node.getName()),
                             CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE.eq(fileResourceType),
                             node.getParent() == null
                                     ? CORE_FILE_SYSTEM.PARENT_ID.isNull()
                                     : CORE_FILE_SYSTEM.PARENT_ID.eq(
-                                            node.getParent().getId()),
+                                    node.getParent().getId()),
                             CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE.eq(FileSystemType.DIRECTORY)))
                     .fetchOne();
 
@@ -560,11 +565,11 @@ public class FileSystemDao {
         });
     }
 
-    private CompletableFuture<Long> insertFolder(FileResourceType fileResourceType, String clientCode, Node node) {
+    private CompletableFuture<Long> insertFolder(FileResourceType fileResourceType, Long userId, Node node) {
         return VirtualThreadWrapper.fromCallable(() -> {
             Record1<Long> rec = this.context
                     .insertInto(CORE_FILE_SYSTEM)
-                    .set(CORE_FILE_SYSTEM.CODE, clientCode)
+                    .set(CORE_FILE_SYSTEM.USER_ID, userId)
                     .set(
                             CORE_FILE_SYSTEM.PARENT_ID,
                             node.getParent() == null ? null : node.getParent().getId())

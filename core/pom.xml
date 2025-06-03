@@ -36,6 +36,7 @@
         <database.schema.name>core</database.schema.name>
         <database.db.name>postgres</database.db.name>
         <env.ENVIRONMENT>dev</env.ENVIRONMENT>
+        <gcp.storage.version>2.43.0</gcp.storage.version>
         <java.version>21</java.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
         <jaxb.runtime.version>4.0.0</jaxb.runtime.version>
@@ -109,14 +110,12 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -186,6 +185,12 @@
             <artifactId>s3</artifactId>
             <version>${aws.s3.version}</version>
         </dependency>
+        <!-- Google Cloud Storage -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-storage</artifactId>
+            <version>${gcp.storage.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
@@ -252,53 +257,6 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgresql.version}</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>generate-postgres</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <jdbc>
-                                <driver>org.postgresql.Driver</driver>
-                                <url>${postgresql.jdbc.url}</url>
-                                <user>${postgresql.jdbc.user}</user>
-                                <password>${postgresql.jdbc.password}</password>
-                            </jdbc>
-                            <generator>
-                                <database>
-                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
-                                    <includes>CORE_.*</includes>
-                                    <inputSchema>${database.schema.name}</inputSchema>
-                                    <unsignedTypes>true</unsignedTypes>
-                                </database>
-                                <generate>
-                                    <deprecated>false</deprecated>
-                                    <relations>true</relations>
-                                    <records>true</records>
-                                    <immutablePojos>false</immutablePojos>
-                                    <fluentSetters>true</fluentSetters>
-                                </generate>
-                                <target>
-                                    <packageName>${jooq.package}</packageName>
-                                    <directory>${main.java.dir}</directory>
-                                </target>
-                            </generator>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
