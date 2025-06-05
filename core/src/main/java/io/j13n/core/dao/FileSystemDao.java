@@ -95,10 +95,8 @@ public class FileSystemDao {
     }
 
     public CompletableFuture<Optional<Long>> getFolderId(
-            FileResourceType fileResourceType, String clientCode, String path) {
+            FileResourceType fileResourceType, Long userId, String path) {
         if (StringUtil.safeIsBlank(path)) return VirtualThreadWrapper.just(Optional.empty());
-
-        Long userId = Long.parseLong(clientCode);
 
         String[] pathParts = path.split(R2_FILE_SEPARATOR_STRING);
         List<String> parts = new ArrayList<>();
@@ -205,14 +203,13 @@ public class FileSystemDao {
 
     public CompletableFuture<FilesPage> list(
             FileResourceType fileResourceType,
-            String clientCode,
+            Long userId,
             String path,
             FileType[] fileType,
             String filter,
             Pageable page) {
         log.debug("FileSystemDao.list (with path)");
 
-        Long userId = Long.parseLong(clientCode);
         return getId(fileResourceType, userId, path).thenCompose(folderId -> {
             if (folderId.isEmpty() && !StringUtil.safeIsBlank(path))
                 return VirtualThreadWrapper.just(new FilesPage(new ArrayList<>(), page.getPageNumber(), 0L));
@@ -307,10 +304,9 @@ public class FileSystemDao {
         return DSL.or(conditions);
     }
 
-    public CompletableFuture<Boolean> deleteFile(FileResourceType fileResourceType, String clientCode, String path) {
+    public CompletableFuture<Boolean> deleteFile(FileResourceType fileResourceType, Long userId, String path) {
         log.debug("FileSystemDao.deleteFile");
 
-        Long userId = Long.parseLong(clientCode);
         return getId(fileResourceType, userId, path).thenCompose(optionalId -> {
             if (optionalId.isEmpty()) return VirtualThreadWrapper.just(false);
 
@@ -325,7 +321,7 @@ public class FileSystemDao {
 
     public CompletableFuture<FileDetail> createOrUpdateFile(
             FileResourceType fileResourceType,
-            String clientCode,
+            Long userId,
             String path,
             String fileName,
             Long fileLength,
@@ -346,7 +342,7 @@ public class FileSystemDao {
         String finalPath = path;
         String finalName = name;
 
-        return getFolderId(fileResourceType, clientCode, parentPath)
+        return getFolderId(fileResourceType, userId, parentPath)
                 .thenCompose(parentId -> {
                     if (exists) {
                         return VirtualThreadWrapper.fromCallable(() -> {
@@ -365,7 +361,7 @@ public class FileSystemDao {
                     return VirtualThreadWrapper.fromCallable(() -> {
                         int inserted = this.context
                                 .insertInto(CORE_FILE_SYSTEM)
-                                .set(CORE_FILE_SYSTEM.USER_ID, Long.parseLong(clientCode))
+                                .set(CORE_FILE_SYSTEM.USER_ID, userId)
                                 .set(CORE_FILE_SYSTEM.PARENT_ID, parentId.orElse(null))
                                 .set(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, FileSystemType.FILE)
                                 .set(CORE_FILE_SYSTEM.NAME, finalName)
@@ -376,10 +372,8 @@ public class FileSystemDao {
                     });
                 })
                 .thenCompose(updatedCreated -> {
-                    if (Boolean.TRUE.equals(updatedCreated)) {
-                        Long userId = Long.parseLong(clientCode);
+                    if (Boolean.TRUE.equals(updatedCreated))
                         return getFileDetail(fileResourceType, userId, finalPath);
-                    }
 
                     return VirtualThreadWrapper.just(null);
                 });
@@ -387,7 +381,7 @@ public class FileSystemDao {
 
     public CompletableFuture<Boolean> createOrUpdateFileForZipUpload(
             FileResourceType fileResourceType,
-            String clientCode,
+            Long userId,
             Long folderId,
             String path,
             String fileName,
@@ -408,7 +402,6 @@ public class FileSystemDao {
         String finalPath = path;
         String finalName = name;
 
-        Long userId = Long.parseLong(clientCode);
         return VirtualThreadWrapper.just(Optional.ofNullable(folderId))
                 .thenCompose(parentId -> getId(fileResourceType, userId, finalPath)
                         .thenCompose(existingId -> {
@@ -430,7 +423,7 @@ public class FileSystemDao {
                             return VirtualThreadWrapper.fromCallable(() -> {
                                 int inserted = this.context
                                         .insertInto(CORE_FILE_SYSTEM)
-                                        .set(CORE_FILE_SYSTEM.USER_ID, Long.parseLong(clientCode))
+                                        .set(CORE_FILE_SYSTEM.USER_ID, userId)
                                         .set(CORE_FILE_SYSTEM.PARENT_ID, parentId.orElse(null))
                                         .set(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, FileSystemType.FILE)
                                         .set(CORE_FILE_SYSTEM.NAME, finalName)
@@ -477,9 +470,8 @@ public class FileSystemDao {
     }
 
     public CompletableFuture<Map<String, Long>> createFolders(
-            FileResourceType fileResourceType, String clientCode, List<String> paths) {
+            FileResourceType fileResourceType, Long userId, List<String> paths) {
         Map<String, Node> nodeMap = new HashMap<>();
-        Long userId = Long.parseLong(clientCode);
 
         for (String path : paths) {
             String[] pathParts = path.split(R2_FILE_SEPARATOR_STRING);
