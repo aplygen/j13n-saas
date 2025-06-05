@@ -1,5 +1,7 @@
 package io.j13n.core.dao;
 
+import static io.j13n.core.jooq.Tables.CORE_FILE_SYSTEM;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
@@ -10,6 +12,16 @@ import io.j13n.core.enums.FileType;
 import io.j13n.core.jooq.tables.records.CoreFileSystemRecord;
 import io.j13n.core.model.file.FileDetail;
 import io.j13n.core.model.file.FilesPage;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,19 +38,6 @@ import org.jooq.SortField;
 import org.jooq.impl.DSL;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-
-import static io.j13n.core.jooq.Tables.CORE_FILE_SYSTEM;
 
 @Service
 @Slf4j
@@ -94,8 +93,7 @@ public class FileSystemDao {
                 });
     }
 
-    public CompletableFuture<Optional<Long>> getFolderId(
-            FileResourceType fileResourceType, Long userId, String path) {
+    public CompletableFuture<Optional<Long>> getFolderId(FileResourceType fileResourceType, Long userId, String path) {
         if (StringUtil.safeIsBlank(path)) return VirtualThreadWrapper.just(Optional.empty());
 
         String[] pathParts = path.split(R2_FILE_SEPARATOR_STRING);
@@ -139,8 +137,7 @@ public class FileSystemDao {
         });
     }
 
-    public CompletableFuture<FileDetail> getFileDetail(
-            FileResourceType fileResourceType, Long userId, String path) {
+    public CompletableFuture<FileDetail> getFileDetail(FileResourceType fileResourceType, Long userId, String path) {
         String[] pathParts =
                 (path.startsWith(R2_FILE_SEPARATOR_STRING) ? path.substring(1) : path).split(R2_FILE_SEPARATOR_STRING);
 
@@ -156,10 +153,7 @@ public class FileSystemDao {
     }
 
     private <T> CompletableFuture<T> getFileRecord(
-            FileResourceType fileResourceType,
-            Long userId,
-            String path,
-            Function<CoreFileSystemRecord, T> mapper) {
+            FileResourceType fileResourceType, Long userId, String path, Function<CoreFileSystemRecord, T> mapper) {
         if (StringUtil.safeIsBlank(path)) return VirtualThreadWrapper.just(null);
 
         String[] pathParts =
@@ -276,11 +270,11 @@ public class FileSystemDao {
         return page.getSort().stream()
                 .filter(e -> SORTABLE_FIELDS.containsKey(e.getProperty().toUpperCase()))
                 .map(e -> {
-                    if (e.getDirection().isDescending()) {
+                    if (e.getDirection().isDescending())
                         return SORTABLE_FIELDS
                                 .get(e.getProperty().toUpperCase())
                                 .desc();
-                    }
+
                     return SORTABLE_FIELDS.get(e.getProperty().toUpperCase()).asc();
                 })
                 .toList();
@@ -295,9 +289,10 @@ public class FileSystemDao {
             switch (ft) {
                 case DIRECTORIES -> conditions.add(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE.eq(FileSystemType.DIRECTORY));
                 case FILES -> conditions.add(CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE.eq(FileSystemType.FILE));
-                default -> conditions.add(DSL.or(ft.getAvailableFileExtensions().stream()
-                        .map(e -> CORE_FILE_SYSTEM.NAME.like("%." + e))
-                        .toList()));
+                default ->
+                    conditions.add(DSL.or(ft.getAvailableFileExtensions().stream()
+                            .map(e -> CORE_FILE_SYSTEM.NAME.like("%." + e))
+                            .toList()));
             }
         }
 
@@ -372,8 +367,7 @@ public class FileSystemDao {
                     });
                 })
                 .thenCompose(updatedCreated -> {
-                    if (Boolean.TRUE.equals(updatedCreated))
-                        return getFileDetail(fileResourceType, userId, finalPath);
+                    if (Boolean.TRUE.equals(updatedCreated)) return getFileDetail(fileResourceType, userId, finalPath);
 
                     return VirtualThreadWrapper.just(null);
                 });
@@ -403,8 +397,8 @@ public class FileSystemDao {
         String finalName = name;
 
         return VirtualThreadWrapper.just(Optional.ofNullable(folderId))
-                .thenCompose(parentId -> getId(fileResourceType, userId, finalPath)
-                        .thenCompose(existingId -> {
+                .thenCompose(
+                        parentId -> getId(fileResourceType, userId, finalPath).thenCompose(existingId -> {
                             if (existingId.isPresent()) {
                                 return VirtualThreadWrapper.fromCallable(() -> {
                                     int updated = this.context
@@ -465,8 +459,7 @@ public class FileSystemDao {
                                 return result.value1();
                             });
                         })
-                        .thenCompose(id ->
-                                VirtualThreadWrapper.delay(1000).thenApply(v -> id)));
+                        .thenCompose(id -> VirtualThreadWrapper.delay(1000).thenApply(v -> id)));
     }
 
     public CompletableFuture<Map<String, Long>> createFolders(
@@ -522,8 +515,7 @@ public class FileSystemDao {
             if (node.getId() != null) return node;
 
             Long id = selectFolderId(fileResourceType, userId, node).join();
-            if (id == null)
-                id = insertFolder(fileResourceType, userId, node).join();
+            if (id == null) id = insertFolder(fileResourceType, userId, node).join();
 
             node.setId(id);
 
@@ -549,7 +541,7 @@ public class FileSystemDao {
                             node.getParent() == null
                                     ? CORE_FILE_SYSTEM.PARENT_ID.isNull()
                                     : CORE_FILE_SYSTEM.PARENT_ID.eq(
-                                    node.getParent().getId()),
+                                            node.getParent().getId()),
                             CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE.eq(FileSystemType.DIRECTORY)))
                     .fetchOne();
 

@@ -33,8 +33,8 @@
         <aws.s3.version>2.25.16</aws.s3.version>
         <base.package>io.j13n</base.package>
         <base.package.dir>io/j13n</base.package.dir>
-        <database.schema.name>core</database.schema.name>
         <database.db.name>postgres</database.db.name>
+        <database.schema.name>core</database.schema.name>
         <env.ENVIRONMENT>dev</env.ENVIRONMENT>
         <gcp.storage.version>2.43.0</gcp.storage.version>
         <java.version>21</java.version>
@@ -66,6 +66,12 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
+        </dependency>
+        <!-- Google Cloud Storage -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-storage</artifactId>
+            <version>${gcp.storage.version}</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.playwright</groupId>
@@ -133,6 +139,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.8</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
         </dependency>
@@ -185,12 +196,6 @@
             <artifactId>s3</artifactId>
             <version>${aws.s3.version}</version>
         </dependency>
-        <!-- Google Cloud Storage -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-storage</artifactId>
-            <version>${gcp.storage.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
@@ -214,11 +219,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.8</version>
-        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -227,12 +227,12 @@
             <url>https://repo.spring.io/milestone</url>
         </repository>
         <repository>
-            <id>spring-snapshot</id>
-            <name>Spring Snapshot Repository</name>
-            <url>https://repo.spring.io/snapshot</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshot Repository</name>
+            <url>https://repo.spring.io/snapshot</url>
         </repository>
     </repositories>
     <build>

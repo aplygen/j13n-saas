@@ -1,8 +1,7 @@
 package io.j13n.core.enums;
 
-import lombok.Getter;
-
 import java.util.Set;
+import lombok.Getter;
 
 @Getter
 public enum FileType {
@@ -29,5 +28,4 @@ public enum FileType {
     FileType(Set<String> extensions) {
         this.availableFileExtensions = extensions;
     }
-
 }
