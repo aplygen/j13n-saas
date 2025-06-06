@@ -26,7 +26,7 @@ jobs:
 
       - name: Build config module with correct Maven profile
         run: |
-          cd config
+          cd core
           if [ "${{ github.ref_name }}" = "main" ]; then
             PROFILE=production
           else
@@ -44,6 +44,9 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
+          ls -la
+          pwd
+          cd core
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/core:${{ github.ref_name }}
           docker build -t $IMAGE_NAME -f core/Dockerfile core/
           docker push $IMAGE_NAME
