@@ -4,6 +4,7 @@
 package io.j13n.core.jooq.tables;
 
 
+import io.j13n.core.enums.UserStatusCode;
 import io.j13n.core.jooq.Core;
 import io.j13n.core.jooq.Keys;
 import io.j13n.core.jooq.tables.CoreAuthorities.CoreAuthoritiesPath;
@@ -35,6 +36,7 @@ import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultDataType;
+import org.jooq.impl.EnumConverter;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -66,14 +68,14 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
     public final TableField<CoreUsersRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field(DSL.raw("core.next_id()"), SQLDataType.BIGINT)), this, "");
 
     /**
-     * The column <code>core.core_users.username</code>.
+     * The column <code>core.core_users.user_name</code>.
      */
-    public final TableField<CoreUsersRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.CHAR(320).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::bpchar"), SQLDataType.CHAR)), this, "");
+    public final TableField<CoreUsersRecord, String> USER_NAME = createField(DSL.name("user_name"), SQLDataType.CHAR(320).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::bpchar"), SQLDataType.CHAR)), this, "");
 
     /**
-     * The column <code>core.core_users.email</code>.
+     * The column <code>core.core_users.email_id</code>.
      */
-    public final TableField<CoreUsersRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(320).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
+    public final TableField<CoreUsersRecord, String> EMAIL_ID = createField(DSL.name("email_id"), SQLDataType.VARCHAR(320).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::character varying"), SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>core.core_users.dial_code</code>.
@@ -116,15 +118,9 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
     public final TableField<CoreUsersRecord, Boolean> PASSWORD_HASHED = createField(DSL.name("password_hashed"), SQLDataType.BOOLEAN.defaultValue(DSL.field(DSL.raw("true"), SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * @deprecated Unknown data type. If this is a qualified, user-defined type,
-     * it may have been excluded from code generation. If this is a built-in
-     * type, you can define an explicit {@link org.jooq.Binding} to specify how
-     * this type should be handled. Deprecation can be turned off using
-     * {@literal <deprecationOnUnknownTypes/>} in your code generator
-     * configuration.
+     * The column <code>core.core_users.user_status_code</code>.
      */
-    @Deprecated
-    public final TableField<CoreUsersRecord, Object> USER_STATUS_CODE = createField(DSL.name("user_status_code"), DefaultDataType.getDefaultDataType("\"public\".\"user_status_code\"").nullable(false).defaultValue(DSL.field(DSL.raw("'ACTIVE'::user_status_code"), org.jooq.impl.SQLDataType.OTHER)), this, "");
+    public final TableField<CoreUsersRecord, UserStatusCode> USER_STATUS_CODE = createField(DSL.name("user_status_code"), DefaultDataType.getDefaultDataType("\"core\".\"user_status_code\"").nullable(false).defaultValue(DSL.field(DSL.raw("'ACTIVE'::core.user_status_code"), org.jooq.impl.SQLDataType.OTHER)), this, "", new EnumConverter<Object, UserStatusCode>(Object.class, UserStatusCode.class));
 
     /**
      * The column <code>core.core_users.no_failed_attempt</code>.
@@ -225,7 +221,7 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
 
     @Override
     public List<UniqueKey<CoreUsersRecord>> getUniqueKeys() {
-        return Arrays.asList(Keys.CORE_USERS_EMAIL_KEY, Keys.CORE_USERS_USERNAME_KEY);
+        return Arrays.asList(Keys.CORE_USERS_EMAIL_ID_KEY, Keys.CORE_USERS_USER_NAME_KEY);
     }
 
     private transient CoreFileSystemPath _coreFileSystem;

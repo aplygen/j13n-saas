@@ -36,9 +36,9 @@ public class Keys {
     public static final UniqueKey<CoreAuthoritiesRecord> CORE_AUTHORITIES_PKEY = Internal.createUniqueKey(CoreAuthorities.CORE_AUTHORITIES, DSL.name("core_authorities_pkey"), new TableField[] { CoreAuthorities.CORE_AUTHORITIES.ID }, true);
     public static final UniqueKey<CoreFileSystemRecord> CORE_FILE_SYSTEM_PKEY = Internal.createUniqueKey(CoreFileSystem.CORE_FILE_SYSTEM, DSL.name("core_file_system_pkey"), new TableField[] { CoreFileSystem.CORE_FILE_SYSTEM.ID }, true);
     public static final UniqueKey<CoreUserAuthoritiesRecord> CORE_USER_AUTHORITIES_PKEY = Internal.createUniqueKey(CoreUserAuthorities.CORE_USER_AUTHORITIES, DSL.name("core_user_authorities_pkey"), new TableField[] { CoreUserAuthorities.CORE_USER_AUTHORITIES.USER_ID, CoreUserAuthorities.CORE_USER_AUTHORITIES.AUTHORITY_ID }, true);
-    public static final UniqueKey<CoreUsersRecord> CORE_USERS_EMAIL_KEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_email_key"), new TableField[] { CoreUsers.CORE_USERS.EMAIL }, true);
+    public static final UniqueKey<CoreUsersRecord> CORE_USERS_EMAIL_ID_KEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_email_id_key"), new TableField[] { CoreUsers.CORE_USERS.EMAIL_ID }, true);
     public static final UniqueKey<CoreUsersRecord> CORE_USERS_PKEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_pkey"), new TableField[] { CoreUsers.CORE_USERS.ID }, true);
-    public static final UniqueKey<CoreUsersRecord> CORE_USERS_USERNAME_KEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_username_key"), new TableField[] { CoreUsers.CORE_USERS.USERNAME }, true);
+    public static final UniqueKey<CoreUsersRecord> CORE_USERS_USER_NAME_KEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_user_name_key"), new TableField[] { CoreUsers.CORE_USERS.USER_NAME }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions

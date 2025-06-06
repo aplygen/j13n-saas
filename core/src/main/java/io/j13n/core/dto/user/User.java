@@ -33,7 +33,7 @@ public class User extends AbstractUpdatableDTO<Long, Long> {
     private String localeCode;
     private String password;
     private boolean passwordHashed = Boolean.TRUE;
-    private UserStatusCode statusCode;
+    private UserStatusCode userStatusCode;
     private Short noFailedAttempt;
     private Set<String> authorities;
 

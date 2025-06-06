@@ -3,9 +3,9 @@ spring:
   application:
     name: core
   datasource:
-    url: jdbc:postgresql://localhost:5432/core
-    username: your_username
-    password: your_password
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: Vishwas123#
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -48,3 +48,10 @@ openai:
 jwt:
   secret: "${JWT_SECRET:j13nSecretKeyForJWTTokenGenerationAndVerificationPurposes}"
   expiration: 86400000
+logging:
+  level:
+    org.jooq.tools.LoggerListener: DEBUG
+    org.jooq.impl.DefaultBinding: TRACE
+    org.jooq: DEBUG
+
+

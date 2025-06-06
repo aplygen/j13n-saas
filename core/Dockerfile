@@ -1,11 +1,16 @@
-FROM openjdk:21-ea-jdk-oracle
+FROM eclipse-temurin:21-jre-alpine
 
-COPY target/core-1.1.0.jar core-1.1.0.jar
+WORKDIR /app
 
-EXPOSE 8005
+COPY target/core-*.jar app.jar
 
-VOLUME [ "/logs" ]
+# Create a non-root user
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
 
-ENV INSTANCE_ID=default
+EXPOSE 8080
 
-ENTRYPOINT ["java", "-Dlogging.file.name=/logs/core-${INSTANCE_ID}.log", "-jar", "core-1.1.0.jar"]
+ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC"
+ENV SPRING_PROFILES_ACTIVE=gcp
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

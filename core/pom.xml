@@ -284,6 +284,11 @@
                                     <name>org.jooq.meta.postgres.PostgresDatabase</name>
                                     <includes>CORE_.*</includes>
                                     <inputSchema>${database.schema.name}</inputSchema>
+                                    <schemata>
+                                        <schema>
+                                            <inputSchema>${database.schema.name}</inputSchema>
+                                        </schema>
+                                    </schemata>
                                     <forcedTypes>
                                         <forcedType>
                                             <name>FILE_SYSTEM_TYPE</name>
@@ -296,6 +301,13 @@
                                             <name>FILE_RESOURCE_TYPE</name>
                                             <userType>io.j13n.core.enums.FileResourceType</userType>
                                             <includeExpression>.*\.FILE_RESOURCE_TYPE</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                            <enumConverter>true</enumConverter>
+                                        </forcedType>
+                                        <forcedType>
+                                            <name>USER_STATUS_CODE</name>
+                                            <userType>io.j13n.core.enums.UserStatusCode</userType>
+                                            <includeExpression>.*\.USER_STATUS_CODE</includeExpression>
                                             <includeTypes>.*</includeTypes>
                                             <enumConverter>true</enumConverter>
                                         </forcedType>

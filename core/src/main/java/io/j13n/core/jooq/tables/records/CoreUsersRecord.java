@@ -4,6 +4,7 @@
 package io.j13n.core.jooq.tables.records;
 
 
+import io.j13n.core.enums.UserStatusCode;
 import io.j13n.core.jooq.tables.CoreUsers;
 
 import java.time.LocalDateTime;
@@ -36,32 +37,32 @@ public class CoreUsersRecord extends UpdatableRecordImpl<CoreUsersRecord> {
     }
 
     /**
-     * Setter for <code>core.core_users.username</code>.
+     * Setter for <code>core.core_users.user_name</code>.
      */
-    public CoreUsersRecord setUsername(String value) {
+    public CoreUsersRecord setUserName(String value) {
         set(1, value);
         return this;
     }
 
     /**
-     * Getter for <code>core.core_users.username</code>.
+     * Getter for <code>core.core_users.user_name</code>.
      */
-    public String getUsername() {
+    public String getUserName() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>core.core_users.email</code>.
+     * Setter for <code>core.core_users.email_id</code>.
      */
-    public CoreUsersRecord setEmail(String value) {
+    public CoreUsersRecord setEmailId(String value) {
         set(2, value);
         return this;
     }
 
     /**
-     * Getter for <code>core.core_users.email</code>.
+     * Getter for <code>core.core_users.email_id</code>.
      */
-    public String getEmail() {
+    public String getEmailId() {
         return (String) get(2);
     }
 
@@ -186,30 +187,18 @@ public class CoreUsersRecord extends UpdatableRecordImpl<CoreUsersRecord> {
     }
 
     /**
-     * @deprecated Unknown data type. If this is a qualified, user-defined type,
-     * it may have been excluded from code generation. If this is a built-in
-     * type, you can define an explicit {@link org.jooq.Binding} to specify how
-     * this type should be handled. Deprecation can be turned off using
-     * {@literal <deprecationOnUnknownTypes/>} in your code generator
-     * configuration.
+     * Setter for <code>core.core_users.user_status_code</code>.
      */
-    @Deprecated
-    public CoreUsersRecord setUserStatusCode(Object value) {
+    public CoreUsersRecord setUserStatusCode(UserStatusCode value) {
         set(11, value);
         return this;
     }
 
     /**
-     * @deprecated Unknown data type. If this is a qualified, user-defined type,
-     * it may have been excluded from code generation. If this is a built-in
-     * type, you can define an explicit {@link org.jooq.Binding} to specify how
-     * this type should be handled. Deprecation can be turned off using
-     * {@literal <deprecationOnUnknownTypes/>} in your code generator
-     * configuration.
+     * Getter for <code>core.core_users.user_status_code</code>.
      */
-    @Deprecated
-    public Object getUserStatusCode() {
-        return get(11);
+    public UserStatusCode getUserStatusCode() {
+        return (UserStatusCode) get(11);
     }
 
     /**
@@ -310,12 +299,12 @@ public class CoreUsersRecord extends UpdatableRecordImpl<CoreUsersRecord> {
     /**
      * Create a detached, initialised CoreUsersRecord
      */
-    public CoreUsersRecord(Long id, String username, String email, String dialCode, String phoneNumber, String firstName, String lastName, String middleName, String localeCode, String password, Boolean passwordHashed, Object userStatusCode, Short noFailedAttempt, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy) {
+    public CoreUsersRecord(Long id, String userName, String emailId, String dialCode, String phoneNumber, String firstName, String lastName, String middleName, String localeCode, String password, Boolean passwordHashed, UserStatusCode userStatusCode, Short noFailedAttempt, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy) {
         super(CoreUsers.CORE_USERS);
 
         setId(id);
-        setUsername(username);
-        setEmail(email);
+        setUserName(userName);
+        setEmailId(emailId);
         setDialCode(dialCode);
         setPhoneNumber(phoneNumber);
         setFirstName(firstName);

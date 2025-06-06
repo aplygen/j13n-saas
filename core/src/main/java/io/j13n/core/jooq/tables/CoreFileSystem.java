@@ -72,7 +72,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
     /**
      * The column <code>core.core_file_system.file_resource_type</code>.
      */
-    public final TableField<CoreFileSystemRecord, FileResourceType> FILE_RESOURCE_TYPE = createField(DSL.name("file_resource_type"), DefaultDataType.getDefaultDataType("\"public\".\"file_resource_type\"").nullable(false).defaultValue(DSL.field(DSL.raw("'STATIC'::file_resource_type"), org.jooq.impl.SQLDataType.OTHER)), this, "", new EnumConverter<Object, FileResourceType>(Object.class, FileResourceType.class));
+    public final TableField<CoreFileSystemRecord, FileResourceType> FILE_RESOURCE_TYPE = createField(DSL.name("file_resource_type"), DefaultDataType.getDefaultDataType("\"core\".\"file_resource_type\"").nullable(false).defaultValue(DSL.field(DSL.raw("'STATIC'::core.file_resource_type"), org.jooq.impl.SQLDataType.OTHER)), this, "", new EnumConverter<Object, FileResourceType>(Object.class, FileResourceType.class));
 
     /**
      * The column <code>core.core_file_system.user_id</code>.
@@ -87,7 +87,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
     /**
      * The column <code>core.core_file_system.file_system_type</code>.
      */
-    public final TableField<CoreFileSystemRecord, FileSystemType> FILE_SYSTEM_TYPE = createField(DSL.name("file_system_type"), DefaultDataType.getDefaultDataType("\"public\".\"file_system_type\"").nullable(false).defaultValue(DSL.field(DSL.raw("'FILE'::file_system_type"), org.jooq.impl.SQLDataType.OTHER)), this, "", new EnumConverter<Object, FileSystemType>(Object.class, FileSystemType.class));
+    public final TableField<CoreFileSystemRecord, FileSystemType> FILE_SYSTEM_TYPE = createField(DSL.name("file_system_type"), DefaultDataType.getDefaultDataType("\"core\".\"file_system_type\"").nullable(false).defaultValue(DSL.field(DSL.raw("'FILE'::core.file_system_type"), org.jooq.impl.SQLDataType.OTHER)), this, "", new EnumConverter<Object, FileSystemType>(Object.class, FileSystemType.class));
 
     /**
      * The column <code>core.core_file_system.size</code>.

@@ -47,7 +47,7 @@ public class AuthenticationService implements IAuthenticationService {
         return VirtualThreadWrapper.flatMap(userService.findByUsername(authRequest.getUserName()), user -> {
             if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
-            if (!user.getStatusCode().isInActive())
+            if (!user.getUserStatusCode().isInActive())
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled");
 
             return VirtualThreadWrapper.flatMap(
@@ -115,7 +115,7 @@ public class AuthenticationService implements IAuthenticationService {
                         if (user == null)
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-                        if (Boolean.FALSE.equals(user.getStatusCode().isInActive()))
+                        if (!user.getUserStatusCode().isInActive())
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
                         return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {

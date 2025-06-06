@@ -37,7 +37,7 @@ public enum UserStatusCode implements EnumType {
 
     @Override
     public String getName() {
-        return null;
+        return "core.user_status_code";
     }
 
     @Override

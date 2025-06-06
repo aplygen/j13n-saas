@@ -21,7 +21,7 @@ public class UserDAO extends AbstractUpdatableDAO<CoreUsersRecord, Long, User> {
     public CompletableFuture<User> findByUsername(String username) {
         return CompletableFuture.supplyAsync(() -> dslContext
                         .selectFrom(CORE_USERS)
-                        .where(CORE_USERS.USERNAME.eq(username))
+                        .where(CORE_USERS.USER_NAME.eq(username))
                         .fetchOptionalInto(User.class)
                         .orElse(null))
                 .thenCompose(user -> {

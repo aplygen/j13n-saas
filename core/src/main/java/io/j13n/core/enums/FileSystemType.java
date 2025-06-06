@@ -24,6 +24,6 @@ public enum FileSystemType implements EnumType {
 
     @Override
     public String getName() {
-        return name();
+        return "core.file_system_type";
     }
 }

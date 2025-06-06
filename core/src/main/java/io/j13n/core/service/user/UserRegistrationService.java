@@ -41,7 +41,7 @@ public class UserRegistrationService {
             validUser.setPassword(passwordEncoder.encode(validUser.getPassword()));
             validUser.setPasswordHashed(true);
 
-            validUser.setStatusCode(UserStatusCode.ACTIVE);
+            validUser.setUserStatusCode(UserStatusCode.ACTIVE);
 
             if (validUser.getAuthorities() == null) validUser.setAuthorities(new HashSet<>());
 
