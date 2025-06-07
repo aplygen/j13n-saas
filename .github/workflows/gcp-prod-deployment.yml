@@ -1,0 +1,93 @@
+name: GCP Production Deployment
+
+on:
+  #To trigger manually
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  ENVIRONMENT: prod
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: us-central1
+  GCP_ARTIFACT_REGISTRY: ${{ secrets.GCP_ARTIFACT_REGISTRY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          ref: main
+
+      - name: Setting up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: "21"
+          distribution: "oracle"
+
+      - name: Building config
+        working-directory: ./config
+        run: mvn clean install
+
+      - name: Building eureka
+        working-directory: ./eureka
+        run: mvn clean install
+
+      - name: Building core
+        working-directory: ./core
+        run: mvn clean install
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 416.0.0'
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Configure Docker for GCP
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+
+      - name: Docker version
+        id: dockerVersion
+        run: |
+          VERSION=$(date '+%Y%m%d%H%M%S')
+          echo "Setting version to ${VERSION}"
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Pushing Config Docker Image to GCP
+        working-directory: ./config
+        run: |
+          docker pull openjdk:21-ea-jdk-oracle
+          docker build -t prod-config-server:${{ steps.dockerVersion.outputs.VERSION }} --build-arg profileName=${ENVIRONMENT} .
+          docker tag prod-config-server:${{ steps.dockerVersion.outputs.VERSION }} ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-config-server:${{ steps.dockerVersion.outputs.VERSION }}
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-config-server:${{ steps.dockerVersion.outputs.VERSION }}
+          docker tag prod-config-server:${{ steps.dockerVersion.outputs.VERSION }} ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-config-server:latest
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-config-server:latest
+
+      - name: Pushing Eureka Docker Image to GCP
+        working-directory: ./eureka
+        run: |
+          docker build -t prod-eureka-server:${{ steps.dockerVersion.outputs.VERSION }} .
+          docker tag prod-eureka-server:${{ steps.dockerVersion.outputs.VERSION }} ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-eureka-server:${{ steps.dockerVersion.outputs.VERSION }}
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-eureka-server:${{ steps.dockerVersion.outputs.VERSION }}
+          docker tag prod-eureka-server:${{ steps.dockerVersion.outputs.VERSION }} ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-eureka-server:latest
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-eureka-server:latest
+
+      - name: Pushing Core Docker Image to GCP
+        working-directory: ./core
+        run: |
+          docker build -t prod-core-server:${{ steps.dockerVersion.outputs.VERSION }} .
+          docker tag prod-core-server:${{ steps.dockerVersion.outputs.VERSION }} ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-core-server:${{ steps.dockerVersion.outputs.VERSION }}
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-core-server:${{ steps.dockerVersion.outputs.VERSION }}
+          docker tag prod-core-server:${{ steps.dockerVersion.outputs.VERSION }} ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-core-server:latest
+          docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_ARTIFACT_REGISTRY }}/prod-core-server:latest

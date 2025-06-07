@@ -11,9 +11,11 @@ import io.j13n.core.model.auth.AuthenticationRequest;
 import io.j13n.core.model.auth.AuthenticationResponse;
 import io.j13n.core.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.CompletableFuture;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -47,7 +49,7 @@ public class AuthenticationService implements IAuthenticationService {
         return VirtualThreadWrapper.flatMap(userService.findByUsername(authRequest.getUserName()), user -> {
             if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
-            if (!user.getUserStatusCode().isInActive())
+            if (user.getUserStatusCode().isInActive())
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled");
 
             return VirtualThreadWrapper.flatMap(
@@ -94,12 +96,7 @@ public class AuthenticationService implements IAuthenticationService {
 
         final String token = bearerToken;
 
-        return VirtualThreadWrapper.flatMap(cacheService.get(CACHE_NAME_TOKEN, token), cachedAuth -> {
-                    if (cachedAuth != null) return VirtualThreadWrapper.just((Authentication) cachedAuth);
-
-                    return extractAndValidateToken(token, request);
-                })
-                .exceptionally(e -> new ContextAuthentication(null, false, null, null));
+        return extractAndValidateToken(token, request);
     }
 
     private CompletableFuture<Authentication> extractAndValidateToken(String token, HttpServletRequest request) {
@@ -111,11 +108,11 @@ public class AuthenticationService implements IAuthenticationService {
                 return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
             return VirtualThreadWrapper.flatMap(
-                    userService.findByUsername(claims.getUserId().toString()), user -> {
+                    userService.read(claims.getUserId()), user -> {
                         if (user == null)
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-                        if (!user.getUserStatusCode().isInActive())
+                        if (user.getUserStatusCode().isInActive())
                             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
                         return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {
@@ -125,9 +122,7 @@ public class AuthenticationService implements IAuthenticationService {
                                     token,
                                     LocalDateTime.now(ZoneId.of("UTC")).plusMinutes(defaultExpiryInMinutes));
 
-                            return VirtualThreadWrapper.flatMap(
-                                    cacheService.put(CACHE_NAME_TOKEN, auth, token),
-                                    ca -> VirtualThreadWrapper.just(auth));
+                            return VirtualThreadWrapper.just(auth);
                         });
                     });
         } catch (Exception e) {

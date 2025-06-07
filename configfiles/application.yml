@@ -1,0 +1,46 @@
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.ss} %-5level %r --- %X{x-debug} [%thread] %logger{40} : %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.ss} %-5level %r --- %X{x-debug} [%thread] %logger{40} : %msg%n"
+    json:
+      add:
+        instanceId: ${INSTANCE_ID:default}
+  level:
+    org:
+      jooq: DEBUG
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:9999/eureka/
+  instance:
+    prefer-ip-address: true
+
+# server:
+#   shutdown: graceful
+
+endpoints:
+  enabled: true
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 60s
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+jwt:
+  key: j13n_secret_token_for_the_new_saas_application_it_requires_a_very_long_key_to_sign_tokens
+  token:
+    rememberme:
+      expiry: 525600
+    default:
+      expiry: 30
+
+files:
+  resources:
+    location:
+      static: ./static
+      secured: ./secured

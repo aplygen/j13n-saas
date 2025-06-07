@@ -1,6 +1,8 @@
 package io.j13n.core.enums;
 
+import io.j13n.core.jooq.core.Core;
 import org.jooq.EnumType;
+import org.jooq.Schema;
 
 public enum FileSystemType implements EnumType {
     FILE("FILE"),
@@ -20,6 +22,11 @@ public enum FileSystemType implements EnumType {
     @Override
     public String getLiteral() {
         return literal;
+    }
+
+    @Override
+    public Schema getSchema() {
+        return Core.CORE;
     }
 
     @Override

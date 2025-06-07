@@ -1,9 +1,10 @@
 package io.j13n.core.enums;
 
+import io.j13n.core.jooq.core.Core;
 import org.jooq.EnumType;
+import org.jooq.Schema;
 
 public enum FileResourceType implements EnumType {
-
     STATIC("STATIC"),
     SECURED("SECURED");
 
@@ -19,7 +20,12 @@ public enum FileResourceType implements EnumType {
 
     @Override
     public String getLiteral() {
-        return literal;
+        return this.literal;
+    }
+
+    @Override
+    public Schema getSchema() {
+        return Core.CORE;
     }
 
     @Override

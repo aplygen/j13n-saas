@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import io.j13n.core.commons.base.codec.RedisJSONCodec;
 import io.j13n.core.commons.base.codec.RedisObjectCodec;
 import io.j13n.core.commons.base.gson.LocalDateTimeAdapter;
+import io.j13n.core.commons.base.jackson.CommonsSerializationModule;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.async.RedisAsyncCommands;
@@ -58,7 +59,7 @@ public abstract class AbstractBaseConfiguration implements WebMvcConfigurer {
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         this.objectMapper.setDefaultPropertyInclusion(JsonInclude.Value.construct(Include.NON_NULL, Include.ALWAYS));
         this.objectMapper.setDefaultPropertyInclusion(JsonInclude.Value.construct(Include.NON_EMPTY, Include.ALWAYS));
-
+        this.objectMapper.registerModule(new CommonsSerializationModule());
         this.objectCodec = "object".equals(codecType) ? new RedisObjectCodec() : new RedisJSONCodec(this.objectMapper);
     }
 

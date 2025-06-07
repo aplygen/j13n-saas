@@ -1,0 +1,31 @@
+core:
+  db:
+    url: r2dbc:mysql://localhost:3306/core?serverTimezone=UTC
+    username: root
+    password: Vishwas123#
+    flyway:
+      url: jdbc:mysql://localhost:3306/core
+
+spring:
+  flyway:
+    enabled: false
+
+redis:
+  url: redis://default@localhost:6379
+  codec: object
+  cache:
+    prefix: j13n
+
+logging:
+  level:
+    root: DEBUG
+    com.j13n: DEBUG
+    org.jooq: DEBUG
+    org.jooq.tools.LoggerListener: DEBUG
+\
+
+mq:
+  host: localhost
+  port: 5672
+  username: ~
+  password: ~

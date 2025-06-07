@@ -43,7 +43,7 @@
         <jib.maven.plugin.version>3.3.0</jib.maven.plugin.version>
         <jooq.dir>${main.java.dir}/${base.package.dir}/${server.package.dir}/jooq</jooq.dir>
         <jooq.package>${base.package}.${server.package}.jooq</jooq.package>
-        <jooq.version>3.20.3</jooq.version>
+        <jooq.version>3.20.4</jooq.version>
         <jsoup.version>1.17.2</jsoup.version>
         <jwt.version>0.11.5</jwt.version>
         <langchain4j.beta.version>1.0.0-beta4</langchain4j.beta.version>
@@ -60,8 +60,20 @@
         <server.package>core</server.package>
         <server.package.dir>core</server.package.dir>
         <spotless.version>2.44.4</spotless.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
         <test.java.dir>src/test/java</test.java.dir>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
@@ -72,6 +84,12 @@
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
             <version>${gcp.storage.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.microsoft.playwright</groupId>
@@ -124,6 +142,11 @@
             <version>${jooq.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-postgres-extensions</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
@@ -166,10 +189,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <!-- Spring Security -->
@@ -187,14 +206,16 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
-        </dependency>
-        <!-- AWS S3 Async Client -->
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>s3</artifactId>
-            <version>${aws.s3.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -287,6 +308,9 @@
                                     <schemata>
                                         <schema>
                                             <inputSchema>${database.schema.name}</inputSchema>
+                                        </schema>
+                                        <schema>
+                                            <inputSchema>public</inputSchema>
                                         </schema>
                                     </schemata>
                                     <forcedTypes>

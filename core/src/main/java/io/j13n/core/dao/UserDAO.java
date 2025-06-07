@@ -1,12 +1,12 @@
 package io.j13n.core.dao;
 
-import static io.j13n.core.jooq.tables.CoreAuthorities.CORE_AUTHORITIES;
-import static io.j13n.core.jooq.tables.CoreUserAuthorities.CORE_USER_AUTHORITIES;
-import static io.j13n.core.jooq.tables.CoreUsers.CORE_USERS;
+import static io.j13n.core.jooq.core.tables.CoreAuthorities.CORE_AUTHORITIES;
+import static io.j13n.core.jooq.core.tables.CoreUserAuthorities.CORE_USER_AUTHORITIES;
+import static io.j13n.core.jooq.core.tables.CoreUsers.CORE_USERS;
 
 import io.j13n.core.commons.jooq.dao.AbstractUpdatableDAO;
 import io.j13n.core.dto.user.User;
-import io.j13n.core.jooq.tables.records.CoreUsersRecord;
+import io.j13n.core.jooq.core.tables.records.CoreUsersRecord;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.stereotype.Component;

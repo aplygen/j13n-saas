@@ -132,13 +132,12 @@ public abstract class AbstractDAO<R extends UpdatableRecord<R>, I extends Serial
         return VirtualThreadWrapper.fromCallable(() -> this.getRecordById(id).into(this.pojoClass));
     }
 
-    @SuppressWarnings("unchecked")
     public CompletableFuture<D> create(D pojo) {
         return VirtualThreadWrapper.fromCallable(() -> {
             pojo.setId(null);
 
             return dslContext.transactionResult(ctx -> {
-                var dsl = ctx.dsl();
+                DSLContext dsl = ctx.dsl();
 
                 R rec = dsl.newRecord(this.table);
                 rec.from(pojo);

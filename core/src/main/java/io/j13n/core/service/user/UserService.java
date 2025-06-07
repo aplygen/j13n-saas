@@ -5,7 +5,7 @@ import io.j13n.core.commons.jooq.service.AbstractJOOQUpdatableDataService;
 import io.j13n.core.commons.security.jwt.ContextUser;
 import io.j13n.core.dao.UserDAO;
 import io.j13n.core.dto.user.User;
-import io.j13n.core.jooq.tables.records.CoreUsersRecord;
+import io.j13n.core.jooq.core.tables.records.CoreUsersRecord;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

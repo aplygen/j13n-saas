@@ -1,10 +1,10 @@
 package io.j13n.core.dao;
 
-import static io.j13n.core.jooq.tables.CoreAuthorities.CORE_AUTHORITIES;
+import static io.j13n.core.jooq.core.tables.CoreAuthorities.CORE_AUTHORITIES;
 
 import io.j13n.core.commons.jooq.dao.AbstractUpdatableDAO;
 import io.j13n.core.dto.user.Authority;
-import io.j13n.core.jooq.tables.records.CoreAuthoritiesRecord;
+import io.j13n.core.jooq.core.tables.records.CoreAuthoritiesRecord;
 import org.springframework.stereotype.Component;
 
 @Component

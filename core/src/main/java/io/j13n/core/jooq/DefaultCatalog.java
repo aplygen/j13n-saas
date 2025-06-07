@@ -4,6 +4,9 @@
 package io.j13n.core.jooq;
 
 
+import io.j13n.core.jooq.core.Core;
+import io.j13n.core.jooq.public_.Public;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +34,11 @@ public class DefaultCatalog extends CatalogImpl {
     public final Core CORE = Core.CORE;
 
     /**
+     * standard public schema
+     */
+    public final Public PUBLIC = Public.PUBLIC;
+
+    /**
      * No further instances allowed
      */
     private DefaultCatalog() {
@@ -40,7 +48,8 @@ public class DefaultCatalog extends CatalogImpl {
     @Override
     public final List<Schema> getSchemas() {
         return Arrays.asList(
-            Core.CORE
+            Core.CORE,
+            Public.PUBLIC
         );
     }
 

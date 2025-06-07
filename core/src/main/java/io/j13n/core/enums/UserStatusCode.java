@@ -1,6 +1,6 @@
 package io.j13n.core.enums;
 
-import org.jooq.Catalog;
+import io.j13n.core.jooq.core.Core;
 import org.jooq.EnumType;
 import org.jooq.Schema;
 
@@ -26,23 +26,18 @@ public enum UserStatusCode implements EnumType {
     }
 
     @Override
-    public Catalog getCatalog() {
-        return null;
+    public String getLiteral() {
+        return this.literal;
     }
 
     @Override
     public Schema getSchema() {
-        return null;
+        return Core.CORE;
     }
 
     @Override
     public String getName() {
         return "core.user_status_code";
-    }
-
-    @Override
-    public String getLiteral() {
-        return literal;
     }
 
     public Boolean isActive() {

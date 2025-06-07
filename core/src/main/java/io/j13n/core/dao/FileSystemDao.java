@@ -1,6 +1,6 @@
 package io.j13n.core.dao;
 
-import static io.j13n.core.jooq.Tables.CORE_FILE_SYSTEM;
+import static io.j13n.core.jooq.core.Tables.CORE_FILE_SYSTEM;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -9,7 +9,7 @@ import io.j13n.core.commons.base.util.StringUtil;
 import io.j13n.core.enums.FileResourceType;
 import io.j13n.core.enums.FileSystemType;
 import io.j13n.core.enums.FileType;
-import io.j13n.core.jooq.tables.records.CoreFileSystemRecord;
+import io.j13n.core.jooq.core.tables.records.CoreFileSystemRecord;
 import io.j13n.core.model.file.FileDetail;
 import io.j13n.core.model.file.FilesPage;
 import java.time.LocalDateTime;
