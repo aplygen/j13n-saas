@@ -19,7 +19,7 @@ public class TavilySearchService extends AbstractSearchService {
     public TavilySearchService(@Value("${tavily.api.key}") String tavilyApiKey) {
         this.searchEngine = TavilyWebSearchEngine.builder()
                 .apiKey(tavilyApiKey)
-                .searchDepth("basic") // Can be "basic" or "advanced"
+                .searchDepth("advanced")
                 .build();
     }
 
