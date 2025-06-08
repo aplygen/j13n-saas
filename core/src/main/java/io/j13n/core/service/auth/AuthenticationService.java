@@ -11,11 +11,9 @@ import io.j13n.core.model.auth.AuthenticationRequest;
 import io.j13n.core.model.auth.AuthenticationResponse;
 import io.j13n.core.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.CompletableFuture;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -107,24 +105,22 @@ public class AuthenticationService implements IAuthenticationService {
             if (!host.equals(claims.getHostName()))
                 return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-            return VirtualThreadWrapper.flatMap(
-                    userService.read(claims.getUserId()), user -> {
-                        if (user == null)
-                            return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
+            return VirtualThreadWrapper.flatMap(userService.read(claims.getUserId()), user -> {
+                if (user == null) return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-                        if (user.getUserStatusCode().isInActive())
-                            return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
+                if (user.getUserStatusCode().isInActive())
+                    return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
 
-                        return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {
-                            ContextAuthentication auth = new ContextAuthentication(
-                                    contextUser,
-                                    true,
-                                    token,
-                                    LocalDateTime.now(ZoneId.of("UTC")).plusMinutes(defaultExpiryInMinutes));
+                return VirtualThreadWrapper.flatMap(userService.toContextUser(user), contextUser -> {
+                    ContextAuthentication auth = new ContextAuthentication(
+                            contextUser,
+                            true,
+                            token,
+                            LocalDateTime.now(ZoneId.of("UTC")).plusMinutes(defaultExpiryInMinutes));
 
-                            return VirtualThreadWrapper.just(auth);
-                        });
-                    });
+                    return VirtualThreadWrapper.just(auth);
+                });
+            });
         } catch (Exception e) {
             return VirtualThreadWrapper.just(new ContextAuthentication(null, false, null, null));
         }

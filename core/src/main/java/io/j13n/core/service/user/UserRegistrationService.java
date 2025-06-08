@@ -8,10 +8,8 @@ import io.j13n.core.model.auth.AuthenticationResponse;
 import io.j13n.core.model.auth.UserRegistrationRequest;
 import io.j13n.core.service.auth.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
-
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,8 +32,9 @@ public class UserRegistrationService {
     public CompletableFuture<AuthenticationResponse> registerUser(
             UserRegistrationRequest registrationRequest, HttpServletRequest request) {
         return this.createUser(registrationRequest.toUser())
-                .thenCompose(registeredUser ->
-                        authenticationService.authenticate(AuthenticationRequest.of(registeredUser.getUserName(), registrationRequest.getPassword()), request));
+                .thenCompose(registeredUser -> authenticationService.authenticate(
+                        AuthenticationRequest.of(registeredUser.getUserName(), registrationRequest.getPassword()),
+                        request));
     }
 
     private CompletableFuture<User> createUser(User user) {

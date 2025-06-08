@@ -30,8 +30,7 @@ public class CoreConfiguration extends AbstractJooqBaseConfiguration implements 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationService authService) throws Exception {
-        return this.springSecurityFilterChain(http, authService, this.objectMapper,
-                "/api/security/users/registration",
-                "/api/auth/login");
+        return this.springSecurityFilterChain(
+                http, authService, this.objectMapper, "/api/security/users/registration", "/api/auth/login");
     }
 }

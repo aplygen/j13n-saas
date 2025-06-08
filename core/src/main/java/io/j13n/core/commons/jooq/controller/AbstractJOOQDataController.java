@@ -10,13 +10,13 @@ import io.j13n.core.commons.jooq.service.AbstractJOOQDataService;
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 import org.jooq.UpdatableRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Component
-public class AbstractJOOQDataController<
+public abstract class AbstractJOOQDataController<
         R extends UpdatableRecord<R>,
         I extends Serializable,
         D extends AbstractDTO<I, I>,
@@ -39,6 +38,11 @@ public class AbstractJOOQDataController<
     public static final String PATH_QUERY = "query";
 
     protected S service;
+
+    @Autowired
+    private void setService(S service) {
+        this.service = service;
+    }
 
     @PostMapping
     public CompletableFuture<ResponseEntity<D>> create(@RequestBody D entity) {

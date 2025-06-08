@@ -22,11 +22,15 @@ public abstract class AbstractJOOQDataService<
 
     protected final Logger logger;
 
-    @Autowired
     protected O dao;
 
     protected AbstractJOOQDataService() {
         this.logger = LoggerFactory.getLogger(this.getClass());
+    }
+
+    @Autowired
+    private void setDao(O dao) {
+        this.dao = dao;
     }
 
     public CompletableFuture<D> create(D entity) {

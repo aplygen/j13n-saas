@@ -16,13 +16,12 @@ redis:
   cache:
     prefix: j13n
 
-logging:
-  level:
-    root: DEBUG
-    com.j13n: DEBUG
-    org.jooq: DEBUG
-    org.jooq.tools.LoggerListener: DEBUG
-\
+#logging:
+#  level:
+#    root: INFO
+#    com.j13n: DEBUG
+#    org.jooq: DEBUG
+#    org.jooq.tools.LoggerListener: DEBUG
 
 mq:
   host: localhost

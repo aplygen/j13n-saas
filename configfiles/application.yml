@@ -6,8 +6,10 @@ logging:
       add:
         instanceId: ${INSTANCE_ID:default}
   level:
-    org:
-      jooq: DEBUG
+    root: INFO
+    org.jooq: DEBUG
+    io.j13n.core.commons.security: DEBUG
+    org.springframework.security: DEBUG
 
 eureka:
   client:

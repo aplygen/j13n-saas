@@ -9,14 +9,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import org.jooq.UpdatableRecord;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Component
-public class AbstractJOOQUpdatableDataController<
+public abstract class AbstractJOOQUpdatableDataController<
                 R extends UpdatableRecord<R>,
                 I extends Serializable,
                 D extends AbstractUpdatableDTO<I, I>,
