@@ -1,7 +1,6 @@
 package io.j13n.core.model.file;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serial;
 import java.io.Serializable;
 import lombok.Data;

@@ -7,8 +7,8 @@ package io.j13n.core.jooq.core.tables;
 import io.j13n.core.enums.UserStatusCode;
 import io.j13n.core.jooq.core.Core;
 import io.j13n.core.jooq.core.Keys;
-import io.j13n.core.jooq.core.tables.CoreAuthorities.CoreAuthoritiesPath;
 import io.j13n.core.jooq.core.tables.CoreFileSystem.CoreFileSystemPath;
+import io.j13n.core.jooq.core.tables.CoreJobs.CoreJobsPath;
 import io.j13n.core.jooq.core.tables.CoreUserAuthorities.CoreUserAuthoritiesPath;
 import io.j13n.core.jooq.core.tables.records.CoreUsersRecord;
 import io.j13n.core.jooq.public_.enums.CoreUserStatusCode;
@@ -224,19 +224,6 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
         return Arrays.asList(Keys.CORE_USERS_EMAIL_ID_KEY, Keys.CORE_USERS_USER_NAME_KEY);
     }
 
-    private transient CoreFileSystemPath _coreFileSystem;
-
-    /**
-     * Get the implicit to-many join path to the
-     * <code>core.core_file_system</code> table
-     */
-    public CoreFileSystemPath coreFileSystem() {
-        if (_coreFileSystem == null)
-            _coreFileSystem = new CoreFileSystemPath(this, null, Keys.CORE_FILE_SYSTEM__CORE_FILE_SYSTEM_USER_ID_FKEY.getInverseKey());
-
-        return _coreFileSystem;
-    }
-
     private transient CoreUserAuthoritiesPath _coreUserAuthorities;
 
     /**
@@ -245,17 +232,35 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
      */
     public CoreUserAuthoritiesPath coreUserAuthorities() {
         if (_coreUserAuthorities == null)
-            _coreUserAuthorities = new CoreUserAuthoritiesPath(this, null, Keys.CORE_USER_AUTHORITIES__CORE_USER_AUTHORITIES_USER_ID_FKEY.getInverseKey());
+            _coreUserAuthorities = new CoreUserAuthoritiesPath(this, null, Keys.CORE_USER_AUTHORITIES__FK1_USER_AUTHORITIES_USER_ID_USERS_ID.getInverseKey());
 
         return _coreUserAuthorities;
     }
 
+    private transient CoreFileSystemPath _coreFileSystem;
+
     /**
-     * Get the implicit many-to-many join path to the
-     * <code>core.core_authorities</code> table
+     * Get the implicit to-many join path to the
+     * <code>core.core_file_system</code> table
      */
-    public CoreAuthoritiesPath coreAuthorities() {
-        return coreUserAuthorities().coreAuthorities();
+    public CoreFileSystemPath coreFileSystem() {
+        if (_coreFileSystem == null)
+            _coreFileSystem = new CoreFileSystemPath(this, null, Keys.CORE_FILE_SYSTEM__FK2_FILE_SYSTEM_USER_ID_CORE_USERS_ID.getInverseKey());
+
+        return _coreFileSystem;
+    }
+
+    private transient CoreJobsPath _coreJobs;
+
+    /**
+     * Get the implicit to-many join path to the <code>core.core_jobs</code>
+     * table
+     */
+    public CoreJobsPath coreJobs() {
+        if (_coreJobs == null)
+            _coreJobs = new CoreJobsPath(this, null, Keys.CORE_JOBS__FK_JOB_SEARCH_RESULTS_USER_ID_USERS_ID.getInverseKey());
+
+        return _coreJobs;
     }
 
     @Override

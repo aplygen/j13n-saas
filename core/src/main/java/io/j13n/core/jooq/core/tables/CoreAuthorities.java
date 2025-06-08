@@ -7,7 +7,6 @@ package io.j13n.core.jooq.core.tables;
 import io.j13n.core.jooq.core.Core;
 import io.j13n.core.jooq.core.Keys;
 import io.j13n.core.jooq.core.tables.CoreUserAuthorities.CoreUserAuthoritiesPath;
-import io.j13n.core.jooq.core.tables.CoreUsers.CoreUsersPath;
 import io.j13n.core.jooq.core.tables.records.CoreAuthoritiesRecord;
 
 import java.time.LocalDateTime;
@@ -173,17 +172,9 @@ public class CoreAuthorities extends TableImpl<CoreAuthoritiesRecord> {
      */
     public CoreUserAuthoritiesPath coreUserAuthorities() {
         if (_coreUserAuthorities == null)
-            _coreUserAuthorities = new CoreUserAuthoritiesPath(this, null, Keys.CORE_USER_AUTHORITIES__CORE_USER_AUTHORITIES_AUTHORITY_ID_FKEY.getInverseKey());
+            _coreUserAuthorities = new CoreUserAuthoritiesPath(this, null, Keys.CORE_USER_AUTHORITIES__FK2_USER_AUTHORITIES_USER_ID_AUTHORITIES_ID.getInverseKey());
 
         return _coreUserAuthorities;
-    }
-
-    /**
-     * Get the implicit many-to-many join path to the
-     * <code>core.core_users</code> table
-     */
-    public CoreUsersPath coreUsers() {
-        return coreUserAuthorities().coreUsers();
     }
 
     @Override

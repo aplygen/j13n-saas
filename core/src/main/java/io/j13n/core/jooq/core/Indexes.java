@@ -5,6 +5,8 @@ package io.j13n.core.jooq.core;
 
 
 import io.j13n.core.jooq.core.tables.CoreFileSystem;
+import io.j13n.core.jooq.core.tables.CoreJobs;
+import io.j13n.core.jooq.core.tables.CoreUserAuthorities;
 
 import org.jooq.Index;
 import org.jooq.OrderField;
@@ -22,8 +24,13 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index IDX_FILE_SYSTEM_CODE_NAME = Internal.createIndex(DSL.name("idx_file_system_code_name"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID, CoreFileSystem.CORE_FILE_SYSTEM.NAME }, false);
-    public static final Index IDX_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID = Internal.createIndex(DSL.name("idx_file_system_file_resource_type_file_system_type_parent_id"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.PARENT_ID }, false);
-    public static final Index IDX_FILE_SYSTEM_USER_ID = Internal.createIndex(DSL.name("idx_file_system_user_id"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID }, false);
-    public static final Index IDX_FILE_SYSTEM_USER_ID_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE = Internal.createIndex(DSL.name("idx_file_system_user_id_file_resource_type_file_system_type"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID, CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE }, false);
+    public static final Index IDX1_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID = Internal.createIndex(DSL.name("idx1_file_system_file_resource_type_file_system_type_parent_id"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.PARENT_ID }, false);
+    public static final Index IDX2_FILE_SYSTEM_USER_ID_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE = Internal.createIndex(DSL.name("idx2_file_system_user_id_file_resource_type_file_system_type"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID, CoreFileSystem.CORE_FILE_SYSTEM.FILE_RESOURCE_TYPE, CoreFileSystem.CORE_FILE_SYSTEM.FILE_SYSTEM_TYPE }, false);
+    public static final Index IDX3_FILE_SYSTEM_CODE_NAME = Internal.createIndex(DSL.name("idx3_file_system_code_name"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID, CoreFileSystem.CORE_FILE_SYSTEM.NAME }, false);
+    public static final Index IDX4_FILE_SYSTEM_USER_ID = Internal.createIndex(DSL.name("idx4_file_system_user_id"), CoreFileSystem.CORE_FILE_SYSTEM, new OrderField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID }, false);
+    public static final Index IDX_JOBS_COMPANY = Internal.createIndex(DSL.name("idx_jobs_company"), CoreJobs.CORE_JOBS, new OrderField[] { CoreJobs.CORE_JOBS.COMPANY }, false);
+    public static final Index IDX_JOBS_DATE = Internal.createIndex(DSL.name("idx_jobs_date"), CoreJobs.CORE_JOBS, new OrderField[] { CoreJobs.CORE_JOBS.POSTED_DATE }, false);
+    public static final Index IDX_JOBS_SOURCE = Internal.createIndex(DSL.name("idx_jobs_source"), CoreJobs.CORE_JOBS, new OrderField[] { CoreJobs.CORE_JOBS.SOURCE }, false);
+    public static final Index IDX_JOBS_STATUS = Internal.createIndex(DSL.name("idx_jobs_status"), CoreJobs.CORE_JOBS, new OrderField[] { CoreJobs.CORE_JOBS.STATUS }, false);
+    public static final Index UK1_USER_AUTHORITIES_USER_ID_AUTHORITY_ID = Internal.createIndex(DSL.name("uk1_user_authorities_user_id_authority_id"), CoreUserAuthorities.CORE_USER_AUTHORITIES, new OrderField[] { CoreUserAuthorities.CORE_USER_AUTHORITIES.USER_ID, CoreUserAuthorities.CORE_USER_AUTHORITIES.AUTHORITY_ID }, true);
 }

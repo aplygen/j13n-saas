@@ -3,7 +3,6 @@ package io.j13n.core.service.search.tavily;
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import io.j13n.core.model.JobSearchResult;
-
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -149,15 +147,15 @@ public class TavilyJobSearchService extends TavilySearchService {
         return title != null && description != null && url != null;
 
         // Check if it's a direct job link
-//        if (!isDirectJobLink(url)) {
-//            return false;
-//        }
-//
-//        // Verify it's not a job search page or list
-//        String lowerTitle = title.toLowerCase();
-//        return !lowerTitle.contains("search jobs")
-//                && !lowerTitle.contains("job list")
-//                && !lowerTitle.contains("career opportunities");
+        //        if (!isDirectJobLink(url)) {
+        //            return false;
+        //        }
+        //
+        //        // Verify it's not a job search page or list
+        //        String lowerTitle = title.toLowerCase();
+        //        return !lowerTitle.contains("search jobs")
+        //                && !lowerTitle.contains("job list")
+        //                && !lowerTitle.contains("career opportunities");
     }
 
     private JobSearchResult createJobResult(String title, String description, URI url) {
@@ -202,10 +200,10 @@ public class TavilyJobSearchService extends TavilySearchService {
     private boolean isDirectJobLink(final URI url) {
         final String lowerUrl = url.toString().toLowerCase();
         return (lowerUrl.contains("/jobs/")
-                || lowerUrl.contains("/careers/")
-                || lowerUrl.contains("/job/")
-                || lowerUrl.contains("apply")
-                || lowerUrl.contains("position"))
+                        || lowerUrl.contains("/careers/")
+                        || lowerUrl.contains("/job/")
+                        || lowerUrl.contains("apply")
+                        || lowerUrl.contains("position"))
                 && JOB_DOMAINS.stream().anyMatch(domain -> lowerUrl.contains(domain.toLowerCase()));
     }
 }

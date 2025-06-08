@@ -1,7 +1,6 @@
 package io.j13n.core.model.scrape;
 
 import io.j13n.core.model.JobSearchResult;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;

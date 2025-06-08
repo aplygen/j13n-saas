@@ -25,8 +25,7 @@ public class UserDAO extends AbstractUpdatableDAO<CoreUsersRecord, Long, User> {
                         .fetchOptionalInto(User.class)
                         .orElse(null))
                 .thenCompose(user -> {
-                    if (user != null)
-                        return loadAuthorities(user);
+                    if (user != null) return loadAuthorities(user);
                     return CompletableFuture.completedFuture(null);
                 });
     }

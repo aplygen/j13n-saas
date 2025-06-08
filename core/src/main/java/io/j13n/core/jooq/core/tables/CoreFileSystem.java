@@ -189,7 +189,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_FILE_SYSTEM_CODE_NAME, Indexes.IDX_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID, Indexes.IDX_FILE_SYSTEM_USER_ID, Indexes.IDX_FILE_SYSTEM_USER_ID_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE);
+        return Arrays.asList(Indexes.IDX1_FILE_SYSTEM_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE_PARENT_ID, Indexes.IDX2_FILE_SYSTEM_USER_ID_FILE_RESOURCE_TYPE_FILE_SYSTEM_TYPE, Indexes.IDX3_FILE_SYSTEM_CODE_NAME, Indexes.IDX4_FILE_SYSTEM_USER_ID);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
 
     @Override
     public List<ForeignKey<CoreFileSystemRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CORE_FILE_SYSTEM__CORE_FILE_SYSTEM_PARENT_ID_FKEY, Keys.CORE_FILE_SYSTEM__CORE_FILE_SYSTEM_USER_ID_FKEY);
+        return Arrays.asList(Keys.CORE_FILE_SYSTEM__FK1_FILE_SYSTEM_PARENT_ID_SELF_REFERENCE, Keys.CORE_FILE_SYSTEM__FK2_FILE_SYSTEM_USER_ID_CORE_USERS_ID);
     }
 
     private transient CoreFileSystemPath _coreFileSystem;
@@ -210,7 +210,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
      */
     public CoreFileSystemPath coreFileSystem() {
         if (_coreFileSystem == null)
-            _coreFileSystem = new CoreFileSystemPath(this, Keys.CORE_FILE_SYSTEM__CORE_FILE_SYSTEM_PARENT_ID_FKEY, null);
+            _coreFileSystem = new CoreFileSystemPath(this, Keys.CORE_FILE_SYSTEM__FK1_FILE_SYSTEM_PARENT_ID_SELF_REFERENCE, null);
 
         return _coreFileSystem;
     }
@@ -222,7 +222,7 @@ public class CoreFileSystem extends TableImpl<CoreFileSystemRecord> {
      */
     public CoreUsersPath coreUsers() {
         if (_coreUsers == null)
-            _coreUsers = new CoreUsersPath(this, Keys.CORE_FILE_SYSTEM__CORE_FILE_SYSTEM_USER_ID_FKEY, null);
+            _coreUsers = new CoreUsersPath(this, Keys.CORE_FILE_SYSTEM__FK2_FILE_SYSTEM_USER_ID_CORE_USERS_ID, null);
 
         return _coreUsers;
     }

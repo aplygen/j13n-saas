@@ -5,6 +5,7 @@ package io.j13n.core.jooq.core.tables;
 
 
 import io.j13n.core.jooq.core.Core;
+import io.j13n.core.jooq.core.Indexes;
 import io.j13n.core.jooq.core.Keys;
 import io.j13n.core.jooq.core.tables.CoreAuthorities.CoreAuthoritiesPath;
 import io.j13n.core.jooq.core.tables.CoreUsers.CoreUsersPath;
@@ -18,6 +19,7 @@ import java.util.List;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Index;
 import org.jooq.InverseForeignKey;
 import org.jooq.Name;
 import org.jooq.Path;
@@ -161,13 +163,30 @@ public class CoreUserAuthorities extends TableImpl<CoreUserAuthoritiesRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.UK1_USER_AUTHORITIES_USER_ID_AUTHORITY_ID);
+    }
+
+    @Override
     public UniqueKey<CoreUserAuthoritiesRecord> getPrimaryKey() {
         return Keys.CORE_USER_AUTHORITIES_PKEY;
     }
 
     @Override
     public List<ForeignKey<CoreUserAuthoritiesRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CORE_USER_AUTHORITIES__CORE_USER_AUTHORITIES_AUTHORITY_ID_FKEY, Keys.CORE_USER_AUTHORITIES__CORE_USER_AUTHORITIES_USER_ID_FKEY);
+        return Arrays.asList(Keys.CORE_USER_AUTHORITIES__FK1_USER_AUTHORITIES_USER_ID_USERS_ID, Keys.CORE_USER_AUTHORITIES__FK2_USER_AUTHORITIES_USER_ID_AUTHORITIES_ID);
+    }
+
+    private transient CoreUsersPath _coreUsers;
+
+    /**
+     * Get the implicit join path to the <code>core.core_users</code> table.
+     */
+    public CoreUsersPath coreUsers() {
+        if (_coreUsers == null)
+            _coreUsers = new CoreUsersPath(this, Keys.CORE_USER_AUTHORITIES__FK1_USER_AUTHORITIES_USER_ID_USERS_ID, null);
+
+        return _coreUsers;
     }
 
     private transient CoreAuthoritiesPath _coreAuthorities;
@@ -178,21 +197,9 @@ public class CoreUserAuthorities extends TableImpl<CoreUserAuthoritiesRecord> {
      */
     public CoreAuthoritiesPath coreAuthorities() {
         if (_coreAuthorities == null)
-            _coreAuthorities = new CoreAuthoritiesPath(this, Keys.CORE_USER_AUTHORITIES__CORE_USER_AUTHORITIES_AUTHORITY_ID_FKEY, null);
+            _coreAuthorities = new CoreAuthoritiesPath(this, Keys.CORE_USER_AUTHORITIES__FK2_USER_AUTHORITIES_USER_ID_AUTHORITIES_ID, null);
 
         return _coreAuthorities;
-    }
-
-    private transient CoreUsersPath _coreUsers;
-
-    /**
-     * Get the implicit join path to the <code>core.core_users</code> table.
-     */
-    public CoreUsersPath coreUsers() {
-        if (_coreUsers == null)
-            _coreUsers = new CoreUsersPath(this, Keys.CORE_USER_AUTHORITIES__CORE_USER_AUTHORITIES_USER_ID_FKEY, null);
-
-        return _coreUsers;
     }
 
     @Override

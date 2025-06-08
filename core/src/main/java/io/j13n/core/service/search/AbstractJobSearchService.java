@@ -14,13 +14,10 @@ public abstract class AbstractJobSearchService {
     protected WebSearchRequest createJobSearchRequest(String query, String location, boolean isRemoteOnly) {
         StringBuilder searchQuery = new StringBuilder(query);
 
-        if (location != null && !location.trim().isEmpty()) {
+        if (location != null && !location.trim().isEmpty())
             searchQuery.append(" in ").append(location);
-        }
 
-        if (isRemoteOnly) {
-            searchQuery.append(" remote");
-        }
+        if (isRemoteOnly) searchQuery.append(" remote");
 
         searchQuery.append(" job application apply");
 

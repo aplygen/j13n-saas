@@ -7,6 +7,7 @@ package io.j13n.core.jooq.core;
 import io.j13n.core.jooq.DefaultCatalog;
 import io.j13n.core.jooq.core.tables.CoreAuthorities;
 import io.j13n.core.jooq.core.tables.CoreFileSystem;
+import io.j13n.core.jooq.core.tables.CoreJobs;
 import io.j13n.core.jooq.core.tables.CoreUserAuthorities;
 import io.j13n.core.jooq.core.tables.CoreUsers;
 
@@ -43,6 +44,11 @@ public class Core extends SchemaImpl {
     public final CoreFileSystem CORE_FILE_SYSTEM = CoreFileSystem.CORE_FILE_SYSTEM;
 
     /**
+     * The table <code>core.core_jobs</code>.
+     */
+    public final CoreJobs CORE_JOBS = CoreJobs.CORE_JOBS;
+
+    /**
      * The table <code>core.core_user_authorities</code>.
      */
     public final CoreUserAuthorities CORE_USER_AUTHORITIES = CoreUserAuthorities.CORE_USER_AUTHORITIES;
@@ -70,6 +76,7 @@ public class Core extends SchemaImpl {
         return Arrays.asList(
             CoreAuthorities.CORE_AUTHORITIES,
             CoreFileSystem.CORE_FILE_SYSTEM,
+            CoreJobs.CORE_JOBS,
             CoreUserAuthorities.CORE_USER_AUTHORITIES,
             CoreUsers.CORE_USERS
         );

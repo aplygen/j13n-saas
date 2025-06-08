@@ -8,7 +8,7 @@ import io.j13n.core.jooq.core.tables.CoreUserAuthorities;
 
 import java.time.LocalDateTime;
 
-import org.jooq.Record2;
+import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -130,8 +130,8 @@ public class CoreUserAuthoritiesRecord extends UpdatableRecordImpl<CoreUserAutho
     // -------------------------------------------------------------------------
 
     @Override
-    public Record2<Long, Long> key() {
-        return (Record2) super.key();
+    public Record1<Long> key() {
+        return (Record1) super.key();
     }
 
     // -------------------------------------------------------------------------

@@ -1,7 +1,6 @@
 package io.j13n.core.model.auth;
 
 import io.j13n.core.commons.security.jwt.ContextUser;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;

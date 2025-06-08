@@ -1,13 +1,12 @@
 package io.j13n.core.model.auth;
 
 import io.j13n.core.dto.user.User;
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import java.io.Serial;
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor

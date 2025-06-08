@@ -6,6 +6,7 @@ package io.j13n.core.jooq.core;
 
 import io.j13n.core.jooq.core.tables.CoreAuthorities;
 import io.j13n.core.jooq.core.tables.CoreFileSystem;
+import io.j13n.core.jooq.core.tables.CoreJobs;
 import io.j13n.core.jooq.core.tables.CoreUserAuthorities;
 import io.j13n.core.jooq.core.tables.CoreUsers;
 
@@ -25,6 +26,11 @@ public class Tables {
      * The table <code>core.core_file_system</code>.
      */
     public static final CoreFileSystem CORE_FILE_SYSTEM = CoreFileSystem.CORE_FILE_SYSTEM;
+
+    /**
+     * The table <code>core.core_jobs</code>.
+     */
+    public static final CoreJobs CORE_JOBS = CoreJobs.CORE_JOBS;
 
     /**
      * The table <code>core.core_user_authorities</code>.
