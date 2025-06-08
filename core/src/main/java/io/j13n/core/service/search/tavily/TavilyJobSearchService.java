@@ -3,7 +3,10 @@ package io.j13n.core.service.search.tavily;
 import dev.langchain4j.web.search.WebSearchRequest;
 import dev.langchain4j.web.search.WebSearchResults;
 import io.j13n.core.model.JobSearchResult;
+
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +29,7 @@ public class TavilyJobSearchService extends TavilySearchService {
     private static final String SOURCE = "Tavily";
     private static final int MAX_RESULTS = 10;
     private static final int MAX_QUERY_LENGTH = 400;
+    private static final int RESERVED_BUFFER = 30;
 
     private static final Set<String> JOB_DOMAINS = new HashSet<>(Arrays.asList(
             "linkedin.com/jobs",
@@ -68,49 +73,43 @@ public class TavilyJobSearchService extends TavilySearchService {
     }
 
     private String buildOptimizedQuery(String query, String location, boolean isRemoteOnly) {
-        // Start with core search terms (truncate if too long)
         String baseQuery = truncateIfNeeded(query.trim(), 100);
         StringBuilder queryBuilder = new StringBuilder(baseQuery);
-        int remainingLength = MAX_QUERY_LENGTH - queryBuilder.length();
 
-        // Add location if there's space (with quotes for exact matching)
-        if (location != null && !location.trim().isEmpty() && remainingLength > 20) {
+        // Location
+        if (location != null && !location.trim().isEmpty()) {
             String locationTerm = String.format(" in \"%s\"", truncateIfNeeded(location.trim(), 30));
-            if (queryBuilder.length() + locationTerm.length() <= MAX_QUERY_LENGTH) {
-                queryBuilder.append(locationTerm);
-            }
+            appendIfFits(queryBuilder, locationTerm);
         }
 
-        // Add remote work terms if requested
-        if (isRemoteOnly && queryBuilder.length() + 25 <= MAX_QUERY_LENGTH) {
-            queryBuilder.append(" \"remote work\"");
+        // Remote
+        if (isRemoteOnly) {
+            appendIfFits(queryBuilder, " \"remote work\"");
         }
 
-        // Calculate remaining space for job-specific terms
-        remainingLength = MAX_QUERY_LENGTH - queryBuilder.length() - 30; // Reserve 30 chars for safety
+        // Job-related terms
+        String jobTerms = " (job OR position)";
+        String applyTerms = " (apply OR application)";
+        String formIntentTerms = " (\"apply now\" OR \"fill out application\")";
 
-        // Add job-specific terms if there's space
-        if (remainingLength > 0) {
-            String jobTerms = " (job OR position)";
-            if (remainingLength >= jobTerms.length()) {
-                queryBuilder.append(jobTerms);
-
-                // Add application terms if there's still space
-                String applyTerms = " (apply OR application)";
-                if (queryBuilder.length() + applyTerms.length() <= MAX_QUERY_LENGTH) {
-                    queryBuilder.append(applyTerms);
-                }
-            }
+        if (MAX_QUERY_LENGTH - queryBuilder.length() > RESERVED_BUFFER) {
+            appendIfFits(queryBuilder, jobTerms);
+            appendIfFits(queryBuilder, applyTerms);
+            appendIfFits(queryBuilder, formIntentTerms);
         }
 
         String finalQuery = queryBuilder.toString().trim();
+        return finalQuery.length() > MAX_QUERY_LENGTH
+                ? finalQuery.substring(0, MAX_QUERY_LENGTH - 3) + "..."
+                : finalQuery;
+    }
 
-        // Double-check length and truncate if somehow still too long
-        if (finalQuery.length() > MAX_QUERY_LENGTH) {
-            finalQuery = finalQuery.substring(0, MAX_QUERY_LENGTH - 3) + "...";
+    private boolean appendIfFits(StringBuilder sb, String term) {
+        if (sb.length() + term.length() <= TavilyJobSearchService.MAX_QUERY_LENGTH) {
+            sb.append(term);
+            return true;
         }
-
-        return finalQuery;
+        return false;
     }
 
     private String truncateIfNeeded(String text, int maxLength) {
@@ -130,8 +129,12 @@ public class TavilyJobSearchService extends TavilySearchService {
                 String description = result.snippet();
                 URI url = result.url();
 
-                if (isValidJobPosting(title, description, url)) {
-                    JobSearchResult job = createJobResult(title, description, url);
+                // Decode the URL if it's encoded
+                String decodedUrl = URLDecoder.decode(url.toString(), StandardCharsets.UTF_8);
+                URI decodedUri = new URI(decodedUrl);
+
+                if (isValidJobPosting(title, description, decodedUri)) {
+                    JobSearchResult job = createJobResult(title, description, decodedUri);
                     jobResults.add(job);
                 }
             } catch (Exception e) {
@@ -143,20 +146,18 @@ public class TavilyJobSearchService extends TavilySearchService {
     }
 
     private boolean isValidJobPosting(String title, String description, URI url) {
-        if (title == null || description == null || url == null) {
-            return false;
-        }
+        return title != null && description != null && url != null;
 
         // Check if it's a direct job link
-        if (!isDirectJobLink(url)) {
-            return false;
-        }
-
-        // Verify it's not a job search page or list
-        String lowerTitle = title.toLowerCase();
-        return !lowerTitle.contains("search jobs")
-                && !lowerTitle.contains("job list")
-                && !lowerTitle.contains("career opportunities");
+//        if (!isDirectJobLink(url)) {
+//            return false;
+//        }
+//
+//        // Verify it's not a job search page or list
+//        String lowerTitle = title.toLowerCase();
+//        return !lowerTitle.contains("search jobs")
+//                && !lowerTitle.contains("job list")
+//                && !lowerTitle.contains("career opportunities");
     }
 
     private JobSearchResult createJobResult(String title, String description, URI url) {
@@ -201,10 +202,10 @@ public class TavilyJobSearchService extends TavilySearchService {
     private boolean isDirectJobLink(final URI url) {
         final String lowerUrl = url.toString().toLowerCase();
         return (lowerUrl.contains("/jobs/")
-                        || lowerUrl.contains("/careers/")
-                        || lowerUrl.contains("/job/")
-                        || lowerUrl.contains("apply")
-                        || lowerUrl.contains("position"))
+                || lowerUrl.contains("/careers/")
+                || lowerUrl.contains("/job/")
+                || lowerUrl.contains("apply")
+                || lowerUrl.contains("position"))
                 && JOB_DOMAINS.stream().anyMatch(domain -> lowerUrl.contains(domain.toLowerCase()));
     }
 }

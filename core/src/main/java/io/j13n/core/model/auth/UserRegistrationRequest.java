@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Model class for user registration requests.
  */
@@ -13,7 +16,11 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class UserRegistrationRequest {
+public class UserRegistrationRequest implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 3408129291756353439L;
+
     private String password;
     private String emailId;
     private String phoneNumber;

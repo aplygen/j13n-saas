@@ -1,6 +1,9 @@
 package io.j13n.core.model.scrape;
 
 import io.j13n.core.model.JobSearchResult;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +16,11 @@ import lombok.experimental.FieldNameConstants;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @FieldNameConstants
-public class JobScrapingResult {
+public class JobScrapingResult implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5218346722134011430L;
+
     private String sourceUrl;
     private String rawHtmlContent;
     private String rawTextContent;

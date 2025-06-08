@@ -1,5 +1,7 @@
 package io.j13n.core.model.analysis;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,11 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class DocumentAnalysisResult {
+public class DocumentAnalysisResult implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 8693116789124396873L;
+
     private String sourceId;
     private String sourceType;
     private Map<String, FieldExtraction> extractedFields;

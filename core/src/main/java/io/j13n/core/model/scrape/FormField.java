@@ -1,5 +1,7 @@
 package io.j13n.core.model.scrape;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
@@ -7,7 +9,11 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class FormField {
+public class FormField implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5384492568866292035L;
+
     private String name;
     private String id;
     private String type;

@@ -1,5 +1,7 @@
 package io.j13n.core.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.net.URI;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -11,7 +13,11 @@ import lombok.experimental.FieldNameConstants;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @FieldNameConstants
-public class JobSearchResult {
+public class JobSearchResult implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2892358632431906782L;
+
     private String title;
     private String company;
     private String location;
@@ -20,25 +26,4 @@ public class JobSearchResult {
     private String source;
     private LocalDateTime postedDate;
     private boolean isRemote;
-
-    public JobSearchResult() {}
-
-    public JobSearchResult(
-            String title,
-            String company,
-            String location,
-            String description,
-            URI applicationUrl,
-            String source,
-            LocalDateTime postedDate,
-            boolean isRemote) {
-        this.title = title;
-        this.company = company;
-        this.location = location;
-        this.description = description;
-        this.applicationUrl = applicationUrl;
-        this.source = source;
-        this.postedDate = postedDate;
-        this.isRemote = isRemote;
-    }
 }

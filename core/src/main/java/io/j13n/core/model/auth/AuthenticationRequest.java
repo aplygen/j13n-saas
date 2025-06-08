@@ -6,11 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class AuthenticationRequest {
+public class AuthenticationRequest implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 970479628689715542L;
+
     private String userName;
     private String password;
     private boolean rememberMe;

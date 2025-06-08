@@ -33,7 +33,7 @@ google:
     id: "${GOOGLE_CSE_ID:12341242143}"
 tavily:
   api:
-    key: "${TAVILY_API_KEY:2132141251234}"
+    key: "${TAVILY_API_KEY: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}"
 openai:
   api:
     key: "${OPENAI_API_KEY:1203i12094129034}"
