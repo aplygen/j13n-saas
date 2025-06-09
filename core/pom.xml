@@ -339,6 +339,13 @@
                                             <includeTypes>.*</includeTypes>
                                             <enumConverter>true</enumConverter>
                                         </forcedType>
+                                        <forcedType>
+                                            <name>JOB_STATUS</name>
+                                            <userType>io.j13n.core.enums.JobStatus</userType>
+                                            <includeExpression>.*\.JOB_STATUS</includeExpression>
+                                            <includeTypes>.*</includeTypes>
+                                            <enumConverter>true</enumConverter>
+                                        </forcedType>
                                     </forcedTypes>
                                 </database>
                                 <generate>

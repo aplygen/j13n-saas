@@ -69,7 +69,7 @@ public class CoreUsersRecord extends UpdatableRecordImpl<CoreUsersRecord> {
     /**
      * Setter for <code>core.core_users.dial_code</code>.
      */
-    public CoreUsersRecord setDialCode(String value) {
+    public CoreUsersRecord setDialCode(Short value) {
         set(3, value);
         return this;
     }
@@ -77,8 +77,8 @@ public class CoreUsersRecord extends UpdatableRecordImpl<CoreUsersRecord> {
     /**
      * Getter for <code>core.core_users.dial_code</code>.
      */
-    public String getDialCode() {
-        return (String) get(3);
+    public Short getDialCode() {
+        return (Short) get(3);
     }
 
     /**
@@ -299,7 +299,7 @@ public class CoreUsersRecord extends UpdatableRecordImpl<CoreUsersRecord> {
     /**
      * Create a detached, initialised CoreUsersRecord
      */
-    public CoreUsersRecord(Long id, String userName, String emailId, String dialCode, String phoneNumber, String firstName, String lastName, String middleName, String localeCode, String password, Boolean passwordHashed, UserStatusCode userStatusCode, Short noFailedAttempt, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy) {
+    public CoreUsersRecord(Long id, String userName, String emailId, Short dialCode, String phoneNumber, String firstName, String lastName, String middleName, String localeCode, String password, Boolean passwordHashed, UserStatusCode userStatusCode, Short noFailedAttempt, LocalDateTime createdAt, LocalDateTime updatedAt, Long createdBy, Long updatedBy) {
         super(CoreUsers.CORE_USERS);
 
         setId(id);

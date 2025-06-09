@@ -5,7 +5,6 @@ package io.j13n.core.jooq.core.tables.records;
 
 
 import io.j13n.core.jooq.core.tables.CoreJobs;
-import io.j13n.core.jooq.public_.enums.CoreJobStatus;
 
 import java.time.LocalDateTime;
 
@@ -37,25 +36,10 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
     }
 
     /**
-     * Setter for <code>core.core_jobs.user_id</code>.
-     */
-    public CoreJobsRecord setUserId(Long value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>core.core_jobs.user_id</code>.
-     */
-    public Long getUserId() {
-        return (Long) get(1);
-    }
-
-    /**
      * Setter for <code>core.core_jobs.title</code>.
      */
     public CoreJobsRecord setTitle(String value) {
-        set(2, value);
+        set(1, value);
         return this;
     }
 
@@ -63,14 +47,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.title</code>.
      */
     public String getTitle() {
-        return (String) get(2);
+        return (String) get(1);
     }
 
     /**
      * Setter for <code>core.core_jobs.company</code>.
      */
     public CoreJobsRecord setCompany(String value) {
-        set(3, value);
+        set(2, value);
         return this;
     }
 
@@ -78,14 +62,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.company</code>.
      */
     public String getCompany() {
-        return (String) get(3);
+        return (String) get(2);
     }
 
     /**
      * Setter for <code>core.core_jobs.location</code>.
      */
     public CoreJobsRecord setLocation(String value) {
-        set(4, value);
+        set(3, value);
         return this;
     }
 
@@ -93,14 +77,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.location</code>.
      */
     public String getLocation() {
-        return (String) get(4);
+        return (String) get(3);
     }
 
     /**
      * Setter for <code>core.core_jobs.description</code>.
      */
     public CoreJobsRecord setDescription(String value) {
-        set(5, value);
+        set(4, value);
         return this;
     }
 
@@ -108,14 +92,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.description</code>.
      */
     public String getDescription() {
-        return (String) get(5);
+        return (String) get(4);
     }
 
     /**
      * Setter for <code>core.core_jobs.application_url</code>.
      */
     public CoreJobsRecord setApplicationUrl(String value) {
-        set(6, value);
+        set(5, value);
         return this;
     }
 
@@ -123,14 +107,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.application_url</code>.
      */
     public String getApplicationUrl() {
-        return (String) get(6);
+        return (String) get(5);
     }
 
     /**
      * Setter for <code>core.core_jobs.source</code>.
      */
     public CoreJobsRecord setSource(String value) {
-        set(7, value);
+        set(6, value);
         return this;
     }
 
@@ -138,14 +122,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.source</code>.
      */
     public String getSource() {
-        return (String) get(7);
+        return (String) get(6);
     }
 
     /**
      * Setter for <code>core.core_jobs.posted_date</code>.
      */
     public CoreJobsRecord setPostedDate(LocalDateTime value) {
-        set(8, value);
+        set(7, value);
         return this;
     }
 
@@ -153,14 +137,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.posted_date</code>.
      */
     public LocalDateTime getPostedDate() {
-        return (LocalDateTime) get(8);
+        return (LocalDateTime) get(7);
     }
 
     /**
      * Setter for <code>core.core_jobs.is_remote</code>.
      */
     public CoreJobsRecord setIsRemote(Boolean value) {
-        set(9, value);
+        set(8, value);
         return this;
     }
 
@@ -168,29 +152,29 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.is_remote</code>.
      */
     public Boolean getIsRemote() {
-        return (Boolean) get(9);
+        return (Boolean) get(8);
     }
 
     /**
-     * Setter for <code>core.core_jobs.status</code>.
+     * Setter for <code>core.core_jobs.is_expired</code>.
      */
-    public CoreJobsRecord setStatus(CoreJobStatus value) {
-        set(10, value);
+    public CoreJobsRecord setIsExpired(Boolean value) {
+        set(9, value);
         return this;
     }
 
     /**
-     * Getter for <code>core.core_jobs.status</code>.
+     * Getter for <code>core.core_jobs.is_expired</code>.
      */
-    public CoreJobStatus getStatus() {
-        return (CoreJobStatus) get(10);
+    public Boolean getIsExpired() {
+        return (Boolean) get(9);
     }
 
     /**
      * Setter for <code>core.core_jobs.created_by</code>.
      */
     public CoreJobsRecord setCreatedBy(Long value) {
-        set(11, value);
+        set(10, value);
         return this;
     }
 
@@ -198,14 +182,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.created_by</code>.
      */
     public Long getCreatedBy() {
-        return (Long) get(11);
+        return (Long) get(10);
     }
 
     /**
      * Setter for <code>core.core_jobs.created_at</code>.
      */
     public CoreJobsRecord setCreatedAt(LocalDateTime value) {
-        set(12, value);
+        set(11, value);
         return this;
     }
 
@@ -213,14 +197,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.created_at</code>.
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(12);
+        return (LocalDateTime) get(11);
     }
 
     /**
      * Setter for <code>core.core_jobs.updated_by</code>.
      */
     public CoreJobsRecord setUpdatedBy(Long value) {
-        set(13, value);
+        set(12, value);
         return this;
     }
 
@@ -228,14 +212,14 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.updated_by</code>.
      */
     public Long getUpdatedBy() {
-        return (Long) get(13);
+        return (Long) get(12);
     }
 
     /**
      * Setter for <code>core.core_jobs.updated_at</code>.
      */
     public CoreJobsRecord setUpdatedAt(LocalDateTime value) {
-        set(14, value);
+        set(13, value);
         return this;
     }
 
@@ -243,7 +227,7 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
      * Getter for <code>core.core_jobs.updated_at</code>.
      */
     public LocalDateTime getUpdatedAt() {
-        return (LocalDateTime) get(14);
+        return (LocalDateTime) get(13);
     }
 
     // -------------------------------------------------------------------------
@@ -269,11 +253,10 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
     /**
      * Create a detached, initialised CoreJobsRecord
      */
-    public CoreJobsRecord(Long id, Long userId, String title, String company, String location, String description, String applicationUrl, String source, LocalDateTime postedDate, Boolean isRemote, CoreJobStatus status, Long createdBy, LocalDateTime createdAt, Long updatedBy, LocalDateTime updatedAt) {
+    public CoreJobsRecord(Long id, String title, String company, String location, String description, String applicationUrl, String source, LocalDateTime postedDate, Boolean isRemote, Boolean isExpired, Long createdBy, LocalDateTime createdAt, Long updatedBy, LocalDateTime updatedAt) {
         super(CoreJobs.CORE_JOBS);
 
         setId(id);
-        setUserId(userId);
         setTitle(title);
         setCompany(company);
         setLocation(location);
@@ -282,7 +265,7 @@ public class CoreJobsRecord extends UpdatableRecordImpl<CoreJobsRecord> {
         setSource(source);
         setPostedDate(postedDate);
         setIsRemote(isRemote);
-        setStatus(status);
+        setIsExpired(isExpired);
         setCreatedBy(createdBy);
         setCreatedAt(createdAt);
         setUpdatedBy(updatedBy);

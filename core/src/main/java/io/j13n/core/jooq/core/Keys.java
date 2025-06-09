@@ -8,11 +8,13 @@ import io.j13n.core.jooq.core.tables.CoreAuthorities;
 import io.j13n.core.jooq.core.tables.CoreFileSystem;
 import io.j13n.core.jooq.core.tables.CoreJobs;
 import io.j13n.core.jooq.core.tables.CoreUserAuthorities;
+import io.j13n.core.jooq.core.tables.CoreUserJobs;
 import io.j13n.core.jooq.core.tables.CoreUsers;
 import io.j13n.core.jooq.core.tables.records.CoreAuthoritiesRecord;
 import io.j13n.core.jooq.core.tables.records.CoreFileSystemRecord;
 import io.j13n.core.jooq.core.tables.records.CoreJobsRecord;
 import io.j13n.core.jooq.core.tables.records.CoreUserAuthoritiesRecord;
+import io.j13n.core.jooq.core.tables.records.CoreUserJobsRecord;
 import io.j13n.core.jooq.core.tables.records.CoreUsersRecord;
 
 import org.jooq.ForeignKey;
@@ -39,6 +41,7 @@ public class Keys {
     public static final UniqueKey<CoreFileSystemRecord> CORE_FILE_SYSTEM_PKEY = Internal.createUniqueKey(CoreFileSystem.CORE_FILE_SYSTEM, DSL.name("core_file_system_pkey"), new TableField[] { CoreFileSystem.CORE_FILE_SYSTEM.ID }, true);
     public static final UniqueKey<CoreJobsRecord> CORE_JOBS_PKEY = Internal.createUniqueKey(CoreJobs.CORE_JOBS, DSL.name("core_jobs_pkey"), new TableField[] { CoreJobs.CORE_JOBS.ID }, true);
     public static final UniqueKey<CoreUserAuthoritiesRecord> CORE_USER_AUTHORITIES_PKEY = Internal.createUniqueKey(CoreUserAuthorities.CORE_USER_AUTHORITIES, DSL.name("core_user_authorities_pkey"), new TableField[] { CoreUserAuthorities.CORE_USER_AUTHORITIES.ID }, true);
+    public static final UniqueKey<CoreUserJobsRecord> CORE_USER_JOBS_PKEY = Internal.createUniqueKey(CoreUserJobs.CORE_USER_JOBS, DSL.name("core_user_jobs_pkey"), new TableField[] { CoreUserJobs.CORE_USER_JOBS.ID }, true);
     public static final UniqueKey<CoreUsersRecord> CORE_USERS_EMAIL_ID_KEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_email_id_key"), new TableField[] { CoreUsers.CORE_USERS.EMAIL_ID }, true);
     public static final UniqueKey<CoreUsersRecord> CORE_USERS_PKEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_pkey"), new TableField[] { CoreUsers.CORE_USERS.ID }, true);
     public static final UniqueKey<CoreUsersRecord> CORE_USERS_USER_NAME_KEY = Internal.createUniqueKey(CoreUsers.CORE_USERS, DSL.name("core_users_user_name_key"), new TableField[] { CoreUsers.CORE_USERS.USER_NAME }, true);
@@ -49,7 +52,8 @@ public class Keys {
 
     public static final ForeignKey<CoreFileSystemRecord, CoreFileSystemRecord> CORE_FILE_SYSTEM__FK1_FILE_SYSTEM_PARENT_ID_SELF_REFERENCE = Internal.createForeignKey(CoreFileSystem.CORE_FILE_SYSTEM, DSL.name("fk1_file_system_parent_id_self_reference"), new TableField[] { CoreFileSystem.CORE_FILE_SYSTEM.PARENT_ID }, Keys.CORE_FILE_SYSTEM_PKEY, new TableField[] { CoreFileSystem.CORE_FILE_SYSTEM.ID }, true, ForeignKeyRule.CASCADE, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<CoreFileSystemRecord, CoreUsersRecord> CORE_FILE_SYSTEM__FK2_FILE_SYSTEM_USER_ID_CORE_USERS_ID = Internal.createForeignKey(CoreFileSystem.CORE_FILE_SYSTEM, DSL.name("fk2_file_system_user_id_core_users_id"), new TableField[] { CoreFileSystem.CORE_FILE_SYSTEM.USER_ID }, Keys.CORE_USERS_PKEY, new TableField[] { CoreUsers.CORE_USERS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
-    public static final ForeignKey<CoreJobsRecord, CoreUsersRecord> CORE_JOBS__FK_JOB_SEARCH_RESULTS_USER_ID_USERS_ID = Internal.createForeignKey(CoreJobs.CORE_JOBS, DSL.name("fk_job_search_results_user_id_users_id"), new TableField[] { CoreJobs.CORE_JOBS.USER_ID }, Keys.CORE_USERS_PKEY, new TableField[] { CoreUsers.CORE_USERS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<CoreUserAuthoritiesRecord, CoreUsersRecord> CORE_USER_AUTHORITIES__FK1_USER_AUTHORITIES_USER_ID_USERS_ID = Internal.createForeignKey(CoreUserAuthorities.CORE_USER_AUTHORITIES, DSL.name("fk1_user_authorities_user_id_users_id"), new TableField[] { CoreUserAuthorities.CORE_USER_AUTHORITIES.USER_ID }, Keys.CORE_USERS_PKEY, new TableField[] { CoreUsers.CORE_USERS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
     public static final ForeignKey<CoreUserAuthoritiesRecord, CoreAuthoritiesRecord> CORE_USER_AUTHORITIES__FK2_USER_AUTHORITIES_USER_ID_AUTHORITIES_ID = Internal.createForeignKey(CoreUserAuthorities.CORE_USER_AUTHORITIES, DSL.name("fk2_user_authorities_user_id_authorities_id"), new TableField[] { CoreUserAuthorities.CORE_USER_AUTHORITIES.AUTHORITY_ID }, Keys.CORE_AUTHORITIES_PKEY, new TableField[] { CoreAuthorities.CORE_AUTHORITIES.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<CoreUserJobsRecord, CoreJobsRecord> CORE_USER_JOBS__FK1_USER_JOBS_JOB_ID_JOBS_ID = Internal.createForeignKey(CoreUserJobs.CORE_USER_JOBS, DSL.name("fk1_user_jobs_job_id_jobs_id"), new TableField[] { CoreUserJobs.CORE_USER_JOBS.JOB_ID }, Keys.CORE_JOBS_PKEY, new TableField[] { CoreJobs.CORE_JOBS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
+    public static final ForeignKey<CoreUserJobsRecord, CoreUsersRecord> CORE_USER_JOBS__FK2_USER_JOBS_USER_ID_USERS_ID = Internal.createForeignKey(CoreUserJobs.CORE_USER_JOBS, DSL.name("fk2_user_jobs_user_id_users_id"), new TableField[] { CoreUserJobs.CORE_USER_JOBS.USER_ID }, Keys.CORE_USERS_PKEY, new TableField[] { CoreUsers.CORE_USERS.ID }, true, ForeignKeyRule.NO_ACTION, ForeignKeyRule.NO_ACTION);
 }

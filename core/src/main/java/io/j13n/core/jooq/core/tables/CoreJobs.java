@@ -7,9 +7,8 @@ package io.j13n.core.jooq.core.tables;
 import io.j13n.core.jooq.core.Core;
 import io.j13n.core.jooq.core.Indexes;
 import io.j13n.core.jooq.core.Keys;
-import io.j13n.core.jooq.core.tables.CoreUsers.CoreUsersPath;
+import io.j13n.core.jooq.core.tables.CoreUserJobs.CoreUserJobsPath;
 import io.j13n.core.jooq.core.tables.records.CoreJobsRecord;
-import io.j13n.core.jooq.public_.enums.CoreJobStatus;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -66,11 +65,6 @@ public class CoreJobs extends TableImpl<CoreJobsRecord> {
     public final TableField<CoreJobsRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field(DSL.raw("core.core_next_id()"), SQLDataType.BIGINT)), this, "");
 
     /**
-     * The column <code>core.core_jobs.user_id</code>.
-     */
-    public final TableField<CoreJobsRecord, Long> USER_ID = createField(DSL.name("user_id"), SQLDataType.BIGINT.nullable(false), this, "");
-
-    /**
      * The column <code>core.core_jobs.title</code>.
      */
     public final TableField<CoreJobsRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(512).nullable(false), this, "");
@@ -111,9 +105,9 @@ public class CoreJobs extends TableImpl<CoreJobsRecord> {
     public final TableField<CoreJobsRecord, Boolean> IS_REMOTE = createField(DSL.name("is_remote"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>core.core_jobs.status</code>.
+     * The column <code>core.core_jobs.is_expired</code>.
      */
-    public final TableField<CoreJobsRecord, CoreJobStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field(DSL.raw("'IN_SEARCH'::core_job_status"), SQLDataType.VARCHAR)).asEnumDataType(CoreJobStatus.class), this, "");
+    public final TableField<CoreJobsRecord, Boolean> IS_EXPIRED = createField(DSL.name("is_expired"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>core.core_jobs.created_by</code>.
@@ -204,7 +198,7 @@ public class CoreJobs extends TableImpl<CoreJobsRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_JOBS_COMPANY, Indexes.IDX_JOBS_DATE, Indexes.IDX_JOBS_SOURCE, Indexes.IDX_JOBS_STATUS);
+        return Arrays.asList(Indexes.IDX_JOBS_COMPANY, Indexes.IDX_JOBS_DATE, Indexes.IDX_JOBS_SOURCE);
     }
 
     @Override
@@ -212,21 +206,17 @@ public class CoreJobs extends TableImpl<CoreJobsRecord> {
         return Keys.CORE_JOBS_PKEY;
     }
 
-    @Override
-    public List<ForeignKey<CoreJobsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CORE_JOBS__FK_JOB_SEARCH_RESULTS_USER_ID_USERS_ID);
-    }
-
-    private transient CoreUsersPath _coreUsers;
+    private transient CoreUserJobsPath _coreUserJobs;
 
     /**
-     * Get the implicit join path to the <code>core.core_users</code> table.
+     * Get the implicit to-many join path to the
+     * <code>core.core_user_jobs</code> table
      */
-    public CoreUsersPath coreUsers() {
-        if (_coreUsers == null)
-            _coreUsers = new CoreUsersPath(this, Keys.CORE_JOBS__FK_JOB_SEARCH_RESULTS_USER_ID_USERS_ID, null);
+    public CoreUserJobsPath coreUserJobs() {
+        if (_coreUserJobs == null)
+            _coreUserJobs = new CoreUserJobsPath(this, null, Keys.CORE_USER_JOBS__FK1_USER_JOBS_JOB_ID_JOBS_ID.getInverseKey());
 
-        return _coreUsers;
+        return _coreUserJobs;
     }
 
     @Override

@@ -8,8 +8,8 @@ import io.j13n.core.enums.UserStatusCode;
 import io.j13n.core.jooq.core.Core;
 import io.j13n.core.jooq.core.Keys;
 import io.j13n.core.jooq.core.tables.CoreFileSystem.CoreFileSystemPath;
-import io.j13n.core.jooq.core.tables.CoreJobs.CoreJobsPath;
 import io.j13n.core.jooq.core.tables.CoreUserAuthorities.CoreUserAuthoritiesPath;
+import io.j13n.core.jooq.core.tables.CoreUserJobs.CoreUserJobsPath;
 import io.j13n.core.jooq.core.tables.records.CoreUsersRecord;
 import io.j13n.core.jooq.public_.enums.CoreUserStatusCode;
 
@@ -80,12 +80,12 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
     /**
      * The column <code>core.core_users.dial_code</code>.
      */
-    public final TableField<CoreUsersRecord, String> DIAL_CODE = createField(DSL.name("dial_code"), SQLDataType.CHAR(5).nullable(false).defaultValue(DSL.field(DSL.raw("'91'::bpchar"), SQLDataType.CHAR)), this, "");
+    public final TableField<CoreUsersRecord, Short> DIAL_CODE = createField(DSL.name("dial_code"), SQLDataType.SMALLINT.nullable(false).defaultValue(DSL.field(DSL.raw("91"), SQLDataType.SMALLINT)), this, "");
 
     /**
      * The column <code>core.core_users.phone_number</code>.
      */
-    public final TableField<CoreUsersRecord, String> PHONE_NUMBER = createField(DSL.name("phone_number"), SQLDataType.CHAR(13).nullable(false).defaultValue(DSL.field(DSL.raw("'NONE'::bpchar"), SQLDataType.CHAR)), this, "");
+    public final TableField<CoreUsersRecord, String> PHONE_NUMBER = createField(DSL.name("phone_number"), SQLDataType.CHAR(15), this, "");
 
     /**
      * The column <code>core.core_users.first_name</code>.
@@ -250,17 +250,17 @@ public class CoreUsers extends TableImpl<CoreUsersRecord> {
         return _coreFileSystem;
     }
 
-    private transient CoreJobsPath _coreJobs;
+    private transient CoreUserJobsPath _coreUserJobs;
 
     /**
-     * Get the implicit to-many join path to the <code>core.core_jobs</code>
-     * table
+     * Get the implicit to-many join path to the
+     * <code>core.core_user_jobs</code> table
      */
-    public CoreJobsPath coreJobs() {
-        if (_coreJobs == null)
-            _coreJobs = new CoreJobsPath(this, null, Keys.CORE_JOBS__FK_JOB_SEARCH_RESULTS_USER_ID_USERS_ID.getInverseKey());
+    public CoreUserJobsPath coreUserJobs() {
+        if (_coreUserJobs == null)
+            _coreUserJobs = new CoreUserJobsPath(this, null, Keys.CORE_USER_JOBS__FK2_USER_JOBS_USER_ID_USERS_ID.getInverseKey());
 
-        return _coreJobs;
+        return _coreUserJobs;
     }
 
     @Override

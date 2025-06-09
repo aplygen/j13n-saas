@@ -3,7 +3,7 @@ spring:
   application:
     name: core
   config:
-    import: "configserver:http://${CLOUD_CONFIG_SERVER:localhost}:${CLOUD_CONFIG_SERVER_PORT:8888}/"
+    import: "configserver:http://${CLOUD_CONFIG_SERVER:localhost}:${CLOUD_CONFIG_SERVER_PORT:9991}/"
   profiles:
     active: "${SPRING_PROFILE:default}"
   http:
@@ -13,4 +13,4 @@ spring:
     virtual:
       enabled: true
 server:
-  port: 8080
+  port: 9992

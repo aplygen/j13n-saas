@@ -21,7 +21,6 @@ public class Jobs extends AbstractUpdatableDTO<Long, Long> {
     @Serial
     private static final long serialVersionUID = 2478806976919905198L;
 
-    private JobStatus jobStatus;
     private String title;
     private String company = DEFAULT;
     private String location;
@@ -30,4 +29,5 @@ public class Jobs extends AbstractUpdatableDTO<Long, Long> {
     private String source = DEFAULT;
     private LocalDateTime postedDate;
     private boolean isRemote = Boolean.FALSE;
+    private boolean isExpired = Boolean.FALSE;
 }
