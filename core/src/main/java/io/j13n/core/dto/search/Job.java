@@ -1,7 +1,6 @@
 package io.j13n.core.dto.search;
 
 import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
-import io.j13n.core.enums.JobStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @ToString(callSuper = true)
-public class Jobs extends AbstractUpdatableDTO<Long, Long> {
+public class Job extends AbstractUpdatableDTO<Long, Long> {
 
     private static final String DEFAULT = "UNKNOWN";
 
@@ -30,4 +29,6 @@ public class Jobs extends AbstractUpdatableDTO<Long, Long> {
     private LocalDateTime postedDate;
     private boolean isRemote = Boolean.FALSE;
     private boolean isExpired = Boolean.FALSE;
+
+    public static Job
 }
