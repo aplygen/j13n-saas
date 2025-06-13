@@ -29,6 +29,4 @@ public class Job extends AbstractUpdatableDTO<Long, Long> {
     private LocalDateTime postedDate;
     private boolean isRemote = Boolean.FALSE;
     private boolean isExpired = Boolean.FALSE;
-
-    public static Job
 }

@@ -35,10 +35,6 @@ public class JobService extends AbstractJOOQUpdatableDataService<CoreJobsRecord,
         });
     }
 
-    public CompletableFuture<List<Job>> saveJobResult(List<JobSearchResult> jobSearchResults) {
-        List<CompletableFuture<Job>> futures = jobSearchResults.stream().map()
-    }
-
     public CompletableFuture<List<Job>> saveJobs(List<Job> jobs) {
         List<CompletableFuture<Job>> futures = jobs.stream()
                 .map(this::create)

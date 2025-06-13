@@ -5,7 +5,7 @@ spring:
         native:
           search-locations: file:///Users/cepl/IdeaProjects/j13n-saas/configfiles
 server:
-  port: 9991
+  port: 8888
 
 eureka:
   client:

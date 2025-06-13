@@ -30,7 +30,6 @@
         <url/>
     </scm>
     <properties>
-        <aws.s3.version>2.25.16</aws.s3.version>
         <base.package>io.j13n</base.package>
         <base.package.dir>io/j13n</base.package.dir>
         <database.db.name>postgres</database.db.name>

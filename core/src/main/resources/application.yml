@@ -12,5 +12,6 @@ spring:
   threads:
     virtual:
       enabled: true
+
 server:
-  port: 9992
+  port: 8005
