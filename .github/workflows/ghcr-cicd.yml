@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 env:
+  VERSION: 1.1.0
   GHCR_REGISTRY: ghcr.io
   GHCR_REPO: ghcr.io/aplygen/j13n-saas
 
@@ -63,8 +64,8 @@ jobs:
         run: |
           IMAGE_NAME=${{ env.GHCR_REPO }}/config
           docker build -t $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} .
-          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }}
+          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
 
       - name: Build and Push Eureka Image
@@ -72,8 +73,8 @@ jobs:
         run: |
           IMAGE_NAME=${{ env.GHCR_REPO }}/eureka
           docker build -t $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} .
-          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }}
+          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
 
       - name: Build and Push Core Image
@@ -81,6 +82,6 @@ jobs:
         run: |
           IMAGE_NAME=${{ env.GHCR_REPO }}/core
           docker build -t $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} .
-          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }}
+          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
