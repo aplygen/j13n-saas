@@ -1,0 +1,76 @@
+name: Build and Push Config, Eureka, and Core Images
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  VERSION: 1.1.0
+  GHCR_REGISTRY: ghcr.io
+  GHCR_REPO: ghcr.io/aplygen/j13n-saas
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build config JAR
+        working-directory: ./config
+        run: mvn clean install -DskipTests
+
+      - name: Build eureka JAR
+        working-directory: ./eureka
+        run: mvn clean install -DskipTests
+
+      - name: Build core JAR
+        working-directory: ./core
+        run: mvn clean install -DskipTests
+
+      - name: Docker Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Config Image
+        working-directory: config
+        env:
+          GIT_URL: ${{ secrets.GIT_URL }}
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+        run: |
+          docker build \
+            -t ${{ env.GHCR_REPO }}/config:${{ env.VERSION }} \
+            .
+          docker push ${{ env.GHCR_REPO }}/config:${{ env.VERSION }}
+
+      - name: Build and Push Eureka Image
+        working-directory: eureka
+        run: |
+          docker build \
+            -t ${{ env.GHCR_REPO }}/eureka:${{ env.VERSION }} \
+            .
+          docker push ${{ env.GHCR_REPO }}/eureka:${{ env.VERSION }}
+
+      - name: Build and Push Core Image
+        working-directory: core
+        run: |
+          docker build \
+            -t ${{ env.GHCR_REPO }}/core:${{ env.VERSION }} \
+            .
+          docker push ${{ env.GHCR_REPO }}/core:${{ env.VERSION }}
