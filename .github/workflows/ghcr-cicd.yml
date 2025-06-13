@@ -54,23 +54,23 @@ jobs:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         run: |
-          docker build \
-            -t ${{ env.GHCR_REPO }}/config:${{ env.VERSION }} \
-            .
-          docker push ${{ env.GHCR_REPO }}/config:${{ env.VERSION }}
+          IMAGE_NAME=${{ env.GHCR_REPO }}/config
+          docker build -t $IMAGE_NAME:${{ env.VERSION }} -t $IMAGE_NAME:latest .
+          docker push $IMAGE_NAME:${{ env.VERSION }}
+          docker push $IMAGE_NAME:latest
 
       - name: Build and Push Eureka Image
         working-directory: eureka
         run: |
-          docker build \
-            -t ${{ env.GHCR_REPO }}/eureka:${{ env.VERSION }} \
-            .
-          docker push ${{ env.GHCR_REPO }}/eureka:${{ env.VERSION }}
+          IMAGE_NAME=${{ env.GHCR_REPO }}/eureka
+          docker build -t $IMAGE_NAME:${{ env.VERSION }} -t $IMAGE_NAME:latest .
+          docker push $IMAGE_NAME:${{ env.VERSION }}
+          docker push $IMAGE_NAME:latest
 
       - name: Build and Push Core Image
         working-directory: core
         run: |
-          docker build \
-            -t ${{ env.GHCR_REPO }}/core:${{ env.VERSION }} \
-            .
-          docker push ${{ env.GHCR_REPO }}/core:${{ env.VERSION }}
+          IMAGE_NAME=${{ env.GHCR_REPO }}/core
+          docker build -t $IMAGE_NAME:${{ env.VERSION }} -t $IMAGE_NAME:latest .
+          docker push $IMAGE_NAME:${{ env.VERSION }}
+          docker push $IMAGE_NAME:latest
