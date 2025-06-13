@@ -27,6 +27,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: 'maven'
 
       - name: Build config JAR
         working-directory: ./config
