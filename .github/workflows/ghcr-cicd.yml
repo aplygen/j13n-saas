@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 env:
-  VERSION: 1.1.0
   GHCR_REGISTRY: ghcr.io
   GHCR_REPO: ghcr.io/aplygen/j13n-saas
 
@@ -48,6 +47,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Docker version
+        id: dockerVersion
+        run: |
+          VERSION=$(date '+%Y%m%d%H%M%S')
+          echo "Setting version to ${VERSION}"
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+
       - name: Build and Push Config Image
         working-directory: config
         env:
@@ -56,22 +62,25 @@ jobs:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
         run: |
           IMAGE_NAME=${{ env.GHCR_REPO }}/config
-          docker build -t $IMAGE_NAME:${{ env.VERSION }} -t $IMAGE_NAME:latest .
-          docker push $IMAGE_NAME:${{ env.VERSION }}
+          docker build -t $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} .
+          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }}
           docker push $IMAGE_NAME:latest
 
       - name: Build and Push Eureka Image
         working-directory: eureka
         run: |
           IMAGE_NAME=${{ env.GHCR_REPO }}/eureka
-          docker build -t $IMAGE_NAME:${{ env.VERSION }} -t $IMAGE_NAME:latest .
-          docker push $IMAGE_NAME:${{ env.VERSION }}
+          docker build -t $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} .
+          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }}
           docker push $IMAGE_NAME:latest
 
       - name: Build and Push Core Image
         working-directory: core
         run: |
           IMAGE_NAME=${{ env.GHCR_REPO }}/core
-          docker build -t $IMAGE_NAME:${{ env.VERSION }} -t $IMAGE_NAME:latest .
-          docker push $IMAGE_NAME:${{ env.VERSION }}
+          docker build -t $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} .
+          docker tag $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }} $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ steps.dockerVersion.outputs.VERSION }}
           docker push $IMAGE_NAME:latest
