@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.3</version>
         <relativePath/>
         <!-- lookup parent from repository -->
     </parent>
@@ -36,7 +36,7 @@
         <database.schema.name>core</database.schema.name>
         <env.ENVIRONMENT>dev</env.ENVIRONMENT>
         <gcp.storage.version>2.43.0</gcp.storage.version>
-        <java.version>21</java.version>
+        <java.version>24</java.version>
         <jaxb.api.version>2.3.1</jaxb.api.version>
         <jaxb.runtime.version>4.0.0</jaxb.runtime.version>
         <jib.maven.plugin.version>3.3.0</jib.maven.plugin.version>
