@@ -1,7 +1,7 @@
 package io.j13n.core.commons.jooq.dao;
 
-import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.model.dto.AbstractUpdatableDTO;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;

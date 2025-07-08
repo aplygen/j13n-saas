@@ -4,8 +4,8 @@ import static io.j13n.core.jooq.core.Tables.CORE_FILE_SYSTEM;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
-import io.j13n.core.commons.base.util.StringUtil;
+import io.j13n.commons.thread.VirtualThreadWrapper;
+import io.j13n.commons.util.StringUtil;
 import io.j13n.core.enums.FileResourceType;
 import io.j13n.core.enums.FileSystemType;
 import io.j13n.core.enums.FileType;

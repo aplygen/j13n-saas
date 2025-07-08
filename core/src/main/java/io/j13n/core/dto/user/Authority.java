@@ -1,7 +1,7 @@
 package io.j13n.core.dto.user;
 
-import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
-import io.j13n.core.commons.base.util.StringUtil;
+import io.j13n.commons.model.dto.AbstractUpdatableDTO;
+import io.j13n.commons.util.StringUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

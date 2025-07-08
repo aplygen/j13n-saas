@@ -3,9 +3,9 @@ spring:
   application:
     name: core
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: Vishwas123#
+    url: ${core.db.url}
+    username: ${core.db.username}
+    password: ${core.db.password}
     driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
@@ -43,5 +43,3 @@ openai:
 jwt:
   secret: "${JWT_SECRET:j13nSecretKeyForJWTTokenGenerationAndVerificationPurposes}"
   expiration: 86400000
-
-

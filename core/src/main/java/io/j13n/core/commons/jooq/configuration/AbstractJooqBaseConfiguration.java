@@ -1,8 +1,8 @@
 package io.j13n.core.commons.jooq.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.j13n.core.commons.base.configuration.AbstractBaseConfiguration;
-import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
+import io.j13n.commons.configuration.AbstractBaseConfiguration;
+import io.j13n.commons.configuration.service.AbstractMessageService;
 import io.j13n.core.commons.jooq.jackson.UnsignedNumbersSerializationModule;
 import lombok.Getter;
 import org.jooq.DSLContext;

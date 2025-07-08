@@ -1,6 +1,6 @@
 package io.j13n.core.service;
 
-import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
+import io.j13n.commons.configuration.service.AbstractMessageService;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;

@@ -1,10 +1,10 @@
 package io.j13n.core.commons.jooq.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
-import io.j13n.core.commons.base.exception.GenericException;
-import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.configuration.service.AbstractMessageService;
+import io.j13n.commons.exception.GenericException;
+import io.j13n.commons.model.dto.AbstractUpdatableDTO;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.jooq.dao.AbstractUpdatableDAO;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;

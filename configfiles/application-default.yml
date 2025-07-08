@@ -1,10 +1,10 @@
 core:
   db:
-    url: r2dbc:mysql://localhost:3306/core?serverTimezone=UTC
-    username: root
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
     password: Vishwas123#
     flyway:
-      url: jdbc:mysql://localhost:3306/core
+      url: jdbc:postgresql://localhost:5432/postgres
 
 spring:
   flyway:
@@ -16,12 +16,12 @@ redis:
   cache:
     prefix: j13n
 
-#logging:
-#  level:
-#    root: INFO
-#    com.j13n: DEBUG
-#    org.jooq: DEBUG
-#    org.jooq.tools.LoggerListener: DEBUG
+logging:
+  level:
+    root: INFO
+    com.j13n: DEBUG
+    org.jooq: DEBUG
+    org.jooq.tools.LoggerListener: DEBUG
 
 mq:
   host: localhost

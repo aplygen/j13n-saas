@@ -1,6 +1,6 @@
 package io.j13n.core.commons.mq.events;
 
-import io.j13n.core.commons.base.util.StringFormatter;
+import io.j13n.commons.util.StringFormatter;
 
 public class EventNames {
 

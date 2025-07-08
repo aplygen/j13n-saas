@@ -1,7 +1,7 @@
 package io.j13n.core.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
+import io.j13n.commons.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.commons.security.jwt.ContextUser;
 import io.j13n.core.enums.UserStatusCode;
 import java.io.Serial;

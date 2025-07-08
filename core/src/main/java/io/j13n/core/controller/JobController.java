@@ -10,5 +10,4 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/jobs")
-public class JobController extends AbstractJOOQUpdatableDataController<CoreJobsRecord, Long, Job, JobDAO, JobService> {
-}
+public class JobController extends AbstractJOOQUpdatableDataController<CoreJobsRecord, Long, Job, JobDAO, JobService> {}

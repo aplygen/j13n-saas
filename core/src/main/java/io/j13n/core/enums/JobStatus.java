@@ -7,7 +7,6 @@ import org.jooq.Schema;
 
 @Getter
 public enum JobStatus implements EnumType {
-
     IN_SEARCH("IN_SEARCH"),
 
     DISCARD("DISCARD"),

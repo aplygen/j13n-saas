@@ -1,8 +1,8 @@
 package io.j13n.core.commons.mq.events;
 
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
-import io.j13n.core.commons.base.util.data.CircularLinkedList;
-import io.j13n.core.commons.base.util.data.DoublePointerNode;
+import io.j13n.commons.thread.VirtualThreadWrapper;
+import io.j13n.commons.util.data.CircularLinkedList;
+import io.j13n.commons.util.data.DoublePointerNode;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.amqp.core.AmqpTemplate;

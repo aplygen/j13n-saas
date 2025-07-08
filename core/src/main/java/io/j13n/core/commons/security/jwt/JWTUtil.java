@@ -5,20 +5,18 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.Builder;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import lombok.Builder;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 public class JWTUtil {
 
-    private JWTUtil() {
-    }
+    private JWTUtil() {}
 
     public static Tuple2<String, LocalDateTime> generateToken(JWTGenerateTokenParameters params) {
 
@@ -26,7 +24,7 @@ public class JWTUtil {
 
         return Tuples.of(
                 Jwts.builder()
-                        .issuer("qplygen")
+                        .issuer("aplygen")
                         .subject(params.userId.toString())
                         .claims(new JWTClaims()
                                 .setUserId(params.userId)
@@ -43,7 +41,8 @@ public class JWTUtil {
 
     public static JWTClaims getClaimsFromToken(String secretKey, String token) {
 
-        JwtParser parser = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+        JwtParser parser = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .build();
 
         Jws<Claims> parsed = parser.parseSignedClaims(token);

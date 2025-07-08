@@ -1,6 +1,6 @@
 package io.j13n.core.service.user;
 
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.jooq.service.AbstractJOOQUpdatableDataService;
 import io.j13n.core.commons.security.jwt.ContextUser;
 import io.j13n.core.dao.UserDAO;

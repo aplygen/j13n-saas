@@ -1,7 +1,7 @@
 package io.j13n.core.service.auth;
 
-import io.j13n.core.commons.base.service.CacheService;
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.service.CacheService;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.security.jwt.ContextAuthentication;
 import io.j13n.core.commons.security.jwt.ContextUser;
 import io.j13n.core.commons.security.jwt.JWTClaims;

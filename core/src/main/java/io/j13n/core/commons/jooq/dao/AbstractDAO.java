@@ -1,16 +1,16 @@
 package io.j13n.core.commons.jooq.dao;
 
-import io.j13n.core.commons.base.configuration.service.AbstractMessageService;
-import io.j13n.core.commons.base.exception.GenericException;
-import io.j13n.core.commons.base.function.Tuple2;
-import io.j13n.core.commons.base.function.Tuples;
-import io.j13n.core.commons.base.model.condition.AbstractCondition;
-import io.j13n.core.commons.base.model.condition.ComplexCondition;
-import io.j13n.core.commons.base.model.condition.ComplexConditionOperator;
-import io.j13n.core.commons.base.model.condition.FilterCondition;
-import io.j13n.core.commons.base.model.condition.FilterConditionOperator;
-import io.j13n.core.commons.base.model.dto.AbstractDTO;
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.configuration.service.AbstractMessageService;
+import io.j13n.commons.exception.GenericException;
+import io.j13n.commons.function.Tuple2;
+import io.j13n.commons.function.Tuples;
+import io.j13n.commons.model.condition.AbstractCondition;
+import io.j13n.commons.model.condition.ComplexCondition;
+import io.j13n.commons.model.condition.ComplexConditionOperator;
+import io.j13n.commons.model.condition.FilterCondition;
+import io.j13n.commons.model.condition.FilterConditionOperator;
+import io.j13n.commons.model.dto.AbstractDTO;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;

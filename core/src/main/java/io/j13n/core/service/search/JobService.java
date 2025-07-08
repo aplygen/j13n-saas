@@ -4,11 +4,9 @@ import io.j13n.core.commons.jooq.service.AbstractJOOQUpdatableDataService;
 import io.j13n.core.dao.JobDAO;
 import io.j13n.core.dto.search.Job;
 import io.j13n.core.jooq.core.tables.records.CoreJobsRecord;
-import io.j13n.core.model.JobSearchResult;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.springframework.stereotype.Service;
 
 @Service
 public class JobService extends AbstractJOOQUpdatableDataService<CoreJobsRecord, Long, Job, JobDAO> {
@@ -36,13 +34,9 @@ public class JobService extends AbstractJOOQUpdatableDataService<CoreJobsRecord,
     }
 
     public CompletableFuture<List<Job>> saveJobs(List<Job> jobs) {
-        List<CompletableFuture<Job>> futures = jobs.stream()
-                .map(this::create)
-                .toList();
+        List<CompletableFuture<Job>> futures = jobs.stream().map(this::create).toList();
 
         return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-                .thenApply(v -> futures.stream()
-                        .map(CompletableFuture::join)
-                        .toList());
+                .thenApply(v -> futures.stream().map(CompletableFuture::join).toList());
     }
 }

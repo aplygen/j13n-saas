@@ -1,14 +1,13 @@
 package io.j13n.core.dto.search;
 
-import io.j13n.core.commons.base.model.dto.AbstractUpdatableDTO;
+import io.j13n.commons.model.dto.AbstractUpdatableDTO;
 import io.j13n.core.enums.JobStatus;
+import java.io.Serial;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
-import java.io.Serial;
-import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

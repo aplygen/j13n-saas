@@ -1,8 +1,8 @@
 package io.j13n.core.commons.jooq.service;
 
-import io.j13n.core.commons.base.model.condition.AbstractCondition;
-import io.j13n.core.commons.base.model.dto.AbstractDTO;
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.model.condition.AbstractCondition;
+import io.j13n.commons.model.dto.AbstractDTO;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.jooq.dao.AbstractDAO;
 import java.io.Serializable;
 import java.util.List;

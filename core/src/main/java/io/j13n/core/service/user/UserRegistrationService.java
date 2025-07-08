@@ -1,6 +1,6 @@
 package io.j13n.core.service.user;
 
-import io.j13n.core.commons.base.thread.VirtualThreadWrapper;
+import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.dto.user.User;
 import io.j13n.core.enums.UserStatusCode;
 import io.j13n.core.model.auth.AuthenticationRequest;
