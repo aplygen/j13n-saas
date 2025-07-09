@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-openjdk-debian:latest-cds
+FROM eclipse-temurin:24-jdk
 
 COPY target/core-1.1.0.jar core-1.1.0.jar
 
