@@ -15,7 +15,6 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestControllerAdvice
@@ -48,7 +47,7 @@ public class ControllerAdvice {
 
         log.error("Error : {}", eId, ex);
 
-        final HttpStatus status = (ex instanceof ResponseStatusException rse)
+        final HttpStatus status = (ex instanceof GenericException rse)
                 ? HttpStatus.valueOf(rse.getStatusCode().value())
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 

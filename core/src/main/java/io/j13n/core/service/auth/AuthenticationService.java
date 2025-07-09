@@ -1,5 +1,7 @@
 package io.j13n.core.service.auth;
 
+import io.j13n.commons.exception.GenericException;
+import io.j13n.commons.function.Tuple2;
 import io.j13n.commons.service.CacheService;
 import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.commons.security.jwt.ContextAuthentication;
@@ -18,8 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import reactor.util.function.Tuple2;
 
 @Service
 public class AuthenticationService implements IAuthenticationService {
@@ -45,15 +45,15 @@ public class AuthenticationService implements IAuthenticationService {
     public CompletableFuture<AuthenticationResponse> authenticate(
             AuthenticationRequest authRequest, HttpServletRequest request) {
         return VirtualThreadWrapper.flatMap(userService.findByUsername(authRequest.getUserName()), user -> {
-            if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+            if (user == null) throw new GenericException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
             if (user.getUserStatusCode().isInActive())
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled");
+                throw new GenericException(HttpStatus.UNAUTHORIZED, "User account is disabled");
 
             return VirtualThreadWrapper.flatMap(
                     userService.validatePassword(user, authRequest.getPassword()), isValid -> {
                         if (Boolean.FALSE.equals(isValid))
-                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+                            throw new GenericException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 
                         return VirtualThreadWrapper.flatMap(
                                 userService.toContextUser(user),

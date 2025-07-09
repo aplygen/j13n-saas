@@ -1,4 +1,4 @@
-FROM openjdk:21-ea-jdk-oracle
+FROM bellsoft/liberica-openjdk-debian:latest-cds
 
 COPY target/eureka-1.1.0.jar eureka-1.1.0.jar
 

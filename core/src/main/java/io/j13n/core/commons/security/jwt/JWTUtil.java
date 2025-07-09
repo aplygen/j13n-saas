@@ -1,22 +1,25 @@
 package io.j13n.core.commons.security.jwt;
 
+import io.j13n.commons.function.Tuple2;
+import io.j13n.commons.function.Tuples;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
 import lombok.Builder;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
 public class JWTUtil {
 
-    private JWTUtil() {}
+    private JWTUtil() {
+    }
 
     public static Tuple2<String, LocalDateTime> generateToken(JWTGenerateTokenParameters params) {
 

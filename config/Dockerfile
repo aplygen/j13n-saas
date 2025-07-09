@@ -1,4 +1,4 @@
-FROM openjdk:21-ea-jdk-oracle
+FROM bellsoft/liberica-openjdk-debian:latest-cds
 
 COPY target/config-1.1.0.jar config-1.1.0.jar
 

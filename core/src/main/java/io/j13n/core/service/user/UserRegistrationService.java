@@ -1,5 +1,6 @@
 package io.j13n.core.service.user;
 
+import io.j13n.commons.exception.GenericException;
 import io.j13n.commons.thread.VirtualThreadWrapper;
 import io.j13n.core.dto.user.User;
 import io.j13n.core.enums.UserStatusCode;
@@ -13,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserRegistrationService {
@@ -55,13 +55,13 @@ public class UserRegistrationService {
     private CompletableFuture<User> validateNewUser(User user) {
         return VirtualThreadWrapper.fromCallable(() -> {
             if (user.getUserName() == null || user.getUserName().isBlank())
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username is required");
+                throw new GenericException(HttpStatus.BAD_REQUEST, "Username is required");
 
             if (user.getPassword() == null || user.getPassword().isBlank())
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
+                throw new GenericException(HttpStatus.BAD_REQUEST, "Password is required");
 
             User existingUser = userService.findByUsername(user.getUserName()).join();
-            if (existingUser != null) throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+            if (existingUser != null) throw new GenericException(HttpStatus.CONFLICT, "Username already exists");
 
             return user;
         });

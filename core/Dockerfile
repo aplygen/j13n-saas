@@ -1,4 +1,4 @@
-FROM openjdk:21-ea-jdk-oracle
+FROM bellsoft/liberica-openjdk-debian:latest-cds
 
 COPY target/core-1.1.0.jar core-1.1.0.jar
 
