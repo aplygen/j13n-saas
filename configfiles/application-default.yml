@@ -23,15 +23,6 @@ logging:
     org.jooq: DEBUG
     org.jooq.tools.LoggerListener: DEBUG
 
-eureka:
-  instance:
-    hostname: eureka-server
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://eureka-server:9999/eureka/
-
 mq:
   host: localhost
   port: 5672
