@@ -30,8 +30,9 @@ services:
     image: ghcr.io/aplygen/j13n-saas/eureka:latest
     pull_policy: always
     environment:
-      SPRING_PROFILE: local,native
+#      SPRING_PROFILE: local,native
       CLOUD_CONFIG_SERVER: config-server
+      EUREKA_SERVER_HOST: eureka-server
       INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:
@@ -47,8 +48,9 @@ services:
     image: ghcr.io/aplygen/j13n-saas/core:latest
     pull_policy: always
     environment:
-      SPRING_PROFILE: local,native
+#      SPRING_PROFILE: local,native
       CLOUD_CONFIG_SERVER: config-server
+      EUREKA_SERVER_HOST: eureka-server
       INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:
