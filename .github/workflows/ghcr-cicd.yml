@@ -29,7 +29,7 @@ jobs:
           java-version: '24'
           cache: 'maven'
 
-      - name: Building commons
+      - name: Build commons JAR
         working-directory: ./commons
         run: mvn clean install
 
