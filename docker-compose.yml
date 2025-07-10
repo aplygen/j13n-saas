@@ -8,9 +8,9 @@ services:
       GIT_URL: https://github.com/aplygen/j13n-saas
       GIT_USERNAME: lawbringr1
       GIT_PASSWORD: Hobbs1For2President3
-      INSTANCE_ID: 1
       EUREKA_SERVER_HOST: eureka-server
-      EUREKA_SERVER_PORT: 9999
+      INSTANCE_ENVIRONMENT: Local
+      INSTANCE_ID: 1
     ports:
       - "8888:8888"
     volumes:
@@ -21,7 +21,6 @@ services:
       timeout: 5s
       retries: 2
       start_period: 20s
-
   eureka-server:
     depends_on:
       config-server:
@@ -31,13 +30,14 @@ services:
     image: ghcr.io/aplygen/j13n-saas/eureka:latest
     pull_policy: always
     environment:
+      SPRING_PROFILE: local,native
       CLOUD_CONFIG_SERVER: config-server
+      INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:
       - "9999:9999"
     volumes:
       - "/var/log/apps/:/logs"
-
   core-server:
     depends_on:
       config-server:
@@ -47,7 +47,9 @@ services:
     image: ghcr.io/aplygen/j13n-saas/core:latest
     pull_policy: always
     environment:
+      SPRING_PROFILE: local,native
       CLOUD_CONFIG_SERVER: config-server
+      INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:
       - "8005:8005"
