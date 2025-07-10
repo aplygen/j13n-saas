@@ -1,44 +1,53 @@
-version: "3.9"
-
 services:
-
-  config:
-    build:
-      context: ./config
-    container_name: config
-    ports:
-      - "8888:8888"
+  config-server:
+    container_name: config-server
+    image: ghcr.io/aplygen/j13n-saas/config:latest
+    pull_policy: always
     environment:
-      SPRING_PROFILE: default
-      INSTANCE_ID: config-instance
       GIT_URL: https://github.com/aplygen/j13n-saas
       GIT_USERNAME: lawbringr1
-      GIT_PASSWORD: Hobbs1For2President3\
+      GIT_PASSWORD: Hobbs1For2President3
+      EUREKA_SERVER_HOST: localhost
+      INSTANCE_ID: 1
+    ports:
+      - "8888:8888"
     volumes:
-      - ./logs/config:/logs
+      - "/var/log/apps/:/logs"
+    networks:
+      - default
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
-  eureka:
-    build:
-      context: ./eureka
-    container_name: eureka
+
+  eureka-server:
+    depends_on:
+      config-server:
+        condition: service_healthy
+    container_name: eureka-server
+    image: ghcr.io/aplygen/j13n-saas/eureka:latest
+    pull_policy: always
+    environment:
+      CLOUD_CONFIG_SERVER: config-server
+      INSTANCE_ID: 1
     ports:
       - "9999:9999"
-    environment:
-      INSTANCE_ID: eureka-instance
     volumes:
-      - ./logs/eureka:/logs
-    depends_on:
-      - config
+      - "/var/log/apps/:/logs"
 
-  core:
-    build:
-      context: ./core
-    container_name: core
+  core-server:
+    depends_on:
+      config-server:
+        condition: service_healthy
+    container_name: core-server
+    image: ghcr.io/aplygen/j13n-saas/core:latest
+    pull_policy: always
+    environment:
+      CLOUD_CONFIG_SERVER: config-server
+      INSTANCE_ID: 1
     ports:
       - "8005:8005"
-    environment:
-      INSTANCE_ID: core-instance
     volumes:
-      - ./logs/core:/logs
-    depends_on:
-      - eureka
+      - "/var/log/apps/:/logs"
