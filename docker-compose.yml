@@ -33,15 +33,24 @@ services:
 #      SPRING_PROFILE: local,native
       CLOUD_CONFIG_SERVER: config-server
       EUREKA_SERVER_HOST: eureka-server
+      EUREKA_SERVER_PORT: 9999
       INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:
       - "9999:9999"
     volumes:
       - "/var/log/apps/:/logs"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9999/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 30s
   core-server:
     depends_on:
       config-server:
+        condition: service_healthy
+      eureka-server:
         condition: service_healthy
     container_name: core-server
     hostname: core-server
@@ -51,6 +60,7 @@ services:
 #      SPRING_PROFILE: local,native
       CLOUD_CONFIG_SERVER: config-server
       EUREKA_SERVER_HOST: eureka-server
+      EUREKA_SERVER_PORT: 9999
       INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:
