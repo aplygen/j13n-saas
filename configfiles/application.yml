@@ -9,14 +9,6 @@ logging:
     org:
       jooq: DEBUG
 
-eureka:
-  client:
-    register-with-eureka: true
-    serviceUrl:
-      defaultzone: http://${EUREKA_SERVER_HOST:localhost}:${EUREKA_SERVER_PORT:9999}/eureka/
-  instance:
-    prefer-ip-address: true
-
 # server:
 #   shutdown: graceful
 
