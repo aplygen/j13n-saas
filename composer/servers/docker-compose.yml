@@ -2,9 +2,7 @@ services:
   config-server:
     container_name: config-server
     hostname: config-server
-    build:
-      context: ./config
-      dockerfile: Dockerfile
+    image: ghcr.io/aplygen/j13n-saas/config:latest
     environment:
       GIT_URL: https://github.com/aplygen/j13n-saas.git
       GIT_SEARCH_PATH: configfiles
@@ -22,11 +20,9 @@ services:
       - config-server
     container_name: eureka-server
     hostname: eureka-server
-    build:
-      context: ./eureka
-      dockerfile: Dockerfile
+    image: ghcr.io/aplygen/j13n-saas/eureka:latest
     environment:
-      SPRING_PROFILE: native,local
+#      SPRING_PROFILE: native,local
       CLOUD_CONFIG_SERVER: config-server
       EUREKA_SERVER_HOST: eureka-server
       INSTANCE_ENVIRONMENT: Local
@@ -40,11 +36,9 @@ services:
       - config-server
     container_name: core-server
     hostname: core-server
-    build:
-      context: ./core
-      dockerfile: Dockerfile
+    image: ghcr.io/aplygen/j13n-saas/core:latest
     environment:
-      SPRING_PROFILE: native,local
+#      SPRING_PROFILE: native,local
       CLOUD_CONFIG_SERVER: config-server
       EUREKA_SERVER_HOST: eureka-server
       INSTANCE_ENVIRONMENT: Local

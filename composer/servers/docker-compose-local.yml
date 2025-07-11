@@ -1,0 +1,55 @@
+services:
+  config-server:
+    container_name: config-server
+    hostname: config-server
+    build:
+      context: ../../config
+      dockerfile: ../../config/Dockerfile
+    environment:
+      GIT_URL: https://github.com/aplygen/j13n-saas.git
+      GIT_SEARCH_PATH: configfiles
+      GIT_USERNAME: lawbringr1
+      GIT_PASSWORD: Hobbs1For2President3
+      EUREKA_SERVER_HOST: eureka-server
+      INSTANCE_ENVIRONMENT: Local
+      INSTANCE_ID: 1
+    ports:
+      - "8888:8888"
+    volumes:
+      - "/var/log/apps/:/logs"
+  eureka-server:
+    depends_on:
+      - config-server
+    container_name: eureka-server
+    hostname: eureka-server
+    build:
+      context: ../../eureka
+      dockerfile: ../../eureka/Dockerfile
+    environment:
+      SPRING_PROFILE: native,local
+      CLOUD_CONFIG_SERVER: config-server
+      EUREKA_SERVER_HOST: eureka-server
+      INSTANCE_ENVIRONMENT: Local
+      INSTANCE_ID: 1
+    ports:
+      - "9999:9999"
+    volumes:
+      - "/var/log/apps/:/logs"
+  core-server:
+    depends_on:
+      - config-server
+    container_name: core-server
+    hostname: core-server
+    build:
+      context: ../../core
+      dockerfile: ../../core/Dockerfile
+    environment:
+      SPRING_PROFILE: native,local
+      CLOUD_CONFIG_SERVER: config-server
+      EUREKA_SERVER_HOST: eureka-server
+      INSTANCE_ENVIRONMENT: Local
+      INSTANCE_ID: 1
+    ports:
+      - "8005:8005"
+    volumes:
+      - "/var/log/apps/:/logs"
