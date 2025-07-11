@@ -11,9 +11,9 @@ logging:
 
 eureka:
   client:
-    registerWithEureka: true
+    register-with-eureka: true
     serviceUrl:
-      defaultZone: http://localhost:9999/eureka/
+      defaultZone: http://${EUREKA_SERVER_HOST:localhost}:${EUREKA_SERVER_PORT:9999}/eureka/
   instance:
     prefer-ip-address: true
 
