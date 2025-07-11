@@ -6,9 +6,9 @@ services:
       context: ./config
       dockerfile: Dockerfile
     environment:
-      GIT_URL: https://github.com/aplygen/j13n-saas.git
+      GIT_URL: https://github.com/aplygen/j13n-saas/tree/e017e0d7ede336883b77c547f5d394ce51670a44/configfiles
       GIT_USERNAME: lawbringr1
-      GIT_PASSWORD: ${GIT_PASSWORD}
+      GIT_PASSWORD: Hobbs1For2President3
       INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
     ports:

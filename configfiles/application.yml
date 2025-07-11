@@ -9,6 +9,14 @@ logging:
     org:
       jooq: DEBUG
 
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:9999/eureka/
+  instance:
+    prefer-ip-address: true
+
 # server:
 #   shutdown: graceful
 
@@ -39,12 +47,15 @@ spring:
     max-in-memory-size: 5MB
 
 jwt:
-  key: j13n_secret_token_for_the_new_saas_application_it_requires_a_very_long_key_to_sign_tokens
+  key: ficity_secret_token_for_the_new_saas_application_it_requires_a_very_long_key_to_sign_tokens
   token:
     rememberme:
       expiry: 525600
     default:
       expiry: 30
+
+ui:
+  jsURL: https://nclc-dev.s3.ap-south-1.amazonaws.com
 
 files:
   resources:
