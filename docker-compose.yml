@@ -7,7 +7,7 @@ services:
     environment:
       GIT_URL: https://github.com/aplygen/j13n-saas
       GIT_USERNAME: lawbringr1
-      GIT_PASSWORD: Hobbs1For2President3
+      GIT_PASSWORD: ${GIT_PASSWORD}
       EUREKA_SERVER_HOST: eureka-server
       INSTANCE_ENVIRONMENT: Local
       INSTANCE_ID: 1
